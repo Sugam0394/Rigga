@@ -1,7 +1,31 @@
-node_modules
-dist
-build
-coverage
+ # Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
 .env
-package-lock.json
-yarn.lock
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+
+# Uploads / public assets
+uploads/
+
+# Tooling & cache
+.vite/
+.cache/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

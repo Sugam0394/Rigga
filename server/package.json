@@ -5,11 +5,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon  src/index.js"
+    "dev": "nodemon  src/index.js",
+    "start": "node src/index.js"
   },
   "author": "Sugam singh",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.5.0",
     "nodemon": "^3.1.14"
   },
   "devDependencies": {
