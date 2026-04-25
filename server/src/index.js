@@ -1,10 +1,9 @@
-import dotenv from 'dotenv'
+ import 'dotenv/config'
 import connectDB from './db/index.js'
 import app from './app.js'
 
 
-
-dotenv.config()
+ 
 
 const PORT = process.env.PORT || 3000
 
@@ -12,7 +11,7 @@ connectDB()
 
 
  .then(() => {
-    app.listen(process.env.PORT , () => {
+    app.listen(PORT , () => {
         console.log(` ✅ server running successfully on Port : ${PORT}`)
     })
  })
