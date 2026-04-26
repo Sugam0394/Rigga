@@ -25,15 +25,29 @@ export const onboardingMessages = {
 };
 
 // 🔥 Active phase messages
-export const activeMessages = {
+ export const activeMessages = {
   done: [
-    "🔥 Shabaash! Aaj ka kaam ho gaya.",
-    "Aaj toh tu jeet gaya 💪",
-    "Consistency dikha raha hai boss 😎",
+    "🔥 Aaj toh tu jeet gaya!",
+    "Consistency aa rahi hai 😏"
   ],
 
   unknown: [
-    "Samajh nahi aaya 😅 'DONE' bhej ya kaam kar",
-    "Focus kar bhai, faltu mat bol 😏",
+    "Samajh nahi aaya 😅",
+    "DONE likh warna chup reh"
   ],
+
+  miss1: [
+    "😏 Aaj skip kar diya… chal kal dekhte hain",
+    "Ek din skip = warning ⚠️"
+  ],
+
+  miss2: [
+    "😬 Do din ho gaye… serious ho ja bhai",
+    "Discipline kidhar hai? 😏"
+  ],
+
+  miss3: [
+    "😈 Ab toh lag raha tu sudhrega nahi",
+    "Bas kar bhai… ya witness ko bulaun?"
+  ]
 };
