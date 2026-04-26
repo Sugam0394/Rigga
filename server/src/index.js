@@ -6,9 +6,10 @@ import app from './app.js'
  
 
 const PORT = process.env.PORT || 3000
-
+console.log("ENV CHECK MONGODB_URL:", process.env.MONGODB_URL);
+console.log("MONGO VALUE TYPE:", typeof process.env.MONGODB_URL);
+console.log("MONGO VALUE:", process.env.MONGODB_URL);
 connectDB()
-
 
  .then(() => {
     app.listen(PORT , () => {
