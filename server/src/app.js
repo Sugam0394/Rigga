@@ -18,6 +18,13 @@ app.use(cookieParser());
 app.get('/' , (req , res) => {
     res.send('Bot is running to me')
 })
+
+
+// whatsapp routes
+import whatsappRouter from './Routes/whatsapp.routes.js';
+
+app.use('/api' , whatsappRouter)
+
  
 
 
