@@ -1,13 +1,13 @@
-import express from 'express';
+ import express from 'express';
 import { handleUser } from '../controllers/authController.js';
 import { Habit } from '../models/habitModel.js';
-import { onboardingMessages } from '../services/messages.js';
-import { activeMessages } from '../services/messages.js';
+import { onboardingMessages, activeMessages } from '../services/messages.js';
 import { Witness } from '../models/witnessModel.js';
 
 const router = express.Router();
 
- const isSameDay = (d1, d2) => {
+// ✅ helpers
+const isSameDay = (d1, d2) => {
   return d1 && d2 && d1.toDateString() === d2.toDateString();
 };
 
@@ -17,35 +17,36 @@ const isYesterday = (date) => {
   yesterday.setDate(yesterday.getDate() - 1);
   return date.toDateString() === yesterday.toDateString();
 };
-  
 
- 
 const getRandom = (arr) => {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
- router.post('/webhook', async (req, res) => {
+// ✅ ROUTE
+router.post('/webhook', async (req, res) => {
   try {
- const message = (req.body.Body || '').trim();
-const from = req.body.From || '';
+    const message = (req.body.Body || '').trim();
+    const from = req.body.From || '';
 
- 
     console.log('📩 Message:', message);
     console.log('👤 From:', from);
 
+    // ❌ empty message guard
     if (!message) {
-  return res.send(`
-    <Response>
-      <Message>Message bhej bhai 😅</Message>
-    </Response>
-  `);
-}
+      res.set('Content-Type', 'text/xml');
+      return res.send(`
+        <Response>
+          <Message>Message bhej bhai 😅</Message>
+        </Response>
+      `);
+    }
 
     const user = await handleUser(from);
 
     let reply = '';
 
     switch (user.state) {
+
       case 'new':
         reply = getRandom(onboardingMessages.askName);
         user.state = 'asked_name';
@@ -68,64 +69,60 @@ const from = req.body.From || '';
         break;
 
       case 'asked_witness':
-  if (message.toLowerCase() === 'skip') {
-    reply = getRandom(onboardingMessages.setupDone);
-  } else {
-    // 🔹 normalize number
-    let number = message.replace(/\s+/g, '');
+        if (message.toLowerCase() === 'skip') {
+          reply = getRandom(onboardingMessages.setupDone);
+        } else {
+          let number = message.replace(/\s+/g, '');
 
-    if (!number.startsWith('+91')) {
-      number = '+91' + number;
-    }
+          if (!number.startsWith('+91')) {
+            number = '+91' + number;
+          }
 
-    const whatsappNumber = `whatsapp:${number}`;
+          const whatsappNumber = `whatsapp:${number}`;
 
-    // 🔹 save in DB
-    await Witness.create({
-      userId: user._id,
-      witnessNumber: number,
-      whatsappNumber: whatsappNumber,
-    });
+          await Witness.create({
+            userId: user._id,
+            witnessNumber: number,
+            whatsappNumber: whatsappNumber,
+          });
 
-    reply = "🔥 Witness set! Ab sach me bhaag nahi sakta 😈";
-  }
+          reply = "🔥 Witness set! Ab sach me bhaag nahi sakta 😈";
+        }
 
-  user.state = 'active';
-  break;
+        user.state = 'active';
+        break;
 
       case 'active':
-  if (message.toLowerCase() === 'done') {
+        if (message.toLowerCase() === 'done') {
 
-    const today = new Date();
+          const today = new Date();
 
-    // ❌ already done today
-    if (isSameDay(user.lastCheckinDate, today)) {
-      reply = "Aaj already kar liya 😏 overacting band kar";
-      break;
-    }
+          if (isSameDay(user.lastCheckinDate, today)) {
+            reply = "Aaj already kar liya 😏 overacting band kar";
+            break;
+          }
 
-    // ✅ streak logic
-    if (isYesterday(user.lastCheckinDate)) {
-      user.currentStreak += 1;
-    } else {
-      user.currentStreak = 1;
-    }
+          if (isYesterday(user.lastCheckinDate)) {
+            user.currentStreak += 1;
+          } else {
+            user.currentStreak = 1;
+          }
 
-    // 🔥 longest streak update
-    if (user.currentStreak > user.longestStreak) {
-      user.longestStreak = user.currentStreak;
-    }
+          if (user.currentStreak > user.longestStreak) {
+            user.longestStreak = user.currentStreak;
+          }
 
-    // ✅ update tracking
-    user.lastCheckinDate = today;
-    user.missCount = 0;
+          user.lastCheckinDate = today;
+          user.missCount = 0;
 
-    reply = `🔥 Shabaash! Streak: ${user.currentStreak}`;
+          // 🔥 improved reply
+          const msg = getRandom(activeMessages.done);
+          reply = msg.replace('{streak}', user.currentStreak);
 
-  } else {
-    reply = getRandom(activeMessages.unknown);
-  }
-  break;
+        } else {
+          reply = getRandom(activeMessages.unknown);
+        }
+        break;
 
       default:
         reply = 'System thoda hil gaya 😅';
@@ -146,4 +143,4 @@ const from = req.body.From || '';
   }
 });
 
-export default router; 
+export default router;
