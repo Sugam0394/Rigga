@@ -10,9 +10,11 @@ app.use(cors({
     credentials : true
 }));
 
-app.use(express.json({limit : '20kb'}))
-app.use(express.urlencoded({extended : true , limit:"20kb"}))
-app.use(express.static('public'))
+ // ⚠️ IMPORTANT: Twilio ke liye urlencoded FIRST
+app.use(express.urlencoded({ extended: true, limit: '20kb' }));
+app.use(express.json({ limit: '20kb' }));
+
+app.use(express.static('public'));
 app.use(cookieParser());
 
 
@@ -24,14 +26,15 @@ app.use(cookieParser());
   max: 100, // 100 requests per IP
   message: '⚠️ Bahut zyada requests bhej raha hai , Bsdk thoda ruk ja',
 });
-app.use('/api', limiter);
 
-
-
+ 
 
 // whatsapp routes
 import whatsappRouter from './Routes/whatsapp.routes.js';
-app.use('/api' , whatsappRouter)
+
+app.use('/api/webhook' , whatsappRouter)
+
+app.use('/api', limiter);
 
  
 
