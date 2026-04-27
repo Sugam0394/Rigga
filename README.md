@@ -1,0 +1,1 @@
+Rigga is a WhatsApp-based accountability system that uses desi-style roast, social pressure, and habit tracking to keep you disciplined. Set a goal, check in daily, and if you fail — get roasted or exposed to your friends/family.
