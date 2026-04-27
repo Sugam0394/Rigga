@@ -1,20 +1,16 @@
-import { User } from "../models/userModel.js";
+ import { User } from "../models/userModel.js";
 
+export const handleUser = async (from) => {
+  // from = "whatsapp:+91xxxx"
 
-export const handleUser = async (phone) => {
-  try {
-    let user = await User.findOne({ phone });
+  let user = await User.findOne({ whatsappNumber: from });
 
-    if (!user) {
-      user = await User.create({ phone });
-      console.log('🆕 New user created:', phone);
-    } else {
-      console.log('✅ Existing user:', phone);
-    }
-
-    return user;
-  } catch (error) {
-    console.error('❌ Error in handleUser:', error.message);
-    throw error;
+  if (!user) {
+    user = await User.create({
+      whatsappNumber: from,
+      phone: from.replace("whatsapp:", ""),
+    });
   }
+
+  return user;
 };
