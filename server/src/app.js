@@ -5,6 +5,9 @@ import rateLimit from 'express-rate-limit'
 
 const app = express()
 
+// ✅ FIX: trust proxy (CRITICAL for Railway)
+app.set('trust proxy', 1);
+
 app.use(cors({
     origin : process.env.CORS_ORIGIN,
     credentials : true
@@ -32,7 +35,7 @@ app.use(cookieParser());
 // whatsapp routes
 import whatsappRouter from './Routes/whatsapp.routes.js';
 
-app.use('/api/webhook' , whatsappRouter)
+app.use('/api' , whatsappRouter)
 
 app.use('/api', limiter);
 
