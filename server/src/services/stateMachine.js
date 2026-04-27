@@ -2,18 +2,12 @@ import { User } from '../models/userModel.js';
 import { Habit } from '../models/habitModel.js';
 import { Witness } from '../models/witnessModel.js';
 import { onboardingMessages, activeMessages } from './messages.js';
+import { getTodayUTC , isSameDayUTC , isYesterdayUTC ,  } from '../utils/dateUtils.js';
 
 // helper
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-const isSameDay = (d1, d2) => d1 && d2 && d1.toDateString() === d2.toDateString();
-
-const isYesterday = (date) => {
-  if (!date) return false;
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  return date.toDateString() === yesterday.toDateString();
-};
+ 
 
 export const handleStateTransition = async (user, message) => {
   let reply = '';
@@ -77,14 +71,14 @@ export const handleStateTransition = async (user, message) => {
     case 'active':
       if (message.toLowerCase() === 'done') {
 
-        const today = new Date();
+        const today = getTodayUTC();
 
-        if (isSameDay(user.lastCheckinDate, today)) {
+        if (isSameDayUTC(user.lastCheckinDate, today)) {
           reply = "Aaj already kar liya 😏 overacting band kar";
         } else {
           let streak = user.currentStreak;
 
-          if (isYesterday(user.lastCheckinDate)) {
+          if (isYesterdayUTC(user.lastCheckinDate, today)) {
             streak += 1;
           } else {
             streak = 1;
