@@ -13,7 +13,7 @@ export const validateTwilioRequest = (req, res, next) => {
 
     const url = new URL(req.originalUrl, process.env.BASE_URL).toString();
 
-    const params = req.body || {};
+    const params = req.rawBody; // 🔥 RAW BODY FIX
 
     const isValid = twilio.validateRequest(
       authToken,
