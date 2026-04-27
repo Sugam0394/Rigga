@@ -3,6 +3,7 @@ import { handleUser } from '../controllers/authController.js';
 import { Habit } from '../models/habitModel.js';
 import { onboardingMessages } from '../services/messages.js';
 import { activeMessages } from '../services/messages.js';
+import { Witness } from '../models/witnessModel.js';
 
 const router = express.Router();
 
@@ -67,14 +68,30 @@ const from = req.body.From || '';
         break;
 
       case 'asked_witness':
-        if (message.toLowerCase() === 'skip') {
-          reply = getRandom(onboardingMessages.setupDone);
-        } else {
-          reply = "Witness added 😏 (ab bhaagna mushkil hai)";
-        }
+  if (message.toLowerCase() === 'skip') {
+    reply = getRandom(onboardingMessages.setupDone);
+  } else {
+    // 🔹 normalize number
+    let number = message.replace(/\s+/g, '');
 
-        user.state = 'active';
-        break;
+    if (!number.startsWith('+91')) {
+      number = '+91' + number;
+    }
+
+    const whatsappNumber = `whatsapp:${number}`;
+
+    // 🔹 save in DB
+    await Witness.create({
+      userId: user._id,
+      witnessNumber: number,
+      whatsappNumber: whatsappNumber,
+    });
+
+    reply = "🔥 Witness set! Ab sach me bhaag nahi sakta 😈";
+  }
+
+  user.state = 'active';
+  break;
 
       case 'active':
   if (message.toLowerCase() === 'done') {
