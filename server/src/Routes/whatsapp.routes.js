@@ -3,6 +3,7 @@ import { handleUser } from '../controllers/authController.js';
 import { Habit } from '../models/habitModel.js';
 import { onboardingMessages, activeMessages } from '../services/messages.js';
 import { Witness } from '../models/witnessModel.js';
+import { validateTwilioRequest } from '../middlewares/validateTwilioRequest.js';
 
 const router = express.Router();
 
@@ -171,5 +172,15 @@ const getRandom = (arr) => {
     res.status(500).send('Error');
   }
 });
+
+router.post('/test', validateTwilioRequest, (req, res) => {
+  console.log('✅ Valid Twilio request received at /test');
+  res.send('Twilio request validated successfully!');
+});
+
+
+
+
+
 
 export default router;
