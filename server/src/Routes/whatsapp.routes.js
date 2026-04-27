@@ -25,11 +25,20 @@ const getRandom = (arr) => {
 
  router.post('/webhook', async (req, res) => {
   try {
-    const message = req.body.Body?.trim();
-    const from = req.body.From;
+ const message = (req.body.Body || '').trim();
+const from = req.body.From || '';
 
+ 
     console.log('📩 Message:', message);
     console.log('👤 From:', from);
+
+    if (!message) {
+  return res.send(`
+    <Response>
+      <Message>Message bhej bhai 😅</Message>
+    </Response>
+  `);
+}
 
     const user = await handleUser(from);
 
