@@ -4,16 +4,11 @@ export const validateTwilioRequest = (req, res, next) => {
   try {
     const authToken = process.env.TWILIO_AUTH_TOKEN;
 
-    if (!process.env.BASE_URL) {
-      console.error('❌ BASE_URL missing');
-      return res.status(500).send('Server config error');
-    }
-
     const twilioSignature = req.headers['x-twilio-signature'] || '';
 
     const url = new URL(req.originalUrl, process.env.BASE_URL).toString();
 
-    const params = req.rawBody; // 🔥 RAW BODY FIX
+    const params = req.body; // ✅ FIXED
 
     const isValid = twilio.validateRequest(
       authToken,
