@@ -23,13 +23,22 @@ const getRandom = (arr) => {
 };
 
 // ✅ ROUTE
-router.post('/webhook', async (req, res) => {
+ router.post('/webhook', async (req, res) => {
   try {
     const message = (req.body.Body || '').trim();
-    const from = req.body.From || '';
+    const from = (req.body.From || '').trim();
 
     console.log('📩 Message:', message);
     console.log('👤 From:', from);
+
+    // ❌ invalid request guard
+    if (!from) {
+      console.log("❌ Invalid From");
+      return res.status(400).send('Invalid request');
+    }
+
+    const user = await handleUser(from);
+    console.log("👉 CURRENT STATE:", user.state);
 
     // ❌ empty message guard
     if (!message) {
@@ -41,24 +50,35 @@ router.post('/webhook', async (req, res) => {
       `);
     }
 
-    const user = await handleUser(from);
-
     let reply = '';
 
     switch (user.state) {
 
+      // 🔥 STEP 1
       case 'new':
         reply = getRandom(onboardingMessages.askName);
         user.state = 'asked_name';
         break;
 
+      // 🔥 STEP 2
       case 'asked_name':
+
+        if (message.toLowerCase() === 'hi') {
+          reply = "Naam bata bhai 😅 'hi' nahi";
+          break;
+        }
+
         user.name = message;
-        reply = getRandom(onboardingMessages.askGoal(message));
+
+        const goalMsgs = onboardingMessages.askGoal(user.name);
+        reply = getRandom(goalMsgs);
+
         user.state = 'asked_goal';
         break;
 
+      // 🔥 STEP 3
       case 'asked_goal':
+
         await Habit.create({
           userId: user._id,
           goalText: message,
@@ -68,7 +88,9 @@ router.post('/webhook', async (req, res) => {
         user.state = 'asked_witness';
         break;
 
+      // 🔥 STEP 4
       case 'asked_witness':
+
         if (message.toLowerCase() === 'skip') {
           reply = getRandom(onboardingMessages.setupDone);
         } else {
@@ -83,7 +105,7 @@ router.post('/webhook', async (req, res) => {
           await Witness.create({
             userId: user._id,
             witnessNumber: number,
-            whatsappNumber: whatsappNumber,
+            whatsappNumber,
           });
 
           reply = "🔥 Witness set! Ab sach me bhaag nahi sakta 😈";
@@ -92,22 +114,27 @@ router.post('/webhook', async (req, res) => {
         user.state = 'active';
         break;
 
+      // 🔥 STEP 5 (MAIN GAME)
       case 'active':
+
         if (message.toLowerCase() === 'done') {
 
           const today = new Date();
 
+          // ❌ already done today
           if (isSameDay(user.lastCheckinDate, today)) {
             reply = "Aaj already kar liya 😏 overacting band kar";
             break;
           }
 
+          // ✅ streak logic
           if (isYesterday(user.lastCheckinDate)) {
             user.currentStreak += 1;
           } else {
             user.currentStreak = 1;
           }
 
+          // 🔥 best streak update
           if (user.currentStreak > user.longestStreak) {
             user.longestStreak = user.currentStreak;
           }
@@ -115,13 +142,14 @@ router.post('/webhook', async (req, res) => {
           user.lastCheckinDate = today;
           user.missCount = 0;
 
-          // 🔥 improved reply
+          // 🔥 dynamic reply
           const msg = getRandom(activeMessages.done);
-          reply = msg.replace('{streak}', user.currentStreak);
+          reply = `${msg} 🔥 Streak: ${user.currentStreak}`;
 
         } else {
           reply = getRandom(activeMessages.unknown);
         }
+
         break;
 
       default:
@@ -129,6 +157,7 @@ router.post('/webhook', async (req, res) => {
     }
 
     await user.save();
+    console.log("✅ UPDATED STATE:", user.state);
 
     res.set('Content-Type', 'text/xml');
     res.send(`
