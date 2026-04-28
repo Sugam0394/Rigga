@@ -3,6 +3,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 
+import { errorHandler } from './middlewares/errorHandler.js';
+
 const app = express();
 
 app.set('trust proxy', 1);
@@ -36,5 +38,8 @@ app.use('/api', limiter);
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+
+
+app.use(errorHandler);
 
 export default app;

@@ -2,19 +2,17 @@
 import { validateTwilioRequest } from '../middlewares/validateTwilioRequest.js';
 import { validateWebhookPayload } from '../validators/webhookValidators.js';
 import { handleWebhook } from '../controllers/webhookController.js';
- 
-
-
+import asyncHandler from '../utils/asyncHandler.js';
 
 const router = express.Router();
 
 
+// 🚀 MAIN WEBHOOK ROUTE (CLEAN + PRO)
+router.post(
+  '/webhook',
+  validateTwilioRequest,
+  asyncHandler(async (req, res) => {
 
-
-
-// ✅ CLEAN WEBHOOK ROUTE
-router.post('/webhook', validateTwilioRequest, async (req, res) => {
-  try {
     const { Body, From } = validateWebhookPayload(req.body);
 
     const message = Body.trim();
@@ -23,31 +21,28 @@ router.post('/webhook', validateTwilioRequest, async (req, res) => {
     const result = await handleWebhook(message, from);
 
     res.set('Content-Type', 'text/xml');
-    res.status(result.statusCode).send(`
+
+    return res.status(result.statusCode).send(`
       <Response>
         <Message>${result.reply}</Message>
       </Response>
     `);
 
-  } catch (error) {
-    console.error('❌ Route error:', error.message);
-
-    res.set('Content-Type', 'text/xml');
-    res.status(500).send(`
-      <Response>
-        <Message>System error 😅</Message>
-      </Response>
-    `);
-  }
-});
-
-// ✅ Test route
-router.post('/test', validateTwilioRequest, (req, res) => {
-  console.log('✅ Valid Twilio request received at /test');
-  res.send('Twilio request validated successfully!');
-});
+  })
+);
 
 
+// 🧪 TEST ROUTE (for debugging Twilio signature)
+router.post(
+  '/test',
+  validateTwilioRequest,
+  asyncHandler(async (req, res) => {
+
+    console.log('✅ Valid Twilio request received at /test');
+
+    res.send('Twilio request validated successfully!');
+  })
+);
 
 
 export default router;
