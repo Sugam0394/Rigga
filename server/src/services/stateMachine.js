@@ -1,21 +1,28 @@
-import { User } from '../models/userModel.js';
+ import { User } from '../models/userModel.js';
 import { Habit } from '../models/habitModel.js';
 import { Witness } from '../models/witnessModel.js';
 import { onboardingMessages, activeMessages } from './messages.js';
-import { getTodayUTC , isSameDayUTC , isYesterdayUTC ,  } from '../utils/dateUtils.js';
+import { getTodayUTC , isSameDayUTC , isYesterdayUTC } from '../utils/dateUtils.js';
+import logger from '../utils/logger.js'; // 🔥 ADD THIS
 
-// helper
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
- 
 
 export const handleStateTransition = async (user, message) => {
   let reply = '';
+
+  logger.info("🔄 State machine start", {
+    userId: user._id,
+    state: user.state,
+    message
+  });
 
   switch (user.state) {
 
     case 'new':
       reply = getRandom(onboardingMessages.askName);
+
+      logger.info("➡️ Transition: new → asked_name", { userId: user._id });
+
       await User.findByIdAndUpdate(user._id, { state: 'asked_name' });
       break;
 
@@ -25,6 +32,11 @@ export const handleStateTransition = async (user, message) => {
       } else {
         const goalMsgs = onboardingMessages.askGoal(message);
         reply = getRandom(goalMsgs);
+
+        logger.info("➡️ Transition: asked_name → asked_goal", {
+          userId: user._id,
+          name: message
+        });
 
         await User.findByIdAndUpdate(user._id, {
           name: message,
@@ -37,6 +49,11 @@ export const handleStateTransition = async (user, message) => {
       await Habit.create({
         userId: user._id,
         goalText: message,
+      });
+
+      logger.info("🎯 Goal saved", {
+        userId: user._id,
+        goal: message
       });
 
       reply = getRandom(onboardingMessages.askWitness);
@@ -62,6 +79,11 @@ export const handleStateTransition = async (user, message) => {
           whatsappNumber,
         });
 
+        logger.info("👀 Witness added", {
+          userId: user._id,
+          witness: number
+        });
+
         reply = "🔥 Witness set! Ab sach me bhaag nahi sakta 😈";
       }
 
@@ -75,10 +97,13 @@ export const handleStateTransition = async (user, message) => {
 
         if (isSameDayUTC(user.lastCheckinDate, today)) {
           reply = "Aaj already kar liya 😏 overacting band kar";
+
+          logger.warn("⚠️ Duplicate check-in", { userId: user._id });
+
         } else {
           let streak = user.currentStreak;
 
-          if (isYesterdayUTC(user.lastCheckinDate, today)) {
+          if (isYesterdayUTC(user.lastCheckinDate)) {
             streak += 1;
           } else {
             streak = 1;
@@ -93,6 +118,12 @@ export const handleStateTransition = async (user, message) => {
             missCount: 0,
           });
 
+          logger.info("🔥 Streak updated", {
+            userId: user._id,
+            streak,
+            longestStreak
+          });
+
           const msg = getRandom(activeMessages.done);
           reply = `${msg} 🔥 Streak: ${streak}`;
         }
@@ -105,6 +136,11 @@ export const handleStateTransition = async (user, message) => {
     default:
       reply = 'System thoda hil gaya 😅';
   }
+
+  logger.info("✅ State machine end", {
+    userId: user._id,
+    finalReply: reply
+  });
 
   return { reply };
 };

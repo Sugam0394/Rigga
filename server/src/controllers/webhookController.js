@@ -1,8 +1,11 @@
-import { User } from '../models/userModel.js';
+ import { User } from '../models/userModel.js';
 import { handleStateTransition } from '../services/stateMachine.js';
+import logger from '../utils/logger.js'; // 🔥 ADD
 
- export const handleWebhook = async (message, from) => {
+export const handleWebhook = async (message, from) => {
   try {
+    logger.info("📩 Incoming webhook", { from, message });
+
     let user = await User.findOne({ whatsappNumber: from });
 
     if (!user) {
@@ -10,6 +13,8 @@ import { handleStateTransition } from '../services/stateMachine.js';
         whatsappNumber: from,
         phone: from.replace('whatsapp:', ''),
       });
+
+      logger.info("🆕 New user created", { userId: user._id, from });
     }
 
     if (!message) {
@@ -18,10 +23,20 @@ import { handleStateTransition } from '../services/stateMachine.js';
 
     const result = await handleStateTransition(user, message);
 
+    logger.info("📤 Reply generated", {
+      userId: user._id,
+      reply: result.reply
+    });
+
     return { reply: result.reply, statusCode: 200 };
 
   } catch (error) {
-    console.error('❌ Controller error:', error);
+    logger.error("❌ Controller error", {
+      error: error.message,
+      stack: error.stack,
+      from
+    });
+
     return { reply: 'System error 😅', statusCode: 500 };
   }
 };

@@ -3,12 +3,13 @@ import { validateTwilioRequest } from '../middlewares/validateTwilioRequest.js';
 import { validateWebhookPayload } from '../validators/webhookValidators.js';
 import { handleWebhook } from '../controllers/webhookController.js';
 import asyncHandler from '../utils/asyncHandler.js';
+import logger from '../utils/logger.js';
 
 const router = express.Router();
 
 
 // 🚀 MAIN WEBHOOK ROUTE (CLEAN + PRO)
-router.post(
+ router.post(
   '/webhook',
   validateTwilioRequest,
   asyncHandler(async (req, res) => {
@@ -18,7 +19,21 @@ router.post(
     const message = Body.trim();
     const from = From.trim();
 
+    // 🔥 PART 8.4 — LOGGING (ENTRY POINT)
+    logger.info("📩 Webhook received", {
+      from,
+      messageLength: message.length,
+      messagePreview: message.slice(0, 30),
+    });
+
     const result = await handleWebhook(message, from);
+
+    // 🔥 LOG RESPONSE
+    logger.info("📤 Webhook response sent", {
+      from,
+      replyLength: result.reply.length,
+      statusCode: result.statusCode,
+    });
 
     res.set('Content-Type', 'text/xml');
 
