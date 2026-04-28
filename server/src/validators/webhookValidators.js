@@ -1,4 +1,4 @@
-import Joi from 'joi';
+ import Joi from 'joi';
 
 export const validateWebhookPayload = (payload) => {
   const schema = Joi.object({
@@ -6,7 +6,7 @@ export const validateWebhookPayload = (payload) => {
     From: Joi.string()
       .required()
       .pattern(/^whatsapp:\+\d{1,15}$/),
-  });
+  }).unknown(true); // ← BAS YAHI ADD KARO
 
   const { error, value } = schema.validate(payload);
 
