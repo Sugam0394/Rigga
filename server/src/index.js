@@ -1,30 +1,35 @@
- import 'dotenv/config'
-import connectDB from './db/index.js'
-import app from './app.js'
-import { startCron } from './services/cronServices.js'
+ import 'dotenv/config';
+import connectDB from './db/index.js';
+import app from './app.js';
+import { startCron } from './services/cronServices.js';
+import { startMessageWorker } from './workers/messageWorker.js'
 
+const PORT = process.env.PORT || 3000;
 
- 
-
-const PORT = process.env.PORT || 3000
+// 🔍 ENV DEBUG (only for dev)
 console.log("ENV CHECK MONGODB_URL:", process.env.MONGODB_URL);
 console.log("MONGO VALUE TYPE:", typeof process.env.MONGODB_URL);
-console.log("MONGO VALUE:", process.env.MONGODB_URL);
 
-
- connectDB()
+// 🚀 START SERVER
+connectDB()
   .then(() => {
 
-    // ✅ START CRON HERE
+    console.log("✅ DB connected");
+
+    // 🔥 START CRON
     startCron();
 
+    // 🔥 START QUEUE WORKER (VERY IMPORTANT)
+    startMessageWorker();
+
     app.listen(PORT, () => {
-      console.log(`✅ server running successfully on Port : ${PORT}`)
-    })
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+
   })
   .catch((error) => {
-    console.log(`❌ mongoDB connection failed:`, error);
-    process.exit(1)
-  })
+    console.error(`❌ MongoDB connection failed:`, error);
+    process.exit(1);
+  });
 
 
