@@ -25,6 +25,9 @@ const limiter = rateLimit({
 
 // 🔥 IMPORTANT: webhook FIRST (NO limiter)
 import whatsappRouter from './Routes/whatsapp.routes.js';
+
+
+
 app.use('/api', whatsappRouter);
 
 // 🔥 limiter AFTER
