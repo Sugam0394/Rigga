@@ -56,11 +56,12 @@ const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
           }
         }
 
-        // 🛑 FIX 3: Atomic Update with Today's Date
         await User.findByIdAndUpdate(user._id, {
-          missCount: newMissCount,
-          lastCronRun: today // next restart pe ye skip ho jayega
-        });
+  missCount: newMissCount,
+  currentStreak: 0,          // 🔥 RESET STREAK
+  lastActiveDate: today,     // 🔥 KEEP TIMELINE CLEAN
+  lastCronRun: today
+});
 
       } catch (err) {
         logger.error("❌ Cron error for user", { userId: user._id, error: err.message });
