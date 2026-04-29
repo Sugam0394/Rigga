@@ -19,28 +19,37 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-// ❌ limiter ONLY for normal API
-const limiter = rateLimit({
+
+// 🔥 1. Webhook limiter (light, Twilio safe)
+const webhookLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 min
+  max: 50,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// 🔥 2. Apply webhook FIRST (important)
+app.use('/api/webhook', webhookLimiter, WhatsappRouter);
+
+
+// 🔥 3. Normal API limiter
+const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   message: 'Too many requests'
 });
 
- // ✅ SMART MIDDLEWARE (webhook exclude)
-app.use('/api', (req, res, next) => {
-  if (req.path === '/webhook') return next(); // ❌ skip limiter for Twilio
-  limiter(req, res, next); // ✅ apply limiter for rest
-});
- 
- // ✅ ROUTES
-app.use('/api', WhatsappRouter);
+// 🔥 4. Apply to rest APIs
+app.use('/api', apiLimiter);
 
- 
+
+// ✅ Health route
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
 
+// ✅ Error handler (last)
 app.use(errorHandler);
 
 export default app;

@@ -1,40 +1,45 @@
  import twilio from 'twilio';
 
 export const validateTwilioRequest = (req, res, next) => {
-  
-  // Development mein skip karo
+
+  // Dev mode skip
   if (process.env.NODE_ENV === 'development') {
-    console.log('⚠️ Twilio validation skipped in development');
+    console.log('⚠️ Twilio validation skipped (dev)');
     return next();
   }
 
   try {
     const authToken = process.env.TWILIO_AUTH_TOKEN;
     const twilioSignature = req.headers['x-twilio-signature'] || '';
-    
-    // BASE_URL se construct karo — trust proxy pe depend mat karo
-    const baseUrl = process.env.BASE_URL.replace(/\/$/, ''); // trailing slash remove
+
+    const baseUrl = process.env.BASE_URL.replace(/\/$/, '');
     const url = `${baseUrl}${req.originalUrl}`;
-    
-    const params = req.body;
 
-    console.log('🔍 Validating:', url);
-
-    const isValid = twilio.validateRequest(authToken, twilioSignature, url, params);
+    const isValid = twilio.validateRequest(
+      authToken,
+      twilioSignature,
+      url,
+      req.body
+    );
 
     if (!isValid) {
-      console.warn('❌ Invalid Twilio request:', {
-        url,
-        params,
-        signature: twilioSignature
-      });
-      return res.status(403).send('Forbidden');
+      console.warn('❌ Invalid Twilio request from:', req.ip);
+
+      res.set('Content-Type', 'text/xml');
+      return res.status(403).send(
+        '<Response><Message>Unauthorized</Message></Response>'
+      );
     }
 
+    console.log('✅ Twilio verified');
     next();
 
   } catch (error) {
     console.error('❌ Validation error:', error.message);
-    return res.status(500).send('Validation error');
+
+    res.set('Content-Type', 'text/xml');
+    return res.status(200).send(
+      '<Response><Message>Error occurred</Message></Response>'
+    );
   }
 };
