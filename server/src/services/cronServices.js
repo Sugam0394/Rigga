@@ -9,100 +9,63 @@ import { getTodayUTC , isSameDayUTC } from '../utils/dateUtils.js';
 
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-export const startCron = () => {
-  // ⏰ roz raat 10 baje
-   cron.schedule('30 16 * * *', async () => {
-
+ export const startCron = () => {
+  cron.schedule('30 16 * * *', async () => { // 10 PM IST
     logger.info("⏰ Cron started");
 
     const users = await User.find({ state: 'active' });
     const today = getTodayUTC();
 
-   
-
     for (let user of users) {
       try {
-
-        // 🔥 check miss using UTC
-        const isMiss =
-          !user.lastCheckinDate ||
-          !isSameDayUTC(user.lastCheckinDate, today);
-
-        if (!isMiss) continue;
-
-        let newMissCount = user.missCount + 1;
-
-        let message = '';
-        if (newMissCount === 1) {
-          message = getRandom(activeMessages.miss1);
-        } else if (newMissCount === 2) {
-          message = getRandom(activeMessages.miss2);
-        } else {
-          message = getRandom(activeMessages.miss3);
+        // 🛑 FIX 1: Idempotency Check (Double roast se bachao)
+        if (user.lastCronRun && isSameDayUTC(user.lastCronRun, today)) {
+          logger.info(`⏭️ Skipping ${user.name}, already processed today`);
+          continue;
         }
 
-        logger.info("📛 User missed", {
-          userId: user._id,
-          missCount: newMissCount
-        });
+        const isMiss = !user.lastCheckinDate || !isSameDayUTC(user.lastCheckinDate, today);
 
-        // ✅ USER MESSAGE (WITH RETRY)
-        if (user.whatsappNumber) {
-          try {
-            await sendWhatsAppMessage(user.whatsappNumber, message);
-          } catch (err) {
-            logger.error("❌ Failed to send user message", {
-              userId: user._id,
-              error: err.message
-            });
+        // Agar user ne task kar liya hai, toh sirf lastCronRun update karo aur aage badho
+        if (!isMiss) {
+          await User.findByIdAndUpdate(user._id, { lastCronRun: today });
+          continue;
+        }
+
+        let newMissCount = (user.missCount || 0) + 1;
+        let message = getRandom(
+          newMissCount === 1 ? activeMessages.miss1 : 
+          newMissCount === 2 ? activeMessages.miss2 : activeMessages.miss3
+        );
+
+        // 1. User ko roast message bhejo
+        await sendWhatsAppMessage(user.whatsappNumber, message).catch(err => 
+          logger.error("❌ User message failed", { userId: user._id, error: err.message })
+        );
+
+        // 🛑 FIX 2: Witness Alert (Only for Miss 2 and above)
+        if (newMissCount >= 2) {
+          const witness = await Witness.findOne({ userId: user._id, isActive: true });
+          if (witness) {
+            const habit = await Habit.findOne({ userId: user._id, isActive: true });
+            const roastMsg = `💀 ${user.name} ne aaj phir goal miss kiya!\n\nGoal: ${habit?.goalText || "Unknown"}\n\nIsse thoda seedha karo 😏`;
+            
+            await sendWhatsAppMessage(witness.whatsappNumber, roastMsg).catch(err => 
+              logger.error("❌ Witness message failed", { error: err.message })
+            );
           }
         }
 
-        // 🔥 WITNESS MESSAGE
-        const witness = await Witness.findOne({
-          userId: user._id,
-          isActive: true,
-        });
-
-        if (witness) {
-          const habit = await Habit.findOne({
-            userId: user._id,
-            isActive: true,
-          });
-
-          const roastMsg = `💀 ${user.name || "Tera dost"} aaj apna goal miss kar gaya!
-
-Goal: ${habit?.goalText || "Unknown"}
-
-Isko thoda seedha karo 😏`;
-
-          try {
-            await sendWhatsAppMessage(witness.whatsappNumber, roastMsg);
-          } catch (err) {
-            logger.error("❌ Witness message failed", {
-              witness: witness.whatsappNumber,
-              error: err.message
-            });
-          }
-        }
-
-        // 🔥 ATOMIC UPDATE (NO user.save())
+        // 🛑 FIX 3: Atomic Update with Today's Date
         await User.findByIdAndUpdate(user._id, {
           missCount: newMissCount,
-          lastCronRun: new Date()
+          lastCronRun: today // next restart pe ye skip ho jayega
         });
 
       } catch (err) {
-        logger.error("❌ Cron user processing failed", {
-          userId: user._id,
-          error: err.message
-        });
+        logger.error("❌ Cron error for user", { userId: user._id, error: err.message });
       }
     }
-
-    logger.info("✅ Cron completed", {
-      usersProcessed: users.length
-    });
-
+    logger.info("✅ Cron completed");
   });
 };
