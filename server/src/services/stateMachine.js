@@ -2,26 +2,23 @@
 import { Habit } from '../models/habitModel.js';
 import { Witness } from '../models/witnessModel.js';
 import { onboardingMessages, activeMessages } from './messages.js';
-import { getTodayUTC, isSameDayUTC, isYesterdayUTC } from '../utils/dateUtils.js';
- 
 import logger from '../utils/logger.js';
 import { canUseFeature } from './subscriptionServices.js';
+import { generateAIReply }from './aiServices.js';
 
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 export const handleStateTransition = async (user, messageData) => {
   const freshUser = await User.findById(user._id);
 
-  const text = messageData.text?.toLowerCase().trim() || "";
-  const mediaUrl = messageData.mediaUrl;
+  const text = messageData?.text?.toLowerCase().trim() || "";
 
   let reply = '';
 
   logger.info("🔄 Processing State", {
     state: freshUser.state,
     userId: freshUser._id,
-    text,
-    hasMedia: !!mediaUrl
+    text
   });
 
   switch (freshUser.state) {
@@ -72,7 +69,7 @@ export const handleStateTransition = async (user, messageData) => {
           state: 'active'
         });
 
-        reply = "Theek hai, akele hi discipline dikhao. Setup Done! 🔥";
+        reply = "Theek hai, setup complete 🔥";
         break;
       }
 
@@ -87,7 +84,8 @@ export const handleStateTransition = async (user, messageData) => {
 
       await Witness.create({
         userId: freshUser._id,
-        witnessNumber: number
+        witnessNumber: number,
+        whatsappNumber: `whatsapp:${number}`
       });
 
       await User.findByIdAndUpdate(freshUser._id, {
@@ -98,64 +96,19 @@ export const handleStateTransition = async (user, messageData) => {
       reply = "🔥 Witness set! Ab miss kiya toh report jayegi 😈";
       break;
 
-    // 🔴 ACTIVE (MAIN LOGIC)
+    // 🔴 ACTIVE (MAIN GAME)
     case 'active':
 
-      // 🟣 1. IMAGE PROOF (ALWAYS ALLOWED)
-      if (mediaUrl) {
-        reply = "Photo check kar raha hoon... 👀";
-
-        const isValid = await verifyPhotoProof(mediaUrl, freshUser.goal);
-
-        const today = getTodayUTC();
-
-        if (isValid) {
-
-          if (isSameDayUTC(freshUser.lastCheckinDate, today)) {
-
-            reply = `Aaj already kar liya 😏
-
-🔥 Current Streak: ${freshUser.currentStreak}
-🏆 Best Streak: ${freshUser.longestStreak}`;
-
-          } else {
-
-            let newStreak = isYesterdayUTC(freshUser.lastCheckinDate)
-              ? freshUser.currentStreak + 1
-              : 1;
-
-            const longestStreak = Math.max(newStreak, freshUser.longestStreak);
-
-            await User.findByIdAndUpdate(freshUser._id, {
-              currentStreak: newStreak,
-              longestStreak,
-              lastCheckinDate: today,
-              missCount: 0
-            });
-
-            reply = `Proof accepted ✅
-
-🔥 Current Streak: ${newStreak}
-🏆 Best Streak: ${longestStreak}`;
-          }
-
-        } else {
-          reply = "Ye tera goal ka proof nahi lag raha 😡 sahi photo bhej";
-        }
-
-        break;
-      }
-
-      // 🟡 2. SUBSCRIPTION GATE (AFTER CORE FEATURE)
+      // 🟡 Subscription check
       if (!canUseFeature(freshUser)) {
         return {
-          reply: "🚫 Free limit khatam.\n\nUpgrade kar warna sirf kaam kar 😏"
+          reply: "🚫 Free limit khatam.\n\nUpgrade kar 😏"
         };
       }
 
-      // 🔵 3. COMMANDS
+      // 🔵 Commands
       if (text === 'done') {
-        reply = "Sirf bolne se nahi hoga 😏\nPhoto bhej proof ke liye 📸";
+        reply = "Good 😏 consistency bana ke rakh";
         break;
       }
 
@@ -167,13 +120,13 @@ export const handleStateTransition = async (user, messageData) => {
 
       if (text === 'help') {
         reply = `Commands:
-📸 Photo bhejo (proof)
-📊 streak
-❓ help`;
+done
+streak
+help`;
         break;
       }
 
-      // 🤖 4. AI REPLY (PREMIUM FEEL)
+      // 🤖 AI (Groq)
       reply = await generateAIReply(text, {
         ...freshUser,
         level: freshUser.missCount + 1
@@ -183,7 +136,7 @@ export const handleStateTransition = async (user, messageData) => {
 
     // ❌ DEFAULT
     default:
-      reply = "System thoda hil gaya 😅 Type 'hi' to restart";
+      reply = "System reset ho gaya 😅 'hi' bhej";
 
       await User.findByIdAndUpdate(freshUser._id, {
         state: 'new'

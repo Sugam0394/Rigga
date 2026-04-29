@@ -8,31 +8,33 @@ import logger from '../utils/logger.js';
 const router = express.Router();
 
  
-// 🚀 MAIN WEBHOOK ROUTE (CLEAN + PRO)
  router.post(
   '/webhook',
   validateTwilioRequest,
   asyncHandler(async (req, res) => {
 
+    console.log('🔥 Webhook HIT');
 
-      console.log('🔥 Webhook HIT'); // 👈 yeh add karo
+    const { Body, From, NumMedia, MediaUrl0 } = validateWebhookPayload(req.body);
 
-      
-    const { Body, From } = validateWebhookPayload(req.body);
-
-    const message = Body.trim();
+    const text = Body?.trim() || "";
     const from = From.trim();
 
-    // 🔥 PART 8.4 — LOGGING (ENTRY POINT)
+    // ✅ IMPORTANT FIX
+    const messageData = {
+      text,
+      mediaUrl: Number(NumMedia) > 0 ? MediaUrl0 : null
+    };
+
     logger.info("📩 Webhook received", {
       from,
-      messageLength: message.length,
-      messagePreview: message.slice(0, 30),
+      text,
+      hasMedia: !!messageData.mediaUrl
     });
 
-    const result = await handleWebhook(message, from);
+    // ✅ FIXED CALL
+    const result = await handleWebhook(messageData, from);
 
-    // 🔥 LOG RESPONSE
     logger.info("📤 Webhook response sent", {
       from,
       replyLength: result.reply.length,
@@ -46,7 +48,6 @@ const router = express.Router();
         <Message>${result.reply}</Message>
       </Response>
     `);
-
   })
 );
 
