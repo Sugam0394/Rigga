@@ -112,7 +112,10 @@ export const handleStateTransition = async (user, message) => {
         const today = getTodayUTC();
 
         if (isSameDayUTC(freshUser.lastCheckinDate, today)) {
-          reply = "Aaj already kar liya 😏";
+         reply = `Aaj already kar liya 😏
+
+🔥 Current Streak: ${freshUser.currentStreak}
+🏆 Best Streak: ${freshUser.longestStreak}`;
           break;
         }
 
