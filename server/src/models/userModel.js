@@ -2,8 +2,16 @@
 
 const userSchema = new mongoose.Schema(
   {
+    // 📞 Core identity
+    whatsappNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+
     phone: {
       type: String,
+      default: "",
     },
 
     name: {
@@ -11,6 +19,7 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    // 🔥 STREAK SYSTEM (NEW)
     currentStreak: {
       type: Number,
       default: 0,
@@ -20,23 +29,20 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-   lastCronRun: {
-  type: Date,
-  default: null,
-},
 
-    whatsappNumber: {
-      type: String,
-      required: true,
-      unique: true,
+    lastActiveDate: {
+      type: Date,
+      default: null,
     },
 
+    // 🔁 STATE MACHINE
     state: {
       type: String,
       enum: ["new", "asked_name", "asked_goal", "asked_witness", "active"],
       default: "new",
     },
 
+    // 📊 Tracking
     missCount: {
       type: Number,
       default: 0,
@@ -47,6 +53,12 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
 
+    lastCronRun: {
+      type: Date,
+      default: null,
+    },
+
+    // 💰 Subscription
     subscriptionStatus: {
       type: String,
       enum: ["free", "paid"],
@@ -55,7 +67,5 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
- 
-
 
 export const User = mongoose.model("User", userSchema);

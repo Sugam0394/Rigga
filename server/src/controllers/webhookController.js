@@ -1,6 +1,6 @@
  import { User } from '../models/userModel.js';
-import { handleStateTransition } from '../services/stateMachine.js';
 import logger from '../utils/logger.js'; // 🔥 ADD
+import { handleStateTransition } from '../services/stateMachine.js';
 
 export const handleWebhook = async (message, from) => {
   try {
