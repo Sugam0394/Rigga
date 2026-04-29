@@ -7,13 +7,17 @@ import logger from '../utils/logger.js';
 
 const router = express.Router();
 
-
+ 
 // 🚀 MAIN WEBHOOK ROUTE (CLEAN + PRO)
  router.post(
   '/webhook',
   validateTwilioRequest,
   asyncHandler(async (req, res) => {
 
+
+      console.log('🔥 Webhook HIT'); // 👈 yeh add karo
+
+      
     const { Body, From } = validateWebhookPayload(req.body);
 
     const message = Body.trim();
