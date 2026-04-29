@@ -3,175 +3,108 @@ import { Habit } from '../models/habitModel.js';
 import { Witness } from '../models/witnessModel.js';
 import { onboardingMessages, activeMessages } from './messages.js';
 import { getTodayUTC, isSameDayUTC, isYesterdayUTC } from '../utils/dateUtils.js';
+import { generateAIReply } from './aiServices.js'; // Added Vision
 import logger from '../utils/logger.js';
 
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-export const handleStateTransition = async (user, message) => {
-
-  // 🔥 Always fresh user
+export const handleStateTransition = async (user, messageData) => {
   const freshUser = await User.findById(user._id);
-
-  const text = message.toLowerCase().trim();
+  const text = messageData.text?.toLowerCase().trim() || "";
+  const mediaUrl = messageData.mediaUrl; // Twilio se aane wali image URL
   let reply = '';
 
-  logger.info("🔄 State machine start", {
-    userId: freshUser._id,
-    state: freshUser.state,
-    message
-  });
+  logger.info("🔄 Processing State", { state: freshUser.state, userId: freshUser._id });
 
   switch (freshUser.state) {
-
-    // 🟢 NEW
+    // 🟢 NEW -> ASK NAME
     case 'new':
       reply = getRandom(onboardingMessages.askName);
-
-      await User.findByIdAndUpdate(freshUser._id, {
-        state: 'asked_name'
-      });
+      await User.findByIdAndUpdate(freshUser._id, { state: 'asked_name' });
       break;
 
-    // 🟡 NAME
+    // 🟡 NAME -> ASK GOAL
     case 'asked_name':
-      if (text === 'hi' || text.length < 2) {
-        reply = "Naam bata bhai 😅 'hi' nahi";
+      if (text.length < 2) {
+        reply = "Mazaak mat kar, sahi naam bata bhai! 😅";
         break;
       }
-
-      reply = getRandom(onboardingMessages.askGoal(message));
-
-      await User.findByIdAndUpdate(freshUser._id, {
-        name: message,
-        state: 'asked_goal'
-      });
+      reply = getRandom(onboardingMessages.askGoal(text));
+      await User.findByIdAndUpdate(freshUser._id, { name: text, state: 'asked_goal' });
       break;
 
-    // 🟠 GOAL
+    // 🟠 GOAL -> ASK WITNESS
     case 'asked_goal':
-      await Habit.create({
-        userId: freshUser._id,
-        goalText: message,
-      });
-
-      await User.findByIdAndUpdate(freshUser._id, {
-        goal: message,
-        state: 'asked_witness'
-      });
-
+      await Habit.create({ userId: freshUser._id, goalText: text });
+      await User.findByIdAndUpdate(freshUser._id, { goal: text, state: 'asked_witness' });
       reply = getRandom(onboardingMessages.askWitness);
       break;
 
-    // 🔵 WITNESS
+    // 🔵 WITNESS -> ACTIVE
     case 'asked_witness':
       if (text === 'skip') {
-
-        await User.findByIdAndUpdate(freshUser._id, {
-          state: 'active'
-        });
-
-        reply = getRandom(onboardingMessages.setupDone);
+        await User.findByIdAndUpdate(freshUser._id, { state: 'active' });
+        reply = "Theek hai, akele hi discipline dikhao. Setup Done! 🔥";
         break;
       }
-
-      const cleaned = message.replace(/\D/g, '');
-
+      const cleaned = text.replace(/\D/g, '');
       if (cleaned.length !== 10) {
-        reply = "10 digit number bhej bhai";
+        reply = "Bhai, 10 digit ka valid number bhej (e.g. 98XXXXXXXX)";
         break;
       }
-
       const number = '+91' + cleaned;
-      const whatsappNumber = `whatsapp:${number}`;
-
-      await Witness.create({
-        userId: freshUser._id,
-        witnessNumber: number,
-        whatsappNumber,
-      });
-
-      await User.findByIdAndUpdate(freshUser._id, {
-        witness: number,
-        state: 'active'
-      });
-
-      logger.info("👀 Witness added", {
-        userId: freshUser._id,
-        witness: number
-      });
-
-      reply = "🔥 Witness set! Ab bhaag nahi sakta 😈";
+      await Witness.create({ userId: freshUser._id, witnessNumber: number });
+      await User.findByIdAndUpdate(freshUser._id, { witness: number, state: 'active' });
+      reply = "🔥 Witness set! Ab agar miss kiya toh seedha unhe report jayegi. 😈";
       break;
 
-    // 🔴 ACTIVE
+    // 🔴 ACTIVE (The Main Game)
     case 'active':
+      // 1. Check for Image Proof (Gemini Vision)
+      if (mediaUrl) {
+        reply = "Wait, photo check kar raha hoon... 👀";
+        const isValid = await verifyPhotoProof(mediaUrl, freshUser.goal);
 
-      // ✅ DONE
-      if (text === 'done') {
-
-        const today = getTodayUTC();
-
-        if (isSameDayUTC(freshUser.lastCheckinDate, today)) {
-         reply = `Aaj already kar liya 😏
-
-🔥 Current Streak: ${freshUser.currentStreak}
-🏆 Best Streak: ${freshUser.longestStreak}`;
-          break;
-        }
-
-        let streak = freshUser.currentStreak;
-
-        if (isYesterdayUTC(freshUser.lastCheckinDate)) {
-          streak += 1;
+        if (isValid) {
+          const today = getTodayUTC();
+          if (isSameDayUTC(freshUser.lastCheckinDate, today)) {
+            reply = "Double mehnat? Sahi hai, par streak ek hi baar badhegi! 😉";
+          } else {
+            let newStreak = isYesterdayUTC(freshUser.lastCheckinDate) ? freshUser.currentStreak + 1 : 1;
+            await User.findByIdAndUpdate(freshUser._id, {
+              currentStreak: newStreak,
+              longestStreak: Math.max(newStreak, freshUser.longestStreak),
+              lastCheckinDate: today,
+              missCount: 0 // Reset penalty
+            });
+            reply = `Proof accepted! ✅ Streak: ${newStreak}. Kal phir milte hain.`;
+          }
         } else {
-          streak = 1;
+          reply = "Ye kya bhej diya? Ye tera goal nahi lag raha. Sahi proof bhej! 😡";
         }
+        break;
+      }
 
-        const longestStreak = Math.max(streak, freshUser.longestStreak);
-
-        await User.findByIdAndUpdate(freshUser._id, {
-          currentStreak: streak,
-          longestStreak,
-          lastCheckinDate: today,
-          lastActiveDate: today,
-          missCount: 0,
+      // 2. Commands
+      if (text === 'done') {
+        reply = "Sirf bolne se nahi hoga, photo bhej proof ke liye! 📸";
+      } else if (text === 'streak') {
+        reply = `🔥 Current: ${freshUser.currentStreak} | 🏆 Best: ${freshUser.longestStreak}`;
+      } else if (text === 'help') {
+        reply = "Commands: \n✅ Photo bhejo (Proof)\n📊 'streak'\n❓ 'help'";
+      } else {
+        // 3. AI Roast/Chat Logic (Escalation Aware)
+        reply = await generateAIReply(text, {
+          ...freshUser,
+          level: freshUser.missCount + 1
         });
-
-        logger.info("🔥 Streak updated", {
-          userId: freshUser._id,
-          streak,
-          longestStreak
-        });
-
-        const msg = getRandom(activeMessages.done);
-        reply = `${msg} 🔥 Streak: ${streak}`;
-        break;
       }
-
-      // 📊 STREAK CHECK
-      if (text === 'streak') {
-        reply = `🔥 Current: ${freshUser.currentStreak}\n🏆 Best: ${freshUser.longestStreak}`;
-        break;
-      }
-
-      // ❓ HELP
-      if (text === 'help') {
-        reply = "Commands:\n- done ✅\n- streak 📊\n- help ❓";
-        break;
-      }
-
-      // 🤖 DEFAULT
-      reply = getRandom(activeMessages.unknown);
       break;
 
     default:
-      reply = 'System thoda hil gaya 😅';
+      reply = "System crash ho gaya, par tera aalsi pan nahi! 😅 Type 'hi' to restart.";
+      await User.findByIdAndUpdate(freshUser._id, { state: 'new' });
   }
-
-  logger.info("✅ State machine end", {
-    userId: freshUser._id,
-    finalReply: reply
-  });
 
   return { reply };
 };
