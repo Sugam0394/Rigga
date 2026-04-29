@@ -1,13 +1,7 @@
  import { Worker } from 'bullmq';
-import IORedis from 'ioredis';
+import { redisConnection } from '../config/redis.js';
 import { processWhatsAppMessage } from '../services/twilioServices.js';
 import logger from '../utils/logger.js';
-
-// 🔥 Upstash connection
- const connection = new IORedis(process.env.REDIS_URL, {
-  tls: {}, // Upstash ke liye
-  maxRetriesPerRequest: null, // 🔥 FIX
-});
 
 export const startMessageWorker = () => {
 
@@ -15,11 +9,10 @@ export const startMessageWorker = () => {
     'messageQueue',
     async job => {
       const { to, message } = job.data;
-
       await processWhatsAppMessage({ to, message });
     },
     {
-      connection // ✅ FIXED
+      connection: redisConnection // ✅ SAME CONNECTION
     }
   );
 

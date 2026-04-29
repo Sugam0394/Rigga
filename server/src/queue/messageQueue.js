@@ -1,27 +1,15 @@
  import { Queue } from 'bullmq';
-import IORedis from 'ioredis';
+import { redisConnection } from '../config/redis.js';
 
-// 🔥 REDIS CONNECTION (UPSTASH / RAILWAY SAFE)
-const connection = new IORedis(process.env.REDIS_URL, {
-  maxRetriesPerRequest: null, // required for BullMQ
-  enableReadyCheck: false,
-});
-
-// ❌ ERROR HANDLING (IMPORTANT)
-connection.on('error', (err) => {
-  console.error('❌ Redis error:', err.message);
-});
-
-// ✅ QUEUE
 export const messageQueue = new Queue('messageQueue', {
-  connection,
+  connection: redisConnection,
   defaultJobOptions: {
-    attempts: 3, // retry 3 times
+    attempts: 3,
     backoff: {
       type: 'exponential',
-      delay: 2000, // 2 sec
+      delay: 2000,
     },
     removeOnComplete: true,
     removeOnFail: false,
   },
-});  
+});

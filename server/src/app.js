@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 
 import { errorHandler } from './middlewares/errorHandler.js';
+import WhatsappRouter from './Routes/whatsapp.routes.js';
 
 const app = express();
 
@@ -25,16 +26,16 @@ const limiter = rateLimit({
   message: 'Too many requests'
 });
 
-// 🔥 IMPORTANT: webhook FIRST (NO limiter)
-import whatsappRouter from './Routes/whatsapp.routes.js';
+ // ✅ SMART MIDDLEWARE (webhook exclude)
+app.use('/api', (req, res, next) => {
+  if (req.path === '/webhook') return next(); // ❌ skip limiter for Twilio
+  limiter(req, res, next); // ✅ apply limiter for rest
+});
+ 
+ // ✅ ROUTES
+app.use('/api', WhatsappRouter);
 
-
-
-app.use('/api', whatsappRouter);
-
-// 🔥 limiter AFTER
-app.use('/api', limiter);
-
+ 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });

@@ -11,12 +11,14 @@ const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 export const startCron = () => {
   // ⏰ roz raat 10 baje
-  cron.schedule('0 22 * * *', async () => {
+   cron.schedule('30 16 * * *', async () => {
 
     logger.info("⏰ Cron started");
 
     const users = await User.find({ state: 'active' });
     const today = getTodayUTC();
+
+   
 
     for (let user of users) {
       try {

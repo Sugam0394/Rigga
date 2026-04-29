@@ -21,24 +21,20 @@ export const sendWhatsAppMessage = async (to, message) => {
 
 
 // 🚀 ACTUAL SENDER (WORKER USE ONLY)
-export const processWhatsAppMessage = async ({ to, message }) => {
+ export const processWhatsAppMessage = async ({ to, message }) => {
 
-  return retryAsync(async () => {
+  logger.info("📤 Sending message", { to });
 
-    logger.info("📤 Sending message", { to });
+  const res = await client.messages.create({
+    from: process.env.TWILIO_WHATSAPP_NUMBER,
+    to,
+    body: message,
+  });
 
-    const res = await client.messages.create({
-      from: process.env.TWILIO_WHATSAPP_NUMBER,
-      to,
-      body: message,
-    });
+  logger.info("✅ Message sent", {
+    to,
+    sid: res.sid
+  });
 
-    logger.info("✅ Message sent", {
-      to,
-      sid: res.sid
-    });
-
-    return res;
-
-  }, 3, 2000);
+  return res;
 };

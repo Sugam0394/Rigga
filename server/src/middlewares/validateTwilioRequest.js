@@ -23,12 +23,11 @@ export const validateTwilioRequest = (req, res, next) => {
     const isValid = twilio.validateRequest(authToken, twilioSignature, url, params);
 
     if (!isValid) {
-      console.log('❌ Twilio validation failed');
-      console.log('   URL used:', url);
-      console.log('   Signature:', twilioSignature?.substring(0, 20) + '...');
-      console.log('🔑 Token length:', authToken?.length);
-console.log('🔑 Token preview:', authToken?.substring(0, 6));
-console.log('📦 Body params:', JSON.stringify(params));
+      console.warn('❌ Invalid Twilio request:', {
+        url,
+        params,
+        signature: twilioSignature
+      });
       return res.status(403).send('Forbidden');
     }
 

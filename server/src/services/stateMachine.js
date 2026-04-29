@@ -7,23 +7,25 @@ import logger from '../utils/logger.js'; // 🔥 ADD THIS
 
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-export const handleStateTransition = async (user, message) => {
+ export const handleStateTransition = async (user, message) => {
+
+  // 🔥 ALWAYS GET FRESH USER (IMPORTANT)
+  const freshUser = await User.findById(user._id);
+
   let reply = '';
 
   logger.info("🔄 State machine start", {
-    userId: user._id,
-    state: user.state,
+    userId: freshUser._id,
+    state: freshUser.state,
     message
   });
 
-  switch (user.state) {
+  switch (freshUser.state) {
 
     case 'new':
       reply = getRandom(onboardingMessages.askName);
 
-      logger.info("➡️ Transition: new → asked_name", { userId: user._id });
-
-      await User.findByIdAndUpdate(user._id, { state: 'asked_name' });
+      await User.findByIdAndUpdate(freshUser._id, { state: 'asked_name' });
       break;
 
     case 'asked_name':
@@ -33,12 +35,7 @@ export const handleStateTransition = async (user, message) => {
         const goalMsgs = onboardingMessages.askGoal(message);
         reply = getRandom(goalMsgs);
 
-        logger.info("➡️ Transition: asked_name → asked_goal", {
-          userId: user._id,
-          name: message
-        });
-
-        await User.findByIdAndUpdate(user._id, {
+        await User.findByIdAndUpdate(freshUser._id, {
           name: message,
           state: 'asked_goal'
         });
@@ -47,47 +44,46 @@ export const handleStateTransition = async (user, message) => {
 
     case 'asked_goal':
       await Habit.create({
-        userId: user._id,
+        userId: freshUser._id,
         goalText: message,
-      });
-
-      logger.info("🎯 Goal saved", {
-        userId: user._id,
-        goal: message
       });
 
       reply = getRandom(onboardingMessages.askWitness);
 
-      await User.findByIdAndUpdate(user._id, { state: 'asked_witness' });
+      await User.findByIdAndUpdate(freshUser._id, { state: 'asked_witness' });
       break;
 
     case 'asked_witness':
       if (message.toLowerCase() === 'skip') {
         reply = getRandom(onboardingMessages.setupDone);
       } else {
-        let number = message.replace(/\s+/g, '');
 
-        if (!number.startsWith('+91')) {
-          number = '+91' + number;
+        // 🔥 CLEAN + VALIDATE NUMBER
+        const cleaned = message.replace(/\D/g, '');
+
+        if (cleaned.length !== 10) {
+          reply = "10 digit number bhej bhai";
+          break;
         }
 
+        const number = '+91' + cleaned;
         const whatsappNumber = `whatsapp:${number}`;
 
         await Witness.create({
-          userId: user._id,
+          userId: freshUser._id,
           witnessNumber: number,
           whatsappNumber,
         });
 
         logger.info("👀 Witness added", {
-          userId: user._id,
+          userId: freshUser._id,
           witness: number
         });
 
         reply = "🔥 Witness set! Ab sach me bhaag nahi sakta 😈";
       }
 
-      await User.findByIdAndUpdate(user._id, { state: 'active' });
+      await User.findByIdAndUpdate(freshUser._id, { state: 'active' });
       break;
 
     case 'active':
@@ -95,23 +91,24 @@ export const handleStateTransition = async (user, message) => {
 
         const today = getTodayUTC();
 
-        if (isSameDayUTC(user.lastCheckinDate, today)) {
+        if (isSameDayUTC(freshUser.lastCheckinDate, today)) {
           reply = "Aaj already kar liya 😏 overacting band kar";
 
-          logger.warn("⚠️ Duplicate check-in", { userId: user._id });
+          logger.warn("⚠️ Duplicate check-in", { userId: freshUser._id });
 
         } else {
-          let streak = user.currentStreak;
 
-          if (isYesterdayUTC(user.lastCheckinDate)) {
+          let streak = freshUser.currentStreak;
+
+          if (isYesterdayUTC(freshUser.lastCheckinDate)) {
             streak += 1;
           } else {
             streak = 1;
           }
 
-          const longestStreak = Math.max(streak, user.longestStreak);
+          const longestStreak = Math.max(streak, freshUser.longestStreak);
 
-          await User.findByIdAndUpdate(user._id, {
+          await User.findByIdAndUpdate(freshUser._id, {
             currentStreak: streak,
             longestStreak,
             lastCheckinDate: today,
@@ -119,7 +116,7 @@ export const handleStateTransition = async (user, message) => {
           });
 
           logger.info("🔥 Streak updated", {
-            userId: user._id,
+            userId: freshUser._id,
             streak,
             longestStreak
           });
@@ -138,7 +135,7 @@ export const handleStateTransition = async (user, message) => {
   }
 
   logger.info("✅ State machine end", {
-    userId: user._id,
+    userId: freshUser._id,
     finalReply: reply
   });
 

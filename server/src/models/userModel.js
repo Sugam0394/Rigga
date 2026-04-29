@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+   lastCronRun: {
+  type: Date,
+  default: null,
+},
 
     whatsappNumber: {
       type: String,
@@ -51,5 +55,7 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+ 
+
 
 export const User = mongoose.model("User", userSchema);
