@@ -6,7 +6,7 @@ export const generateAIReply = async (message, user) => {
   try {
     // 1. Model Setup (Using latest stable version)
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash", // Added '-latest'
+      model: "gemini-2.5-flash", // Added '-latest'
       safetySettings: [
         { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
         { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
