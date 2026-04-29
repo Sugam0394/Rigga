@@ -73,6 +73,7 @@ witness: {
   type: String,
   default: "",
 },
+
   },
   { timestamps: true }
 );

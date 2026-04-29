@@ -29,8 +29,10 @@ const webhookLimiter = rateLimit({
 });
 
 // 🔥 2. Apply webhook FIRST (important)
-app.use('/api/', webhookLimiter, WhatsappRouter);
+app.use('/api', webhookLimiter, WhatsappRouter);
 
+import taskRouter from './Routes/taskRoute.js';
+app.use('/api', taskRouter);
 
 // 🔥 3. Normal API limiter
 const apiLimiter = rateLimit({
