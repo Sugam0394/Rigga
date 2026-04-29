@@ -64,6 +64,15 @@ const userSchema = new mongoose.Schema(
       enum: ["free", "paid"],
       default: "free",
     },
+    goal: {
+  type: String,
+  default: "",
+},
+
+witness: {
+  type: String,
+  default: "",
+},
   },
   { timestamps: true }
 );
