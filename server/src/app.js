@@ -5,8 +5,11 @@ import rateLimit from 'express-rate-limit';
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import WhatsappRouter from './Routes/whatsapp.routes.js';
+import { startCron } from './services/cronServices.js';
 
 const app = express();
+
+startCron(); // Start the cron job
 
 app.set('trust proxy', 1);
 
@@ -28,13 +31,15 @@ const webhookLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+
 // 🔥 2. Apply webhook FIRST (important)
 app.use('/api', webhookLimiter, WhatsappRouter);
 
 import taskRouter from './Routes/taskRoute.js';
 app.use('/api', taskRouter);
 
-// 🔥 3. Normal API limiter
+ 
+// 🔥 4. Normal API limiter
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,

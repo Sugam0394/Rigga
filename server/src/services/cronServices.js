@@ -1,72 +1,57 @@
  import cron from 'node-cron';
 import { User } from '../models/userModel.js';
-import { activeMessages } from './messages.js';
-import { Witness } from '../models/witnessModel.js';
-import { Habit } from '../models/habitModel.js';
+import { TaskBox } from '../models/taskModel.js';   // Hum naya model use karenge
 import { sendWhatsAppMessage } from './twilioServices.js';
+ import { generateAIReply } from './aiServices.js'; // Groq Roast ke liye
 import logger from '../utils/logger.js';
-import { getTodayUTC , isSameDayUTC } from '../utils/dateUtils.js';
 
-const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+export const startCron = () => {
+  
+  cron.schedule('30 16 * * *', async () => {
+    logger.info("⏰ Rigga Cron Started: Checking pending tasks...");
 
- export const startCron = () => {
-  cron.schedule('30 16 * * *', async () => { // 10 PM IST
-    logger.info("⏰ Cron started");
+    try {
+       
+      const overdueTasks = await TaskBox.find({
+        status: 'pending',
+        deadline: { $lt: new Date() }
+      });
 
-    const users = await User.find({ state: 'active' });
-    const today = getTodayUTC();
+      for (let task of overdueTasks) {
+        const user = await User.findById(task.userId);
+        if (!user) continue;
 
-    for (let user of users) {
-      try {
-        // 🛑 FIX 1: Idempotency Check (Double roast se bachao)
-        if (user.lastCronRun && isSameDayUTC(user.lastCronRun, today)) {
-          logger.info(`⏭️ Skipping ${user.name}, already processed today`);
-          continue;
-        }
-
-        const isMiss = !user.lastCheckinDate || !isSameDayUTC(user.lastCheckinDate, today);
-
-        // Agar user ne task kar liya hai, toh sirf lastCronRun update karo aur aage badho
-        if (!isMiss) {
-          await User.findByIdAndUpdate(user._id, { lastCronRun: today });
-          continue;
-        }
-
-        let newMissCount = (user.missCount || 0) + 1;
-        let message = getRandom(
-          newMissCount === 1 ? activeMessages.miss1 : 
-          newMissCount === 2 ? activeMessages.miss2 : activeMessages.miss3
+      
+        const roastMessage = await generateAIReply(
+          `User failed task: ${task.goal}. Proof not submitted.`, 
+          { name: user.name, goal: task.goal, level: task.level }
         );
 
-        // 1. User ko roast message bhejo
-        await sendWhatsAppMessage(user.whatsappNumber, message).catch(err => 
-          logger.error("❌ User message failed", { userId: user._id, error: err.message })
-        );
+        // 3. User ko WhatsApp par roast bhejo
+        await sendWhatsAppMessage(user.whatsappNumber, roastMessage);
 
-        // 🛑 FIX 2: Witness Alert (Only for Miss 2 and above)
-        if (newMissCount >= 2) {
-          const witness = await Witness.findOne({ userId: user._id, isActive: true });
-          if (witness) {
-            const habit = await Habit.findOne({ userId: user._id, isActive: true });
-            const roastMsg = `💀 ${user.name} ne aaj phir goal miss kiya!\n\nGoal: ${habit?.goalText || "Unknown"}\n\nIsse thoda seedha karo 😏`;
-            
-            await sendWhatsAppMessage(witness.whatsappNumber, roastMsg).catch(err => 
-              logger.error("❌ Witness message failed", { error: err.message })
-            );
-          }
+        // 4. Witness ko alert bhejo (Day 3 Penalty)
+        if (task.witness && task.witness.phone) {
+          const witnessAlert = `🚨 ALERT: ${user.name} failed his goal: "${task.goal}".\n\nAb iska kya karna hai aap dekh lo! 😈`;
+          await sendWhatsAppMessage(task.witness.phone, witnessAlert);
+          task.witness.notified = true;
         }
 
-        await User.findByIdAndUpdate(user._id, {
-  missCount: newMissCount,
-  currentStreak: 0,          // 🔥 RESET STREAK
-  lastActiveDate: today,     // 🔥 KEEP TIMELINE CLEAN
-  lastCronRun: today
-});
+        // 5. Update Task Status & User Stats
+        task.status = 'failed';
+        task.level = Math.min((task.level || 1) + 1, 4); // Increase failure level
+        await task.save();
 
-      } catch (err) {
-        logger.error("❌ Cron error for user", { userId: user._id, error: err.message });
+        user.totalFails = (user.totalFails || 0) + 1;
+        user.currentStreak = 0; // Streak reset
+        await user.save();
+
+        logger.info(`💀 Task ${task._id} failed for user ${user.name}`);
       }
+
+      logger.info("✅ Cron completed successfully");
+    } catch (err) {
+      logger.error("❌ Cron global error:", err.message);
     }
-    logger.info("✅ Cron completed");
   });
 };
