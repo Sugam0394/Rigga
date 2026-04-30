@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+ import mongoose from "mongoose";
 
 const witnessSchema = new mongoose.Schema(
   {
@@ -13,7 +13,7 @@ const witnessSchema = new mongoose.Schema(
 const proofSchema = new mongoose.Schema(
   {
     url: String,
-    geminiVerdict: String, // "ok"|"fake"|"unclear"
+    geminiVerdict: { type: String, enum: ["ok", "fake", "unclear", "none"], default: "none" }, 
     submittedAt: Date,
   },
   { _id: false }
@@ -21,7 +21,7 @@ const proofSchema = new mongoose.Schema(
 
 const escalationLogSchema = new mongoose.Schema(
   {
-    at: Date,
+    at: { type: Date, default: Date.now },
     action: String,
     payload: String,
     outcome: String,
@@ -41,10 +41,8 @@ const taskBoxSchema = new mongoose.Schema(
     level: { type: Number, default: 1 }, // Escalation progression (1-4)
     proof: proofSchema,
     escalationLog: [escalationLogSchema],
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
   },
-  { timestamps: true }
+  { timestamps: true } // Automatically manages createdAt and updatedAt
 );
 
 export const TaskBox = mongoose.model("TaskBox", taskBoxSchema);

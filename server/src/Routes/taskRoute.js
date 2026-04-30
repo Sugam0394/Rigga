@@ -1,6 +1,8 @@
  import express from "express";
 import { TaskBox } from "../models/taskModel.js";
-import { User } from "../models/userModel.js"; // FIXED: Use User, not People
+import { User } from "../models/userModel.js";
+import { validateProofWithGroq } from "../validators/visionValidator.js";// 🔥 Added for Error #4
+import { unlockNextTaskBox } from "../services/taskBoxServices.js"; // 🔥 Added for Error #7
 
 const router = express.Router();
 
@@ -11,27 +13,24 @@ router.post("/create", async (req, res) => {
   try {
     const { phone, goal, stakeType, stakeUrl, witness, deadline } = req.body;
 
-    // 🛡️ Validation (FIXED: Basic guardrails)
     if (!phone || !goal || !deadline || !witness?.phone) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // 🔧 Get or create user using whatsappNumber (FIXED: People -> User)
     let user = await User.findOne({ whatsappNumber: phone });
     if (!user) {
       user = await User.create({ 
         whatsappNumber: phone, 
-        name: witness.name || "User" 
+        name: witness.name || "User",
+        state: 'active'
       });
     }
 
-    // Validate only one pending TaskBox per user
     const hasPending = await TaskBox.findOne({ userId: user._id, status: "pending" });
     if (hasPending) {
       return res.status(400).json({ error: "You already have a pending Task Box." });
     }
 
-    // 🔧 Make TaskBox (FIXED: Initialized proof object)
     const taskBox = await TaskBox.create({
       userId: user._id,
       goal,
@@ -42,10 +41,9 @@ router.post("/create", async (req, res) => {
         phone: witness.phone,
       },
       deadline: new Date(deadline),
-      proof: { url: null, geminiVerdict: null, submittedAt: null } // FIXED: Error 4
+      proof: { url: null, geminiVerdict: "none", submittedAt: null }
     });
 
-    // 🔧 Link to user (FIXED: Fields now exist in User model)
     user.activeTaskBox = taskBox._id;
     user.taskBoxes.push(taskBox._id);
     await user.save();
@@ -57,13 +55,8 @@ router.post("/create", async (req, res) => {
   }
 });
 
-
-
-
-
-
 /**
- * ✅ GET Active TaskBox (FIXED: Error 5 - Required for Day 2)
+ * ✅ GET Active TaskBox
  */
 router.get("/:phone/active", async (req, res) => {
   try {
@@ -79,77 +72,70 @@ router.get("/:phone/active", async (req, res) => {
   }
 });
 
-
-
-
-
 /**
- * Endpoint: POST /api/task/:taskBoxId/submit-proof
+ * ✅ Submit Proof & Trigger AI Chain (Error #3 & #4)
  */
 router.post("/:taskBoxId/submit-proof", async (req, res) => {
   try {
     const { taskBoxId } = req.params;
     const { proofUrl } = req.body;
 
-    if (!proofUrl) {
-      return res.status(400).json({ error: "Proof URL is required" });
-    }
+    if (!proofUrl) return res.status(400).json({ error: "Proof URL is required" });
 
-    // 1. Task dhundo
     const taskBox = await TaskBox.findById(taskBoxId);
-    if (!taskBox) {
-      return res.status(404).json({ error: "TaskBox not found" });
-    }
-
-    if (taskBox.status !== "pending") {
-      return res.status(400).json({ error: "Proof already submitted or task expired" });
+    if (!taskBox || taskBox.status !== "pending") {
+      return res.status(404).json({ error: "Task not found or already processed" });
     }
 
     const now = new Date();
     const isLate = now > taskBox.deadline;
 
-    // 2. Update proof object
+    // 🔥 Trigger AI Vision Validation (Error #4)
+    const verdict = await validateProofWithGroq(proofUrl, taskBox.goal);
+
     taskBox.proof = {
       url: proofUrl,
-      geminiVerdict: null, // Day 3 mein Gemini update karega
+      geminiVerdict: verdict,
       submittedAt: now,
     };
 
-    // 3. Status logic (On-time vs Late)
-    if (isLate) {
+    // 🏆 Logic: Late submission ya Fake image = Failed
+    if (isLate || verdict === "fake") {
       taskBox.status = "failed";
-      taskBox.level = 2; // Level up for failure
+      taskBox.level = Math.min((taskBox.level || 1) + 1, 4);
     } else {
       taskBox.status = "done";
-      taskBox.level = 4; // High level for success
     }
 
-    // 4. Log the action
     taskBox.escalationLog.push({
       at: now,
       action: "proof_submitted",
-      payload: proofUrl,
+      payload: `Verdict: ${verdict}`,
       outcome: taskBox.status,
     });
 
     await taskBox.save();
 
-    // 5. Update User Stats (Wins/Fails)
+    // 📈 Update User Stats & Unlock Next (Error #7)
     const user = await User.findById(taskBox.userId);
     if (user) {
       if (taskBox.status === "done") {
-        user.totalWins = (user.totalWins || 0) + 1;
+        user.totalWins += 1;
+        user.currentStreak += 1;
       } else {
-        user.totalFails = (user.totalFails || 0) + 1;
+        user.totalFails += 1;
+        user.currentStreak = 0;
       }
-      // Task link release (optional: depends if you want to keep activeTaskBox until next day)
-      user.activeTaskBox = null; 
+      
       await user.save();
+      
+      // 🔥 Automatically unlock next TaskBox so the cycle continues
+      await unlockNextTaskBox(user._id);
     }
 
     res.json({ 
       success: true, 
-      message: isLate ? "Late submission recorded" : "Task completed successfully",
+      verdict,
       status: taskBox.status 
     });
 

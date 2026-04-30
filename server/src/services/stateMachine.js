@@ -1,152 +1,111 @@
  import { User } from '../models/userModel.js';
-import { Habit } from '../models/habitModel.js';
-import { Witness } from '../models/witnessModel.js';
-import { onboardingMessages, activeMessages } from './messages.js';
-import logger from '../utils/logger.js';
+import { TaskBox } from '../models/taskModel.js';  
+import { onboardingMessages } from './messages.js';
+import { generateAIReply } from './aiServices.js';
 import { canUseFeature } from './subscriptionServices.js';
-import { generateAIReply }from './aiServices.js';
+import logger from '../utils/logger.js';
 
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 export const handleStateTransition = async (user, messageData) => {
   const freshUser = await User.findById(user._id);
-
   const text = messageData?.text?.toLowerCase().trim() || "";
-
   let reply = '';
 
-  logger.info("🔄 Processing State", {
-    state: freshUser.state,
-    userId: freshUser._id,
-    text
-  });
+  logger.info("🔄 Processing State", { state: freshUser.state, userId: freshUser._id, text });
 
   switch (freshUser.state) {
-
-    // 🟢 NEW
     case 'new':
       reply = getRandom(onboardingMessages.askName);
-
-      await User.findByIdAndUpdate(freshUser._id, {
-        state: 'asked_name'
-      });
+      await User.findByIdAndUpdate(freshUser._id, { state: 'asked_name' });
       break;
 
-    // 🟡 NAME
     case 'asked_name':
       if (text.length < 2) {
         reply = "Mazaak mat kar, sahi naam bata bhai 😅";
         break;
       }
-
       reply = getRandom(onboardingMessages.askGoal(text));
-
-      await User.findByIdAndUpdate(freshUser._id, {
-        name: text,
-        state: 'asked_goal'
-      });
+      await User.findByIdAndUpdate(freshUser._id, { name: text, state: 'asked_goal' });
       break;
 
-    // 🟠 GOAL
     case 'asked_goal':
-      await Habit.create({
+      // 🔥 FIX: Create TaskBox instead of Habit
+      const newTask = await TaskBox.create({
         userId: freshUser._id,
-        goalText: text
+        goal: text,
+        stakeType: "photo", // Default stake
+        stakeUrl: "pending",
+        deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24h from now
+        status: "pending"
       });
 
       await User.findByIdAndUpdate(freshUser._id, {
         goal: text,
+        activeTaskBox: newTask._id, // Link to user
         state: 'asked_witness'
       });
 
       reply = getRandom(onboardingMessages.askWitness);
       break;
 
-    // 🔵 WITNESS
     case 'asked_witness':
+      const userTask = await TaskBox.findOne({ userId: freshUser._id, status: 'pending' });
+      
       if (text === 'skip') {
-        await User.findByIdAndUpdate(freshUser._id, {
-          state: 'active'
-        });
-
-        reply = "Theek hai, setup complete 🔥";
+        await User.findByIdAndUpdate(freshUser._id, { state: 'active' });
+        reply = "Theek hai, setup complete 🔥 Kal se proof mangunga!";
         break;
       }
 
       const cleaned = text.replace(/\D/g, '');
-
       if (cleaned.length !== 10) {
         reply = "10 digit number bhej bhai (98XXXXXXXX)";
         break;
       }
 
-      const number = '+91' + cleaned;
+      const witnessNumber = '+91' + cleaned;
 
-      await Witness.create({
-        userId: freshUser._id,
-        witnessNumber: number,
-        whatsappNumber: `whatsapp:${number}`
-      });
+      // 🔥 FIX: Update TaskBox witness instead of Witness.create
+      if (userTask) {
+        userTask.witness = {
+          name: "Witness",
+          phone: `whatsapp:${witnessNumber}`,
+          notified: false
+        };
+        await userTask.save();
+      }
 
-      await User.findByIdAndUpdate(freshUser._id, {
-        witness: number,
-        state: 'active'
-      });
-
+      await User.findByIdAndUpdate(freshUser._id, { state: 'active' });
       reply = "🔥 Witness set! Ab miss kiya toh report jayegi 😈";
       break;
 
-    // 🔴 ACTIVE (MAIN GAME)
     case 'active':
-
-      // 🟡 Subscription check
       if (!canUseFeature(freshUser)) {
-        return {
-          reply: "🚫 Free limit khatam.\n\nUpgrade kar 😏"
-        };
+        return { reply: "🚫 Free limit khatam.\n\nUpgrade kar 😏" };
       }
 
-      // 🔵 Commands
+      // 'done' command logic handling yahan se hata kar proof submission controller mein handle hogi
       if (text === 'done') {
-        reply = "Good 😏 consistency bana ke rakh";
+        reply = "Photo bhej bhai, sirf 'done' bolne se kaam nahi chalega! 📸";
         break;
       }
 
       if (text === 'streak') {
-        reply = `🔥 Current: ${freshUser.currentStreak}
-🏆 Best: ${freshUser.longestStreak}`;
+        reply = `🔥 Current: ${freshUser.currentStreak}\n🏆 Best: ${freshUser.longestStreak}`;
         break;
       }
 
-      if (text === 'help') {
-        reply = `Commands:
-done
-streak
-help`;
-        break;
-      }
-
-      // 🤖 AI (Groq)
       reply = await generateAIReply(text, {
         ...freshUser,
-        level: freshUser.missCount + 1
+        level: (freshUser.missCount || 0) + 1
       });
-
       break;
 
-    // ❌ DEFAULT
     default:
       reply = "System reset ho gaya 😅 'hi' bhej";
-
-      await User.findByIdAndUpdate(freshUser._id, {
-        state: 'new'
-      });
+      await User.findByIdAndUpdate(freshUser._id, { state: 'new' });
   }
-
-  logger.info("✅ Reply Sent", {
-    userId: freshUser._id,
-    reply
-  });
 
   return { reply };
 };
