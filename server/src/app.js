@@ -21,9 +21,9 @@ app.set('trust proxy', 1);
 
 // 2. Global Middlewares
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:5173", // Default Vite port
+  origin: process.env.CORS_ORIGIN,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+ 
 }));
 
 app.use(express.json({ limit: "16kb" })); // Body limit lagana safe hai
@@ -48,10 +48,10 @@ const apiLimiter = rateLimit({
  
 
  
-app.use('/api/whatsapp', webhookLimiter, WhatsappRouter); 
+app.use('/api', webhookLimiter, WhatsappRouter); 
 
  
-app.use('/api/tasks', apiLimiter, taskRouter); 
+app.use('/api', apiLimiter, taskRouter); 
 
 // 5. Health Check
 app.get('/health', (req, res) => {
