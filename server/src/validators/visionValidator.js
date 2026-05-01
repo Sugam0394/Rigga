@@ -4,30 +4,38 @@ import axios from "axios";
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 /**
- * Helper: Image URL ko Base64 mein convert karne ke liye
- * Taaki Groq access error na de
+ * Helper: URL to Base64 with Timeout & Size Check
  */
 async function encodeImage(url) {
-  const response = await axios.get(url, { responseType: 'arraybuffer' });
-  return Buffer.from(response.data).toString('base64');
+  try {
+    const response = await axios.get(url, { 
+      responseType: 'arraybuffer',
+      timeout: 5000, // 5 seconds timeout taaki server hang na ho
+      maxContentLength: 5 * 1024 * 1024 // 5MB Limit for safety
+    });
+    return Buffer.from(response.data).toString('base64');
+  } catch (error) {
+    console.error("❌ Image Fetch Error:", error.message);
+    throw new Error("Could not fetch proof image");
+  }
 }
 
 export const validateProofWithGroq = async (imageUrl, taskGoal) => {
   try {
-    // 1. Image ko fetch karke Base64 banana
     const base64Image = await encodeImage(imageUrl);
 
-    // 2. Groq Vision Call
     const response = await groq.chat.completions.create({
       messages: [
+        {
+          role: "system",
+          content: "You are a strict task validator for Rigga. Your only job is to compare an image with a stated goal. Respond with exactly ONE word: 'ok', 'fake', or 'unclear'. No punctuation, no explanation."
+        },
         {
           role: "user",
           content: [
             {
               type: "text",
-              text: `Goal: "${taskGoal}". Is this image valid proof? 
-              Options: 'ok' (valid), 'fake' (unrelated), 'unclear'. 
-              Give ONLY the word.`
+              text: `Goal: "${taskGoal}". Analyze this image. Does it prove the goal was completed? Output one word.`
             },
             {
               type: "image_url",
@@ -37,18 +45,24 @@ export const validateProofWithGroq = async (imageUrl, taskGoal) => {
         },
       ],
       model: "llama-3.2-11b-vision-preview",
-      temperature: 0.1, // Lower temperature = more consistent results
+      temperature: 0, // 0 for deterministic results
+      max_tokens: 5,   // Strict limit taaki AI lambe answer na de
     });
 
-    const verdict = response.choices[0]?.message?.content?.toLowerCase().replace(/[^a-z]/g, "");
+    const rawVerdict = response.choices[0]?.message?.content?.trim().toLowerCase() || "unclear";
     
-    // Strict validation of output
-    if (verdict.includes("ok")) return "ok";
-    if (verdict.includes("fake")) return "fake";
+    // 🔥 Strict matching logic
+    if (rawVerdict === "ok") return "ok";
+    if (rawVerdict === "fake") return "fake";
+    
+    // Secondary check for robustness
+    if (rawVerdict.includes("ok") && !rawVerdict.includes("not")) return "ok";
+    if (rawVerdict.includes("fake") || rawVerdict.includes("invalid")) return "fake";
+
     return "unclear";
 
   } catch (error) {
-    console.error("❌ Groq Vision Error:", error.message);
-    return "unclear"; // Fallback
+    console.error("❌ Groq Vision Critical Error:", error.message);
+    return "unclear"; 
   }
 };

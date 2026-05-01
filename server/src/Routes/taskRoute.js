@@ -1,13 +1,13 @@
  import express from "express";
 import { TaskBox } from "../models/taskModel.js";
 import { User } from "../models/userModel.js";
-import { validateProofWithGroq } from "../validators/visionValidator.js";// 🔥 Added for Error #4
-import { unlockNextTaskBox } from "../services/taskBoxServices.js"; // 🔥 Added for Error #7
+import { validateProofWithGroq } from "../validators/visionValidator.js";
+import { unlockNextTaskBox } from "../services/taskBoxServices.js";
 
 const router = express.Router();
 
 /**
- * ✅ Create a new TaskBox
+ * ✅ Create a new TaskBox (Dashboard Optimized)
  */
 router.post("/create", async (req, res) => {
   try {
@@ -17,18 +17,21 @@ router.post("/create", async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
+    // 1. WhatsApp Number normalization
     let user = await User.findOne({ whatsappNumber: phone });
     if (!user) {
       user = await User.create({ 
         whatsappNumber: phone, 
         name: witness.name || "User",
-        state: 'active'
+        state: 'active',
+        currentStreak: 0 // Initialize streak
       });
     }
 
+    // 2. Prevent duplicate active tasks
     const hasPending = await TaskBox.findOne({ userId: user._id, status: "pending" });
     if (hasPending) {
-      return res.status(400).json({ error: "You already have a pending Task Box." });
+      return res.status(400).json({ error: "Focus on your current task first!" });
     }
 
     const taskBox = await TaskBox.create({
@@ -44,11 +47,13 @@ router.post("/create", async (req, res) => {
       proof: { url: null, geminiVerdict: "none", submittedAt: null }
     });
 
-    user.activeTaskBox = taskBox._id;
-    user.taskBoxes.push(taskBox._id);
-    await user.save();
+    // 3. Update User Reference Atomic Update
+    await User.findByIdAndUpdate(user._id, {
+      $set: { activeTaskBox: taskBox._id },
+      $push: { taskBoxes: taskBox._id }
+    });
 
-    res.json({ success: true, taskBox });
+    res.status(201).json({ success: true, taskBox });
   } catch (err) {
     console.error("❌ Task Creation Error:", err);
     res.status(500).json({ error: "Failed to create TaskBox" });
@@ -56,50 +61,57 @@ router.post("/create", async (req, res) => {
 });
 
 /**
- * ✅ GET Active TaskBox
+ * ✅ GET Active Task (With User Stats for Dashboard)
  */
 router.get("/:phone/active", async (req, res) => {
   try {
     const user = await User.findOne({ whatsappNumber: req.params.phone })
       .populate("activeTaskBox");
     
-    if (!user || !user.activeTaskBox) {
-      return res.status(404).json({ error: "No active task found" });
-    }
-    res.json(user.activeTaskBox);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    
+    res.json({
+      activeTask: user.activeTaskBox,
+      stats: {
+        totalWins: user.totalWins || 0,
+        totalFails: user.totalFails || 0,
+        currentStreak: user.currentStreak || 0
+      }
+    });
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
 /**
- * ✅ Submit Proof & Trigger AI Chain (Error #3 & #4)
+ * ✅ Submit Proof & Execute Logic (The Core Game Engine)
  */
 router.post("/:taskBoxId/submit-proof", async (req, res) => {
   try {
     const { taskBoxId } = req.params;
     const { proofUrl } = req.body;
 
-    if (!proofUrl) return res.status(400).json({ error: "Proof URL is required" });
+    if (!proofUrl) return res.status(400).json({ error: "Upload your proof first!" });
 
     const taskBox = await TaskBox.findById(taskBoxId);
     if (!taskBox || taskBox.status !== "pending") {
-      return res.status(404).json({ error: "Task not found or already processed" });
+      return res.status(404).json({ error: "Task expired or not found" });
     }
 
     const now = new Date();
     const isLate = now > taskBox.deadline;
 
-    // 🔥 Trigger AI Vision Validation (Error #4)
-    const verdict = await validateProofWithGroq(proofUrl, taskBox.goal);
+    // AI Validation with Fallback[cite: 1]
+    let verdict = "unclear";
+    try {
+      verdict = await validateProofWithGroq(proofUrl, taskBox.goal);
+    } catch (aiErr) {
+      console.warn("⚠️ AI Validator failed, defaulting to manual review.");
+    }
 
-    taskBox.proof = {
-      url: proofUrl,
-      geminiVerdict: verdict,
-      submittedAt: now,
-    };
+    taskBox.proof = { url: proofUrl, geminiVerdict: verdict, submittedAt: now };
 
-    // 🏆 Logic: Late submission ya Fake image = Failed
+    // 💀 Savage Logic: Deadline Missed or Fake Image
     if (isLate || verdict === "fake") {
       taskBox.status = "failed";
       taskBox.level = Math.min((taskBox.level || 1) + 1, 4);
@@ -110,38 +122,32 @@ router.post("/:taskBoxId/submit-proof", async (req, res) => {
     taskBox.escalationLog.push({
       at: now,
       action: "proof_submitted",
-      payload: `Verdict: ${verdict}`,
+      payload: `AI Verdict: ${verdict} | Late: ${isLate}`,
       outcome: taskBox.status,
     });
 
     await taskBox.save();
 
-    // 📈 Update User Stats & Unlock Next (Error #7)
-    const user = await User.findById(taskBox.userId);
-    if (user) {
-      if (taskBox.status === "done") {
-        user.totalWins += 1;
-        user.currentStreak += 1;
-      } else {
-        user.totalFails += 1;
-        user.currentStreak = 0;
-      }
-      
-      await user.save();
-      
-      // 🔥 Automatically unlock next TaskBox so the cycle continues
-      await unlockNextTaskBox(user._id);
-    }
+    // Stats Update with Atomic Logic[cite: 1]
+    const updateQuery = taskBox.status === "done" 
+      ? { $inc: { totalWins: 1, currentStreak: 1 } }
+      : { $inc: { totalFails: 1 }, $set: { currentStreak: 0 } };
+
+    await User.findByIdAndUpdate(taskBox.userId, updateQuery);
+    
+    // 🚀 Trigger Next Task Logic
+    const nextTask = await unlockNextTaskBox(taskBox.userId);
 
     res.json({ 
       success: true, 
       verdict,
-      status: taskBox.status 
+      status: taskBox.status,
+      nextTaskId: nextTask?._id || null
     });
 
   } catch (err) {
-    console.error("❌ Proof Submit Error:", err.message);
-    res.status(500).json({ error: "Failed to submit proof" });
+    console.error("❌ Submission Engine Failure:", err);
+    res.status(500).json({ error: "Process failed. Try again." });
   }
 });
 
