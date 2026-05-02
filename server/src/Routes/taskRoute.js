@@ -151,4 +151,24 @@ router.post("/:taskBoxId/submit-proof", async (req, res) => {
   }
 });
 
+router.get("/:phone/history", async (req, res) => {
+  try {
+    const user = await User.findOne({ whatsappNumber: req.params.phone });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const taskBoxes = await TaskBox.find({ userId: user._id }).sort({ createdAt: -1 }).lean();
+
+    const stats = {
+      totalTasks: taskBoxes.length,
+      completed: taskBoxes.filter(t => t.status === 'done').length,
+      failed: taskBoxes.filter(t => t.status === 'failed').length,
+      currentStreak: user.currentStreak || 0,
+    };
+
+    res.json({ user: { name: user.name, ...stats }, taskBoxes });
+  } catch (err) {
+    res.status(500).json({ error: "History fetch failed" });
+  }
+});
+
 export default router;
