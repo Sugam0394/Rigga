@@ -15,6 +15,7 @@ export const handleStateTransition = async (user, messageData) => {
   logger.info("🔄 Processing State", { state: freshUser.state, userId: freshUser._id, text });
 
   switch (freshUser.state) {
+
     case 'new':
       reply = getRandom(onboardingMessages.askName);
       await User.findByIdAndUpdate(freshUser._id, { state: 'asked_name' });
@@ -25,24 +26,28 @@ export const handleStateTransition = async (user, messageData) => {
         reply = "Mazaak mat kar, sahi naam bata bhai 😅";
         break;
       }
+
       reply = getRandom(onboardingMessages.askGoal(text));
-      await User.findByIdAndUpdate(freshUser._id, { name: text, state: 'asked_goal' });
+
+      await User.findByIdAndUpdate(freshUser._id, {
+        name: text,
+        state: 'asked_goal'
+      });
       break;
 
     case 'asked_goal':
-      // 🔥 FIX: Create TaskBox instead of Habit
+      // ✅ Create TaskBox (goal now stored here)
       const newTask = await TaskBox.create({
         userId: freshUser._id,
         goal: text,
-        stakeType: "photo", // Default stake
+        stakeType: "photo",
         stakeUrl: "pending",
-        deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24h from now
+        deadline: new Date(Date.now() + 24 * 60 * 60 * 1000),
         status: "pending"
       });
 
       await User.findByIdAndUpdate(freshUser._id, {
-        goal: text,
-        activeTaskBox: newTask._id, // Link to user
+        activeTaskBox: newTask._id,
         state: 'asked_witness'
       });
 
@@ -50,8 +55,12 @@ export const handleStateTransition = async (user, messageData) => {
       break;
 
     case 'asked_witness':
-      const userTask = await TaskBox.findOne({ userId: freshUser._id, status: 'pending' });
-      
+      const userTask = await TaskBox.findById(freshUser.activeTaskBox);
+
+      if (!userTask) {
+        return { reply: "⚠️ Task missing hai. 'hi' bhej ke restart kar." };
+      }
+
       if (text === 'skip') {
         await User.findByIdAndUpdate(freshUser._id, { state: 'active' });
         reply = "Theek hai, setup complete 🔥 Kal se proof mangunga!";
@@ -59,6 +68,7 @@ export const handleStateTransition = async (user, messageData) => {
       }
 
       const cleaned = text.replace(/\D/g, '');
+
       if (cleaned.length !== 10) {
         reply = "10 digit number bhej bhai (98XXXXXXXX)";
         break;
@@ -66,26 +76,25 @@ export const handleStateTransition = async (user, messageData) => {
 
       const witnessNumber = '+91' + cleaned;
 
-      // 🔥 FIX: Update TaskBox witness instead of Witness.create
-      if (userTask) {
-        userTask.witness = {
-          name: "Witness",
-          phone: `whatsapp:${witnessNumber}`,
-          notified: false
-        };
-        await userTask.save();
-      }
+      userTask.witness = {
+        name: "Witness",
+        phone: `whatsapp:${witnessNumber}`,
+        notified: false
+      };
+
+      await userTask.save();
 
       await User.findByIdAndUpdate(freshUser._id, { state: 'active' });
+
       reply = "🔥 Witness set! Ab miss kiya toh report jayegi 😈";
       break;
 
     case 'active':
+
       if (!canUseFeature(freshUser)) {
         return { reply: "🚫 Free limit khatam.\n\nUpgrade kar 😏" };
       }
 
-      // 'done' command logic handling yahan se hata kar proof submission controller mein handle hogi
       if (text === 'done') {
         reply = "Photo bhej bhai, sirf 'done' bolne se kaam nahi chalega! 📸";
         break;
@@ -96,10 +105,15 @@ export const handleStateTransition = async (user, messageData) => {
         break;
       }
 
+      // ✅ Fetch active task for AI context
+      const activeTask = await TaskBox.findById(freshUser.activeTaskBox);
+
       reply = await generateAIReply(text, {
         ...freshUser,
+        goal: activeTask?.goal || "No goal set",
         level: (freshUser.missCount || 0) + 1
       });
+
       break;
 
     default:

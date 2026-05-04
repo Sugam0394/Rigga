@@ -13,7 +13,11 @@ const witnessSchema = new mongoose.Schema(
 const proofSchema = new mongoose.Schema(
   {
     url: String,
-    geminiVerdict: { type: String, enum: ["ok", "fake", "unclear", "none"], default: "none" }, 
+    geminiVerdict: { 
+      type: String, 
+      enum: ["ok", "fake", "unclear", "none"], 
+      default: "none" 
+    },
     submittedAt: Date,
   },
   { _id: false }
@@ -31,18 +35,55 @@ const escalationLogSchema = new mongoose.Schema(
 
 const taskBoxSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    goal: { type: String, required: true },
-    stakeType: { type: String, enum: ["photo", "text", "money"], required: true },
-    stakeUrl: { type: String, required: true }, // link to photo/text/description
+    userId: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "User", 
+      required: true 
+    },
+
+    goal: { 
+      type: String, 
+      required: true 
+    },
+
+    stakeType: { 
+      type: String, 
+      enum: ["photo", "text", "money"], 
+      default: "photo"
+    },
+
+    stakeUrl: { 
+      type: String, 
+      default: "pending"
+    },
+
     witness: witnessSchema,
-    deadline: { type: Date, required: true },
-    status: { type: String, enum: ["pending", "done", "failed"], default: "pending" },
-    level: { type: Number, default: 1 }, // Escalation progression (1-4)
+
+    deadline: { 
+      type: Date, 
+      required: true,
+      default: () => new Date(Date.now() + 24 * 60 * 60 * 1000)
+    },
+
+    status: { 
+      type: String, 
+      enum: ["pending", "done", "failed"], 
+      default: "pending" 
+    },
+
+    level: { 
+      type: Number, 
+      default: 1 
+    },
+
     proof: proofSchema,
+
     escalationLog: [escalationLogSchema],
   },
-  { timestamps: true } // Automatically manages createdAt and updatedAt
+  { timestamps: true }
 );
+
+// 🔥 Performance Index (important for scaling)
+taskBoxSchema.index({ userId: 1 });
 
 export const TaskBox = mongoose.model("TaskBox", taskBoxSchema);

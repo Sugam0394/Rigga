@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import { errorHandler } from './middlewares/errorHandler.js';
 import WhatsappRouter from './Routes/whatsapp.routes.js';
 import taskRouter from './Routes/taskRoute.js'; // Moved up for cleaner organization
-import { startCron } from './services/cronServices.js';
+ 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,12 +16,12 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
  
-startCron(); 
+ 
 app.set('trust proxy', 1);
 
 // 2. Global Middlewares
 app.use(cors({
-  origin: process.env.CORS_ORIGIN,
+  origin: process.env.CORS_ORIGIN || '*',
   credentials: true,
  
 }));

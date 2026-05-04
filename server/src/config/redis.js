@@ -1,4 +1,4 @@
- import IORedis from 'ioredis';
+  import IORedis from 'ioredis';
 
 export const redisConnection = new IORedis(process.env.REDIS_URL, {
   maxRetriesPerRequest: null,   // BullMQ required
@@ -9,4 +9,4 @@ export const redisConnection = new IORedis(process.env.REDIS_URL, {
 // ❌ error log
 redisConnection.on('error', (err) => {
   console.error('❌ Redis error:', err.message);
-});
+}); 
