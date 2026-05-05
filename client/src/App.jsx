@@ -1,21 +1,22 @@
- import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Landing from './pages/Landing';
-import CreateTask from './pages/CreateTask';
-import Dashboard from './pages/Dashboard';
-import History from './pages/History';
-// Future pages: CreateTask, Dashboard, History
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing";
+import Chat from "./pages/Chat";
+import Task from "./pages/Task";
+import History from "./pages/History";
+import Proof from "./pages/Proof";
 
-export default function App() {
+function App() {
   return (
-    <Router>
-      <div className="max-w-[450px] mx-auto bg-black min-h-screen shadow-2xl">
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/create" element={<CreateTask />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/history" element={<History />} />
-        </Routes>
-      </div>
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/task" element={<Task />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/proof" element={<Proof />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
+
+export default App;
