@@ -154,6 +154,7 @@ router.post("/:taskBoxId/submit-proof", async (req, res) => {
 router.get("/:phone/history", async (req, res) => {
   try {
     const user = await User.findOne({ whatsappNumber: req.params.phone });
+    console.log("REQ PHONE:", req.params.phone);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const taskBoxes = await TaskBox.find({ userId: user._id }).sort({ createdAt: -1 }).lean();

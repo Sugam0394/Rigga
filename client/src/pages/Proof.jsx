@@ -1,30 +1,29 @@
-import { useState } from "react";
+ import { useState } from "react";
 import axios from "axios";
 
+const API = "http://localhost:3000/api";
+
 const Proof = () => {
-  const [file, setFile] = useState(null);
+  const [proofUrl, setProofUrl] = useState("");
   const [response, setResponse] = useState("");
 
-  const handleSubmit = async () => {
-    if (!file) return alert("Select file first");
+  const taskId = localStorage.getItem("taskId");
 
-    const formData = new FormData();
-    formData.append("proof", file);
+  const handleSubmit = async () => {
+    if (!proofUrl) return alert("Enter proof URL");
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/proof",
-        formData,
+        `${API}/${taskId}/submit-proof`,
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          proofUrl: proofUrl
         }
       );
 
-      setResponse(res.data.message);
+      setResponse(`Status: ${res.data.status}`);
     } catch (err) {
       console.log(err);
+      setResponse("Submission failed");
     }
   };
 
@@ -33,11 +32,15 @@ const Proof = () => {
       <h2>Submit Proof</h2>
 
       <input
-        type="file"
-        onChange={(e) => setFile(e.target.files[0])}
+        type="text"
+        placeholder="Paste image URL..."
+        value={proofUrl}
+        onChange={(e) => setProofUrl(e.target.value)}
       />
 
-      <button onClick={handleSubmit}>Submit Proof</button>
+      <button onClick={handleSubmit}>
+        Submit Proof
+      </button>
 
       <p>{response}</p>
     </div>

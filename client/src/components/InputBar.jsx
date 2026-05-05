@@ -8,51 +8,84 @@ const InputBar = ({ setMessages }) => {
   const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
-    if (!input || loading) return;
+    if (!input.trim() || loading) return;
 
-    const userMsg = { text: input, type: "user" };
+    const userText = input;
 
-    // add user msg
-    setMessages((prev) => [...prev, userMsg]);
+    // 👇 1. Show user message instantly
+    setMessages((prev) => [
+      ...prev,
+      { text: userText, type: "user" },
+    ]);
 
+    setInput("");
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API}/webhook`, {
-        Body: input,
-        From: "whatsapp:+911234567890",
+      // 👇 2. Call correct backend route (/chat)
+      const res = await axios.post(`${API}/chat`, {
+        Body: userText,
+        From: "web-user",
       });
 
-      // backend se JSON aana chahiye
-      const aiMsg = {
-        text: res.data.message || "No response",
-        type: "ai",
-      };
-
-      setMessages((prev) => [...prev, aiMsg]);
+      // 👇 3. Add AI response
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: res.data.message || "No response",
+          type: "ai",
+        },
+      ]);
     } catch (err) {
-      console.error("API ERROR:", err.message);
+      console.error("API ERROR:", err);
 
       setMessages((prev) => [
         ...prev,
-        { text: "Server error", type: "ai" },
+        {
+          text: "Server error. Check backend.",
+          type: "ai",
+        },
       ]);
     }
 
-    setInput("");
     setLoading(false);
   };
 
+  // 👇 Enter key support
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  };
+
   return (
-    <div>
+    <div style={{ display: "flex", padding: "10px", gap: "10px" }}>
       <input
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Type..."
+        onKeyDown={handleKeyDown}
+        placeholder="Type message..."
+        style={{
+          flex: 1,
+          padding: "10px",
+          borderRadius: "8px",
+          border: "1px solid #ccc",
+        }}
       />
 
-      <button onClick={sendMessage}>
-        {loading ? "Sending..." : "Send"}
+      <button
+        onClick={sendMessage}
+        disabled={loading}
+        style={{
+          padding: "10px 15px",
+          borderRadius: "8px",
+          background: "#f97316",
+          color: "#fff",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        {loading ? "..." : "Send"}
       </button>
     </div>
   );
