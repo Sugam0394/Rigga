@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API = "http://localhost:3000/api";
+const API = "/api";
 const PHONE = "911234567890";
 
 const CreateTask = () => {
@@ -51,10 +51,13 @@ const CreateTask = () => {
       };
 
       const res = await axios.post(`${API}/create`, payload);
+      
+ if (res.data.success) {
+  // ✅ store task id
+  localStorage.setItem("activeTaskBoxId", res.data.taskBox._id);
 
-      if (res.data.success) {
-        window.location.href = "/task";
-      }
+  window.location.href = "/task";
+}
 
     } catch (err) {
       console.log("ERROR:", err.response?.data || err.message);

@@ -1,7 +1,5 @@
- import { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-
-const API = "http://localhost:3000/api";
 
 const InputBar = ({ setMessages }) => {
   const [input, setInput] = useState("");
@@ -12,7 +10,7 @@ const InputBar = ({ setMessages }) => {
 
     const userText = input;
 
-    // 👇 1. Show user message instantly
+    // ✅ show user message instantly
     setMessages((prev) => [
       ...prev,
       { text: userText, type: "user" },
@@ -22,17 +20,17 @@ const InputBar = ({ setMessages }) => {
     setLoading(true);
 
     try {
-      // 👇 2. Call correct backend route (/chat)
-      const res = await axios.post(`${API}/chat`, {
-        Body: userText,
-        From: "web-user",
+      // ✅ correct API + correct body
+      const res = await axios.post(`/api/chat`, {
+        text: userText,
+        from: "web-user",
       });
 
-      // 👇 3. Add AI response
+      // ✅ correct response field
       setMessages((prev) => [
         ...prev,
         {
-          text: res.data.message || "No response",
+          text: res.data.reply || "No response",
           type: "ai",
         },
       ]);
@@ -51,7 +49,7 @@ const InputBar = ({ setMessages }) => {
     setLoading(false);
   };
 
-  // 👇 Enter key support
+  // ✅ Enter key support
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       sendMessage();

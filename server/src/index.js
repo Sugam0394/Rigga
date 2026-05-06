@@ -3,8 +3,8 @@ import connectDB from './db/index.js';
 import app from './app.js';
 import { startCron } from './services/cronServices.js';
 import { startMessageWorker } from './workers/messageWorker.js';
-import { Queue } from 'bullmq';
-import { redisConnection } from './config/redis.js';
+ 
+ 
 
 const PORT = process.env.PORT || 3000;
 

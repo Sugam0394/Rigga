@@ -6,57 +6,66 @@ import { unlockNextTaskBox } from "../services/taskBoxServices.js";
 
 const router = express.Router();
 
-/**
- * ✅ Create a new TaskBox (Dashboard Optimized)
- */
-router.post("/create", async (req, res) => {
+ 
+ router.post("/create", async (req, res) => {
   try {
-    const { phone, goal, stakeType, stakeUrl, witness, deadline } = req.body;
+    const { phone, goal, stakeType, stakeUrl, witness = {}, deadline } = req.body;
 
     if (!phone || !goal || !deadline || !witness?.phone) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // 1. WhatsApp Number normalization
+    // ✅ find user
     let user = await User.findOne({ whatsappNumber: phone });
+
     if (!user) {
       user = await User.create({ 
-        whatsappNumber: phone, 
-        name: witness.name || "User",
+        whatsappNumber: phone,
+        name: witness?.name || "User",
         state: 'active',
-        currentStreak: 0 // Initialize streak
+        currentStreak: 0
       });
     }
 
-    // 2. Prevent duplicate active tasks
-    const hasPending = await TaskBox.findOne({ userId: user._id, status: "pending" });
-    if (hasPending) {
-      return res.status(400).json({ error: "Focus on your current task first!" });
-    }
+    // ✅ REMOVE THIS TEMP (suspect)
+    // const hasPending = await TaskBox.findOne({ userId: user._id, status: "pending" });
 
+    // if (hasPending) {
+    //   return res.status(400).json({ error: "Focus on your current task first!" });
+    // }
+
+    // ✅ create task safely
     const taskBox = await TaskBox.create({
       userId: user._id,
       goal,
-      stakeType,
-      stakeUrl,
+      stakeType: stakeType || "photo",
+      stakeUrl: stakeUrl || "pending",
       witness: {
-        name: witness.name,
-        phone: witness.phone,
+        name: witness?.name || "Unknown",
+        phone: witness?.phone
       },
       deadline: new Date(deadline),
-      proof: { url: null, geminiVerdict: "none", submittedAt: null }
+      proof: {
+        url: null,
+        geminiVerdict: "none",
+        submittedAt: null
+      }
     });
 
-    // 3. Update User Reference Atomic Update
     await User.findByIdAndUpdate(user._id, {
       $set: { activeTaskBox: taskBox._id },
       $push: { taskBoxes: taskBox._id }
     });
 
     res.status(201).json({ success: true, taskBox });
+
   } catch (err) {
-    console.error("❌ Task Creation Error:", err);
-    res.status(500).json({ error: "Failed to create TaskBox" });
+    console.error("❌ FULL ERROR:", err);
+
+    res.status(500).json({
+      error: err.message,
+      details: err.errors || null
+    });
   }
 });
 
@@ -145,9 +154,13 @@ router.post("/:taskBoxId/submit-proof", async (req, res) => {
       nextTaskId: nextTask?._id || null
     });
 
-  } catch (err) {
-    console.error("❌ Submission Engine Failure:", err);
-    res.status(500).json({ error: "Process failed. Try again." });
+  }  catch (err) {
+    console.error("❌ FULL ERROR:", err);
+
+    res.status(500).json({
+      error: err.message,
+      details: err.errors || null
+    });
   }
 });
 

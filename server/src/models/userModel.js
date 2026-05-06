@@ -11,9 +11,9 @@ const userSchema = new mongoose.Schema(
     },
 
     phone: {
-      type: String,
-      default: "",
-    },
+  type: String,
+  default: null, // ✅ change from "" → null
+},
 
     name: {
       type: String,

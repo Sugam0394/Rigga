@@ -64,23 +64,22 @@ router.post(
   })
 );
 
-router.post(
+ router.post(
   '/chat',
   asyncHandler(async (req, res) => {
 
-    const { Body, From } = req.body;
+    const { text, from } = req.body;
 
     const result = await handleWebhook(
-      { text: Body, mediaUrl: null },
-      From
+      { text: text, mediaUrl: null },
+      from
     );
 
     return res.json({
-      message: result.reply
+      reply: result.reply   // ✅ FIXED
     });
   })
 );
-
 
 export default router;
 
