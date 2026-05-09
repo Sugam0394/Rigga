@@ -1,6 +1,6 @@
 import { useState } from "react";
-import MessageBubble from "../components/MessageBubble";
-import InputBar from "../components/InputBar";
+import MessageBubble from "../../components/MessageBubble";
+import InputBar from "../../components/InputBar";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
