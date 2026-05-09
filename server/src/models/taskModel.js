@@ -41,6 +41,11 @@ const taskBoxSchema = new mongoose.Schema(
       required: true 
     },
 
+    challengeId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Challenge",
+},
+
     goal: { 
       type: String, 
       required: true 
@@ -84,6 +89,9 @@ const taskBoxSchema = new mongoose.Schema(
 );
 
 // 🔥 Performance Index (important for scaling)
-taskBoxSchema.index({ userId: 1 });
+ taskBoxSchema.index({
+  userId: 1,
+  status: 1,
+});
 
 export const TaskBox = mongoose.model("TaskBox", taskBoxSchema);

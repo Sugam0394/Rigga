@@ -6,19 +6,20 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "seed": "node src/seeds/challenges.js"
   },
   "author": "Sugam singh",
   "license": "ISC",
   "dependencies": {
-     "axios": "^1.7.9",
     "@google/generative-ai": "^0.24.1",
+    "axios": "^1.7.9",
     "bcryptjs": "^3.0.3",
     "bullmq": "^5.76.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-     "express": "^4.19.2",
+    "express": "^4.19.2",
     "express-rate-limit": "^8.4.1",
     "groq-sdk": "^1.1.2",
     "ioredis": "^5.10.1",
@@ -26,6 +27,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.5.0",
     "node-cron": "^4.2.1",
+    "razorpay": "^2.9.6",
     "twilio": "^6.0.0",
     "winston": "^3.19.0"
   },

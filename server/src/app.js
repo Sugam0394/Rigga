@@ -4,11 +4,15 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import path from 'path'; // Missing import for static files
 import { fileURLToPath } from 'url';
-
 import { errorHandler } from './middlewares/errorHandler.js';
+
+
+// Routers
 import WhatsappRouter from './Routes/whatsapp.routes.js';
 import taskRouter from './Routes/taskRoute.js'; // Moved up for cleaner organization
- 
+import challengeRouter from './Routes/challengeRoute.js';
+import authRouter from './Routes/authRoute.js';
+ import paymentRouter from './Routes/paymentRoute.js'; // Importing payment routes
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,12 +50,17 @@ const apiLimiter = rateLimit({
 });
 
  
+// 4. Routes
 
+app.use('/api', apiLimiter, authRouter);
  
 app.use('/api', webhookLimiter, WhatsappRouter); 
 
- 
 app.use('/api', apiLimiter, taskRouter); 
+
+app.use('/api', apiLimiter, challengeRouter);
+
+app.use('/api', apiLimiter, paymentRouter); 
 
 // 5. Health Check
 app.get('/health', (req, res) => {

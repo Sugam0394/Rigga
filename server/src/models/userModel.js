@@ -20,6 +20,36 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    email: {
+  type: String,
+  default: null,
+},
+
+password: {
+  type: String,
+  default: null,
+},
+
+isVerified: {
+  type: Boolean,
+  default: false,
+},
+
+refreshToken: {
+  type: String,
+  default: null,
+},
+
+subscriptionId: {
+  type: String,
+  default: null,
+},
+
+subscriptionExpiry: {
+  type: Date,
+  default: null,
+},
+
     // 🎮 TaskBox References (FIXED: Added missing fields)
     activeTaskBox: { type: mongoose.Schema.Types.ObjectId, ref: "TaskBox" },
     taskBoxes: [{ type: mongoose.Schema.Types.ObjectId, ref: "TaskBox" }],
