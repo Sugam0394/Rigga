@@ -1,116 +1,158 @@
-import { useState } from "react";
-import axios from "axios";
-
-const API = "/api";
-const PHONE = "911234567890";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../services/api";
+import "./CreateTask.css";
 
 const CreateTask = () => {
-  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth(); // Logged-in user ka data nikalne ke liye
+
+  const challengeData = location.state || {};
 
   const [formData, setFormData] = useState({
-    goal: "",
+    phone: user?.whatsappNumber || "", // Backend expects 'phone'
+    goal: challengeData.challengeTitle || "", // Backend expects 'goal'
+    description: "",
+    stakeType: challengeData.stakeType || "photo",
+    stakeUrl: "",
     deadline: "",
-    stakeType: "photo",
     witnessName: "",
     witnessPhone: "",
-    consent: false,
   });
 
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    console.log("Challenge Data Received:", challengeData);
+  }, [challengeData]);
+
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData.goal || !formData.deadline || !formData.witnessPhone) {
-      return alert("Fill all required fields");
-    }
-
-    if (!formData.consent) {
-      return alert("Accept consent");
-    }
-
-    setLoading(true);
-
     try {
+      setLoading(true);
+
+      // Backend ke schema ke mutabiq object taiyar karna
       const payload = {
-        phone: PHONE,
+        phone: formData.phone,
         goal: formData.goal,
-        deadline: new Date(formData.deadline).toISOString(), // 🔥 FIX
         stakeType: formData.stakeType,
-        stakeUrl: "pending",
+        stakeUrl: formData.stakeUrl || "pending",
+        deadline: formData.deadline,
         witness: {
           name: formData.witnessName || "Witness",
           phone: formData.witnessPhone,
         },
       };
 
-      const res = await axios.post(`${API}/create`, payload);
-      
- if (res.data.success) {
-  // ✅ store task id
-  localStorage.setItem("activeTaskBoxId", res.data.taskBox._id);
+      // API call
+      const res = await api.post("/create", payload);
 
-  window.location.href = "/task";
-}
-
-    } catch (err) {
-      console.log("ERROR:", err.response?.data || err.message);
-
-      // 🔥 DUPLICATE TASK HANDLE
-      if (err.response?.data?.error?.includes("Focus on your current task")) {
-        alert("You already have an active task");
-        window.location.href = "/task";
-      } else {
-        alert("Something went wrong");
+      if (res.data.success) {
+        alert("Challenge Accepted! Rigga is watching you.");
+        navigate("/task");
       }
-
+    } catch (err) {
+      console.error("CREATE TASK ERROR:", err.response?.data);
+      alert(err.response?.data?.error || "Failed to create task. Check all fields.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Create Task</h2>
+    <div className="create-task-page">
+      <div className="create-task-container">
+        <h1>Finalize Challenge</h1>
+        
+        {challengeData.challengeTitle && (
+          <div className="challenge-ref-box">
+            <p><strong>Challenge:</strong> {challengeData.challengeTitle}</p>
+            <p><strong>Consequence:</strong> {challengeData.consequence}</p>
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <input name="goal" placeholder="Goal" onChange={handleChange} />
-        <br /><br />
+        <form onSubmit={handleSubmit}>
+          {/* USER PHONE (Hidden if you want, but mandatory for backend) */}
+          <div className="form-group">
+            <label>Your WhatsApp Phone (with 91)</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="e.g. 918888888888"
+              required
+            />
+          </div>
 
-        <input type="datetime-local" name="deadline" onChange={handleChange} />
-        <br /><br />
+          <div className="form-group">
+            <label>Task Goal</label>
+            <input
+              type="text"
+              name="goal"
+              value={formData.goal}
+              onChange={handleChange}
+              placeholder="e.g. 20 Pushups"
+              required
+            />
+          </div>
 
-        <select name="stakeType" onChange={handleChange}>
-          <option value="photo">Photo</option>
-          <option value="text">Text</option>
-          <option value="money">Money</option>
-        </select>
+          <div className="form-group">
+            <label>Target Deadline</label>
+            <input
+              type="datetime-local"
+              name="deadline"
+              value={formData.deadline}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <br /><br />
+          <div className="witness-section" style={{ marginTop: "20px", borderTop: "1px solid #333", paddingTop: "20px" }}>
+            <h3>Witness Details (Required)</h3>
+            <div className="form-group">
+              <label>Witness Name</label>
+              <input
+                type="text"
+                name="witnessName"
+                value={formData.witnessName}
+                onChange={handleChange}
+                placeholder="Friend's Name"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Witness WhatsApp Number</label>
+              <input
+                type="text"
+                name="witnessPhone"
+                value={formData.witnessPhone}
+                onChange={handleChange}
+                placeholder="e.g. 917777777777"
+                required
+              />
+            </div>
+          </div>
 
-        <input name="witnessPhone" placeholder="Witness Phone" onChange={handleChange} />
-        <br /><br />
+          <button 
+            type="submit" 
+            className="submit-btn" 
+            disabled={loading}
+          >
+            {loading ? "Creating Task..." : "I Swear, I'll Do It →"}
+          </button>
+        </form>
 
-        <input name="witnessName" placeholder="Witness Name" onChange={handleChange} />
-        <br /><br />
-
-        <label>
-          <input type="checkbox" name="consent" onChange={handleChange} />
-          I agree to consequences
-        </label>
-
-        <br /><br />
-
-        <button disabled={loading}>
-          {loading ? "Creating..." : "Create"}
+        <button className="back-link-btn" onClick={() => navigate(-1)} style={{ background: "none", border: "none", color: "#666", marginTop: "15px", cursor: "pointer", width: "100%" }}>
+          Cancel
         </button>
-      </form>
+      </div>
     </div>
   );
 };

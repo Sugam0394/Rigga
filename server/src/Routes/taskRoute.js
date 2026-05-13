@@ -3,6 +3,7 @@ import { TaskBox } from "../models/taskModel.js";
 import { User } from "../models/userModel.js";
 import { validateProofWithGroq } from "../validators/visionValidator.js";
 import { unlockNextTaskBox } from "../services/taskBoxServices.js";
+import{ protect }from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -72,9 +73,9 @@ const router = express.Router();
 /**
  * ✅ GET Active Task (With User Stats for Dashboard)
  */
-router.get("/:phone/active", async (req, res) => {
+router.get("/active", protect, async (req, res) => {
   try {
-    const user = await User.findOne({ whatsappNumber: req.params.phone })
+    const user = await User.findOne({ whatsappNumber: req.params.whatsappNumber })
       .populate("activeTaskBox");
     
     if (!user) return res.status(404).json({ error: "User not found" });

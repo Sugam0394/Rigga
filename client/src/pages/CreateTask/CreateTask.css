@@ -1,0 +1,89 @@
+/* CreateTask.css */
+
+.create-task-page {
+  min-height: 100vh;
+  background: #0f0f0f;
+  color: white;
+  padding: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.create-task-container {
+  background: #171717;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.create-task-container h1 {
+  margin-bottom: 10px;
+  color: #F97316; /* Orange Theme */
+}
+
+.challenge-ref-box {
+  background: rgba(249, 115, 22, 0.1);
+  border-left: 4px solid #F97316;
+  padding: 15px;
+  margin-bottom: 25px;
+  border-radius: 0 10px 10px 0;
+}
+
+.challenge-ref-box p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #aaa;
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+  border-color: #F97316;
+}
+
+.submit-btn {
+  width: 100%;
+  background: #F97316;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .create-task-page {
+    padding: 15px;
+  }
+}

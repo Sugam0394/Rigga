@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Landing.css";
-import api from "../../Services/api";
+import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
 const Landing = () => {
@@ -32,7 +32,7 @@ const Landing = () => {
 
       try {
         console.log("FETCHING DASHBOARD FOR:", user.whatsappNumber);
-        const { data } = await api.get(`/${user.whatsappNumber}/active`);
+        const { data } = await api.get(`/active`);
 
         if (isMounted) {
           console.log("DASHBOARD RESPONSE:", data);

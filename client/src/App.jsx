@@ -6,6 +6,8 @@ import Task from "./pages/Task/Task";
 import History from "./pages/History/History";
 import Proof from "./pages/Proof/Proof";
 import CreateTask from "./pages/CreateTask/CreateTask";
+import ChallengeLibrary from "./pages/Challenge/Library";
+import ChallengeDetail from "./pages/Challenge/ChallengeDetail";
 
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
@@ -13,6 +15,8 @@ import Login from "./pages/Login/Login";
  
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
+
+import "./App.css";
  
 
 
@@ -97,6 +101,24 @@ import PublicRoute from "./routes/PublicRoute";
           </ProtectedRoute>
         }
       />
+
+      <Route
+  path="/challenges"
+  element={
+    <ProtectedRoute>
+      <ChallengeLibrary />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/challenges/:id"
+  element={
+    <ProtectedRoute>
+      <ChallengeDetail />
+    </ProtectedRoute>
+  }
+/>
 
     </Routes>
   );
