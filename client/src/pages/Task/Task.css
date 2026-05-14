@@ -1,0 +1,102 @@
+.task-page {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.task-header h1 {
+  color: #f97316;
+  font-size: 1.5rem;
+  letter-spacing: 4px;
+  margin-bottom: 40px;
+  font-weight: 900;
+}
+
+.task-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+
+.goal-section {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 20px;
+}
+
+.goal-section label {
+  color: #555;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.goal-section h3 {
+  font-size: 1.8rem;
+  margin-top: 10px;
+  line-height: 1.2;
+}
+
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-item .label {
+  color: #555;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.stat-item .value {
+  font-weight: 700;
+}
+
+.timer {
+  font-family: 'Monaco', monospace;
+  font-size: 1.1rem;
+}
+
+.submit-proof-btn {
+  width: 100%;
+  margin-top: 40px;
+  background: #f97316;
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submit-proof-btn:hover {
+  background: #ea580c;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
+}
+
+.loading-screen, .no-task-container {
+  padding: 100px 20px;
+  text-align: center;
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+}

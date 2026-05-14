@@ -1,30 +1,31 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
+import "./Task.css";
 
-const API = "http://localhost:3000/api";
-const PHONE = "+911234567890";
+const PHONE = "+911234567890"; // In a real app, get this from your Auth context or LocalStorage
 
 const Task = () => {
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState("");
+  const navigate = useNavigate();
 
   // 🔥 Fetch Task
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const res = await axios.get(`${API}/${PHONE}/active`);
-
-        const activeTask = res.data.activeTask;
-
-        if (activeTask) {
-          setTask(activeTask);
-          localStorage.setItem("activeTaskBoxId", activeTask._id);
+        // We use encodeURIComponent because the '+' in phone numbers breaks URLs
+        const res = await api.get(`/active/${encodeURIComponent(PHONE)}`);
+        
+        if (res.data.activeTask) {
+          setTask(res.data.activeTask);
+          localStorage.setItem("activeTaskBoxId", res.data.activeTask._id);
         } else {
           setTask(null);
         }
       } catch (err) {
-        console.log("TASK ERROR:", err.response?.data || err.message);
+        console.error("TASK FETCH ERROR:", err.response?.data || err.message);
       } finally {
         setLoading(false);
       }
@@ -35,7 +36,7 @@ const Task = () => {
 
   // 🔥 Countdown Timer
   useEffect(() => {
-    if (!task) return;
+    if (!task || !task.deadline) return;
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -43,7 +44,8 @@ const Task = () => {
       const diff = deadline - now;
 
       if (diff <= 0) {
-        setTimeLeft("Time Over");
+        setTimeLeft("EXPIRED");
+        clearInterval(interval);
         return;
       }
 
@@ -57,85 +59,62 @@ const Task = () => {
     return () => clearInterval(interval);
   }, [task]);
 
-  // 🔥 UI STATES
-  if (loading) {
-    return <p style={{ padding: "20px" }}>Loading task...</p>;
-  }
+  if (loading) return <div className="loading-screen">Loading your mission...</div>;
 
   if (!task) {
     return (
-      <div style={{ padding: "20px" }}>
-        <p>No active task</p>
-        <button onClick={() => (window.location.href = "/create")}>
-          Create Task
+      <div className="no-task-container">
+        <p>No active missions found.</p>
+        <button className="create-btn" onClick={() => navigate("/create")}>
+          Start New Task
         </button>
       </div>
     );
   }
 
-  // 🔥 Status color
-  const statusColor =
-    task.status === "done"
-      ? "green"
-      : task.status === "failed"
-      ? "red"
-      : "orange";
+  const statusColor = {
+    done: "#22c55e",   // Green
+    failed: "#ef4444", // Red
+    pending: "#f97316" // Orange
+  }[task.status] || "#f97316";
 
   return (
-    <div
-      style={{
-        background: "#000",
-        color: "#fff",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
-      <h2 style={{ color: "#F97316" }}>YOUR COMMITMENT</h2>
+    <div className="task-page">
+      <header className="task-header">
+        <h1>YOUR COMMITMENT</h1>
+      </header>
 
-      <div
-        style={{
-          border: "1px solid #333",
-          padding: "20px",
-          borderRadius: "10px",
-          marginTop: "20px",
-        }}
-      >
-        <h3>{task.goal}</h3>
+      <main className="task-card">
+        <div className="goal-section">
+          <label>CURRENT GOAL</label>
+          <h3>{task.goal}</h3>
+        </div>
 
-        <p>
-          <strong>Status:</strong>{" "}
-          <span style={{ color: statusColor }}>{task.status}</span>
-        </p>
+        <div className="stats-grid">
+          <div className="stat-item">
+            <span className="label">STATUS</span>
+            <span className="value" style={{ color: statusColor }}>
+              {task.status.toUpperCase()}
+            </span>
+          </div>
 
-        <p>
-          <strong>Time Left:</strong>{" "}
-          <span
-            style={{
-              color: timeLeft === "Time Over" ? "red" : "yellow",
-            }}
-          >
-            {timeLeft}
-          </span>
-        </p>
+          <div className="stat-item">
+            <span className="label">TIME REMAINING</span>
+            <span className="value timer" style={{ color: timeLeft === "EXPIRED" ? "#ef4444" : "#fbbf24" }}>
+              {timeLeft}
+            </span>
+          </div>
 
-        <p>
-          <strong>Witness:</strong> {task.witness?.name || "N/A"}
-        </p>
+          <div className="stat-item">
+            <span className="label">WITNESS</span>
+            <span className="value">{task.witness?.name || "None Assigned"}</span>
+          </div>
+        </div>
 
-        <button
-          style={{
-            marginTop: "20px",
-            background: "#F97316",
-            color: "#fff",
-            border: "none",
-            padding: "10px 15px",
-            cursor: "pointer",
-          }}
-          onClick={() => (window.location.href = "/proof")}
-        >
-          Submit Proof
+        <button className="submit-proof-btn" onClick={() => navigate("/proof")}>
+          SUBMIT PROOF
         </button>
-      </div>
+      </main>
     </div>
   );
 };
