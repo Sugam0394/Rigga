@@ -32,7 +32,7 @@ const Landing = () => {
 
       try {
         console.log("FETCHING DASHBOARD FOR:", user.whatsappNumber);
-        const { data } = await api.get(`/active`);
+        const { data } = await  api.get(`/active`)
 
         if (isMounted) {
           console.log("DASHBOARD RESPONSE:", data);

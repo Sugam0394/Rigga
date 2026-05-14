@@ -4,7 +4,6 @@ import Landing from "./pages/Landing/Landing";
 import Chat from "./pages/Chat/Chat";
 import Task from "./pages/Task/Task";
 import History from "./pages/History/History";
-import Proof from "./pages/Proof/Proof";
 import CreateTask from "./pages/CreateTask/CreateTask";
 import ChallengeLibrary from "./pages/Challenge/Library";
 import ChallengeDetail from "./pages/Challenge/ChallengeDetail";
@@ -83,16 +82,6 @@ import "./App.css";
           </ProtectedRoute>
         }
       />
-
-      <Route
-        path="/proof"
-        element={
-          <ProtectedRoute>
-            <Proof />
-          </ProtectedRoute>
-        }
-      />
-
       <Route
         path="/create"
         element={
