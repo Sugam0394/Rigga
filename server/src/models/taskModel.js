@@ -53,7 +53,7 @@ const taskBoxSchema = new mongoose.Schema(
 
     stakeType: { 
       type: String, 
-      enum: ["photo", "text", "money"], 
+      enum: ["photo", "text", "money", 'social'], 
       default: "photo"
     },
 

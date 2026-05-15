@@ -12,7 +12,12 @@ import WhatsappRouter from './Routes/whatsapp.routes.js';
 import taskRouter from './Routes/taskRoute.js'; // Moved up for cleaner organization
 import challengeRouter from './Routes/challengeRoute.js';
 import authRouter from './Routes/authRoute.js';
- import paymentRouter from './Routes/paymentRoute.js'; // Importing payment routes
+import paymentRouter from './Routes/paymentRoute.js'; // Importing payment routes
+import chatRouter from './Routes/chatRoute.js';
+
+
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,7 +30,7 @@ app.set('trust proxy', 1);
 
 // 2. Global Middlewares
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: process.env.CORS_ORIGIN,
   credentials: true,
  
 }));
@@ -61,6 +66,8 @@ app.use('/api', apiLimiter, taskRouter);
 app.use('/api', apiLimiter, challengeRouter);
 
 app.use('/api', apiLimiter, paymentRouter); 
+
+app.use('/api' , apiLimiter , chatRouter)
 
 // 5. Health Check
 app.get('/health', (req, res) => {

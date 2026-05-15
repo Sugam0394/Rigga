@@ -18,16 +18,20 @@ const generateToken = (user) => {
 
 export const registerUser = async (req, res) => {
   try {
-    const { phone, password } = req.body;
+    const {name ,  phone , password } = req.body;
 
-    if (!phone || !password) {
+    if ( !name || !phone || !password) {
       return res.status(400).json({
-        message: "Phone and password are required",
+        message: "All fields are required",
       });
     }
 
     let user = await User.findOne({
+    
+
       whatsappNumber: phone,
+
+    
     });
 
     // Existing WhatsApp user
@@ -50,6 +54,7 @@ export const registerUser = async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       user = await User.create({
+        name,
         whatsappNumber: phone,
         password: hashedPassword,
       });
@@ -62,6 +67,7 @@ export const registerUser = async (req, res) => {
       token,
       user: {
     _id: user._id,
+    name: user.name,
     whatsappNumber: user.whatsappNumber,
     email: user.email,
     subscriptionStatus: user.subscriptionStatus,

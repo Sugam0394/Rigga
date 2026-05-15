@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
- import api from "../../services/api";
- import { useAuth } from "../../context/AuthContext";
+import api from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
+
+import "./Subscribe.css";
 
 const Subscribe = () => {
   const navigate = useNavigate();
@@ -20,7 +22,16 @@ const Subscribe = () => {
 
       const { orderId, razorpayKey } = data;
 
-      // OPEN RAZORPAY
+      // SAFETY CHECK
+      if (!window.Razorpay) {
+        alert("Razorpay SDK failed to load");
+
+        setLoading(false);
+
+        return;
+      }
+
+      // RAZORPAY OPTIONS
       const options = {
         key: razorpayKey,
         amount: 19900,
@@ -41,8 +52,17 @@ const Subscribe = () => {
             navigate("/challenges");
           } catch (error) {
             console.log("VERIFY ERROR:", error);
+
             alert("Payment verification failed");
+          } finally {
+            setLoading(false);
           }
+        },
+
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          },
         },
 
         theme: {
@@ -50,6 +70,7 @@ const Subscribe = () => {
         },
       };
 
+      // OPEN RAZORPAY
       const razorpay = new window.Razorpay(options);
 
       razorpay.open();
@@ -57,47 +78,55 @@ const Subscribe = () => {
       console.log("SUBSCRIPTION ERROR:", error);
 
       alert("Something went wrong");
-    } finally {
+
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
-        <h1 className="text-3xl font-bold text-center mb-6">
+    <div className="subscribe-page">
+      <div className="subscribe-card">
+        <h1 className="subscribe-title">
           RIGGA PRO
         </h1>
 
-        <div className="space-y-4 mb-8 text-zinc-300">
+        <div className="subscribe-features">
           <p>✓ 20+ premium challenges</p>
+
           <p>✓ Photo leak consequences</p>
+
           <p>✓ Family WhatsApp escalation</p>
+
           <p>✓ AI proof verification</p>
+
           <p>✓ Real accountability</p>
         </div>
 
-        <div className="border border-orange-500 rounded-xl p-6 text-center">
-          <h2 className="text-4xl font-bold mb-2">
+        <div className="subscribe-pricing">
+          <h2 className="subscribe-price">
             ₹199
           </h2>
 
-          <p className="text-zinc-400 mb-6">
+          <p className="subscribe-month">
             per month
           </p>
 
           <button
             onClick={handleSubscribe}
             disabled={loading}
-            className="w-full bg-orange-500 hover:bg-orange-600 transition-all py-3 rounded-xl font-semibold"
+            className="subscribe-btn"
           >
-            {loading ? "Processing..." : "Subscribe Now →"}
+            {loading
+              ? "Processing..."
+              : "Subscribe Now →"}
           </button>
         </div>
 
         <button
-          onClick={() => navigate("/challenges")}
-          className="mt-6 text-zinc-400 hover:text-white transition-all"
+          onClick={() =>
+            navigate("/challenges")
+          }
+          className="back-btn-subscribe"
         >
           ← Back to challenges
         </button>
@@ -107,3 +136,4 @@ const Subscribe = () => {
 };
 
 export default Subscribe;
+ 

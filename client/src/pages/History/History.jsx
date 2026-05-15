@@ -1,62 +1,201 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import {
+  useEffect,
+  useState,
+} from "react";
+import { useNavigate } from "react-router-dom";
 
-const API = "http://localhost:3000/api";
-const PHONE = "+911234567890";
+import api from "../../services/api";
+
+import "./History.css";
 
 const History = () => {
-  const [tasks, setTasks] = useState([]);
-  const [stats, setStats] = useState(null);
+
+  const navigate = useNavigate();
+
+  const [tasks, setTasks] =
+    useState([]);
+
+  const [stats, setStats] =
+    useState(null);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
 
   useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        const res = await axios.get(`${API}/${PHONE}/history`);
 
-        setTasks(res.data.taskBoxes);
-        setStats(res.data.user);
-      } catch (err) {
-        console.log("HISTORY ERROR:", err.response?.data || err.message);
-      }
-    };
+    const fetchHistory =
+      async () => {
+        try {
+
+          setLoading(true);
+
+          const { data } =
+            await api.get(
+              "/tasks/history"
+            );
+
+          setTasks(
+            data.taskBoxes || []
+          );
+
+          setStats(
+            data.user || null
+          );
+
+        } catch (err) {
+
+          console.log(err);
+
+          setError(
+            "History load failed 💀"
+          );
+
+        } finally {
+
+          setLoading(false);
+        }
+      };
 
     fetchHistory();
+
   }, []);
 
-  return (
-    <div style={{ background: "#000", color: "#fff", minHeight: "100vh", padding: "20px" }}>
-      <h2 style={{ color: "#F97316" }}>HISTORY</h2>
+  // LOADING
+  if (loading) {
+    return (
+      <div className="history-page">
+        <h2>
+          Loading history...
+        </h2>
+      </div>
+    );
+  }
 
-      {/* 🔥 Stats */}
+  // ERROR
+  if (error) {
+    return (
+      <div className="history-page">
+        <h2>{error}</h2>
+      </div>
+    );
+  }
+
+  return (
+    <div className="history-page">
+
+      <div className="history-header">
+
+  <button
+    className="back-btn"
+    onClick={() => navigate(-1)}
+  >
+    ← Back
+  </button>
+
+  <h1>History 📋</h1>
+
+</div>
+
+      {/* STATS */}
       {stats && (
-        <div style={{ marginBottom: "20px" }}>
-          <p>✅ Completed: {stats.completed}</p>
-          <p>❌ Failed: {stats.failed}</p>
-          <p>🔥 Streak: {stats.currentStreak}</p>
+        <div className="stats-bar">
+
+          <div className="stat-box">
+            🔥
+            <span>
+              {stats.currentStreak}
+            </span>
+            <p>Streak</p>
+          </div>
+
+          <div className="stat-box">
+            ✅
+            <span>
+              {stats.completed}
+            </span>
+            <p>Wins</p>
+          </div>
+
+          <div className="stat-box">
+            💀
+            <span>
+              {stats.failed}
+            </span>
+            <p>Fails</p>
+          </div>
+
         </div>
       )}
 
-      {/* 🔥 Task List */}
-      {tasks.map((task) => (
-        <div
-          key={task._id}
-          style={{
-            borderLeft: `4px solid ${
-              task.status === "done"
-                ? "green"
-                : task.status === "failed"
-                ? "red"
-                : "orange"
-            }`,
-            padding: "10px",
-            marginBottom: "10px",
-            background: "#111",
-          }}
-        >
-          <p>{task.goal}</p>
-          <small>{new Date(task.createdAt).toLocaleString()}</small>
+      {/* EMPTY */}
+      {tasks.length === 0 ? (
+        <div className="empty-state">
+          Abhi tak koi task nahi 😴
         </div>
-      ))}
+      ) : (
+
+        <div className="history-list">
+
+          {tasks.map((task) => {
+
+            let statusEmoji = "⏳";
+            let statusClass = "pending";
+
+            if (
+              task.status === "done"
+            ) {
+              statusEmoji = "✅";
+              statusClass = "done";
+            }
+
+            if (
+              task.status ===
+              "failed"
+            ) {
+              statusEmoji = "💀";
+              statusClass = "failed";
+            }
+
+            return (
+              <div
+                key={task._id}
+                className={`history-card ${statusClass}`}
+              >
+
+                <div className="history-top">
+
+                  <h3>
+                    {task.goal}
+                  </h3>
+
+                  <span>
+                    {statusEmoji}
+                  </span>
+
+                </div>
+
+                <div className="history-bottom">
+
+                  <p>
+                    {task.status}
+                  </p>
+
+                  <small>
+                    {new Date(
+                      task.createdAt
+                    ).toLocaleDateString()}
+                  </small>
+
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

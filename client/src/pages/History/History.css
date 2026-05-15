@@ -1,0 +1,93 @@
+ .history-page {
+  min-height: 100vh;
+  background: #111;
+  color: white;
+  padding: 20px;
+}
+
+.history-header {
+  margin-bottom: 20px;
+}
+
+.history-header h1 {
+  font-size: 28px;
+}
+
+.stats-bar {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat-box {
+  flex: 1;
+  background: #1d1d1d;
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+}
+
+.stat-box span {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.stat-box p {
+  color: #aaa;
+  margin-top: 6px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.history-card {
+  background: #1b1b1b;
+  border-radius: 14px;
+  padding: 16px;
+  border-left: 5px solid orange;
+}
+
+.history-card.done {
+  border-left-color: #22c55e;
+}
+
+.history-card.failed {
+  border-left-color: #ef4444;
+}
+
+.history-card.pending {
+  border-left-color: orange;
+}
+
+.history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-top h3 {
+  font-size: 18px;
+}
+
+.history-top span {
+  font-size: 22px;
+}
+
+.history-bottom {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: #aaa;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 80px;
+  color: #888;
+  font-size: 18px;
+}

@@ -15,13 +15,14 @@ const router = express.Router();
       stakeType,
       stakeUrl,
       witness = {},
-      deadline
+      deadline,
+      challengeId,
     } = req.body;
 
     // ✅ logged-in user from JWT
     const phone = req.user.whatsappNumber;
 
-    if (!goal || !deadline || !witness?.phone) {
+    if (!goal || !deadline || !witness?.phone || !challengeId) {
       return res.status(400).json({
         error: "Missing required fields"
       });
@@ -32,6 +33,12 @@ const router = express.Router();
       whatsappNumber : req.user.whatsappNumber
     });
 
+    if (!user) {
+  return res.status(404).json({
+    error: "User not found"
+  });
+}
+ 
     // 🚨 prevent multiple active tasks
 if (user?.activeTaskBox) {
 
@@ -58,6 +65,7 @@ if (user?.activeTaskBox) {
     const taskBox = await TaskBox.create({
       userId: user._id,
       goal,
+      challengeId,
       stakeType: stakeType || "photo",
       stakeUrl: stakeUrl || "pending",
 
@@ -411,25 +419,83 @@ router.post("/:taskBoxId/submit-proof", protect, async (req, res) => {
   }
 });
 
-router.get("/:phone/history", async (req, res) => {
-  try {
-    const user = await User.findOne({ whatsappNumber: req.params.phone });
-    console.log("REQ PHONE:", req.params.phone);
-    if (!user) return res.status(404).json({ error: "User not found" });
+ router.get(
+  "/history",
+  protect,
+  async (req, res) => {
+    try {
 
-    const taskBoxes = await TaskBox.find({ userId: user._id }).sort({ createdAt: -1 }).lean();
+      // LOGGED-IN USER
+      const user = await User.findOne({
+        whatsappNumber:
+          req.user.whatsappNumber,
+      });
 
-    const stats = {
-      totalTasks: taskBoxes.length,
-      completed: taskBoxes.filter(t => t.status === 'done').length,
-      failed: taskBoxes.filter(t => t.status === 'failed').length,
-      currentStreak: user.currentStreak || 0,
-    };
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
 
-    res.json({ user: { name: user.name, ...stats }, taskBoxes });
-  } catch (err) {
-    res.status(500).json({ error: "History fetch failed" });
+      // FETCH TASKS
+      const taskBoxes =
+        await TaskBox.find({
+          userId: user._id,
+        })
+          .sort({
+            createdAt: -1,
+          })
+          .lean();
+
+      // STATS
+      const completed =
+        taskBoxes.filter(
+          (task) =>
+            task.status === "done"
+        ).length;
+
+      const failed =
+        taskBoxes.filter(
+          (task) =>
+            task.status === "failed"
+        ).length;
+
+      // RESPONSE
+      return res.status(200).json({
+        success: true,
+
+        user: {
+          name: user.name,
+
+          totalTasks:
+            taskBoxes.length,
+
+          completed,
+
+          failed,
+
+          currentStreak:
+            user.currentStreak || 0,
+        },
+
+        taskBoxes,
+      });
+
+    } catch (error) {
+
+      console.log(
+        "HISTORY ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to fetch history",
+      });
+    }
   }
-});
+);
 
 export default router;

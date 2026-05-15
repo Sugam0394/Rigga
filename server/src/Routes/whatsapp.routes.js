@@ -65,7 +65,7 @@ router.post(
 );
 
  router.post(
-  '/chat',
+  '/whatsapp/chat',
   asyncHandler(async (req, res) => {
 
     const { text, from } = req.body;

@@ -50,6 +50,17 @@ export const verifyPayment = async (req, res) => {
       razorpay_signature,
     } = req.body;
 
+    if (
+  !razorpay_order_id ||
+  !razorpay_payment_id ||
+  !razorpay_signature
+) {
+  return res.status(400).json({
+    message:
+      "Missing payment details",
+  });
+}
+
     // Generate expected signature
     const generatedSignature =
       crypto
@@ -80,9 +91,26 @@ export const verifyPayment = async (req, res) => {
       req.user._id
     );
 
+    // USER CHECK
+if (!user) {
+  return res.status(404).json({
+    message: "User not found",
+  });
+}
+
     user.subscriptionStatus = "paid";
 
     user.subscriptionId = razorpay_payment_id;
+
+  if (
+  user.subscriptionId ===
+  razorpay_payment_id
+) {
+  return res.status(400).json({
+    message:
+      "Payment already processed",
+  });
+}
 
     // 30 days expiry
     const expiryDate = new Date();
@@ -113,36 +141,94 @@ export const verifyPayment = async (req, res) => {
   }
 };
 
- export const paymentWebhook = async (
-  req,
-  res
-) => {
-  try {
-    const event = req.body.event;
 
-    // Payment captured
-    if (event === "payment.captured") {
+export const paymentWebhook =
+  async (req, res) => {
+    try {
+      // SIGNATURE HEADER
+      const signature =
+        req.headers[
+          "x-razorpay-signature"
+        ];
+
+      // RAW BODY
+      const body =
+        JSON.stringify(req.body);
+
+      // GENERATE SIGNATURE
+      const expectedSignature =
+        crypto
+          .createHmac(
+            "sha256",
+            process.env
+              .RAZORPAY_WEBHOOK_SECRET
+          )
+          .update(body)
+          .digest("hex");
+
+      // VERIFY
+      const isAuthentic =
+        signature ===
+        expectedSignature;
+
+      if (!isAuthentic) {
+        return res.status(400).json({
+          message:
+            "Invalid webhook signature",
+        });
+      }
+
+      // EVENT
+      const event =
+        req.body.event;
+
       console.log(
-        "Payment captured webhook received"
+        "WEBHOOK EVENT:",
+        event
       );
 
-      // Future:
-      // update user here
-      // using metadata/email/phone
+      // PAYMENT CAPTURED
+      if (
+        event ===
+        "payment.captured"
+      ) {
+        const payment =
+          req.body.payload.payment
+            .entity;
+
+        console.log(
+          "PAYMENT ID:",
+          payment.id
+        );
+
+        console.log(
+          "AMOUNT:",
+          payment.amount
+        );
+
+        console.log(
+          "EMAIL:",
+          payment.email
+        );
+
+        // FUTURE:
+        // analytics
+        // receipts
+        // subscription sync
+      }
 
       return res.status(200).json({
         success: true,
       });
+    } catch (error) {
+      console.log(
+        "WEBHOOK ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Webhook failed",
+      });
     }
-
-    return res.status(200).json({
-      received: true,
-    });
-  } catch (error) {
-    console.log(error);
-
-    return res.status(500).json({
-      message: "Webhook failed",
-    });
-  }
-};
+  };

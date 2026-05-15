@@ -20,7 +20,7 @@ const challengeSchema = new mongoose.Schema(
 
     stakeType: {
       type: String,
-      enum: ["photo", "money", "social"],
+      enum: ["photo", "money", "social" , 'text'],
       required: true,
     },
 
