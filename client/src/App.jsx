@@ -7,6 +7,7 @@ import History from "./pages/History/History";
 import CreateTask from "./pages/CreateTask/CreateTask";
 import ChallengeLibrary from "./pages/Challenge/Library";
 import ChallengeDetail from "./pages/Challenge/ChallengeDetail";
+import Subscribe from "./pages/Subscribe/Subscribe";
 
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
@@ -105,6 +106,14 @@ import "./App.css";
   element={
     <ProtectedRoute>
       <ChallengeDetail />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/subscribe"
+  element={
+    <ProtectedRoute>
+      <Subscribe />
     </ProtectedRoute>
   }
 />

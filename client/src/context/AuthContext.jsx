@@ -42,6 +42,17 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
+  // 👇 YAHA ADD KARO
+const refreshUser = async () => {
+  try {
+    const { data } = await api.get("/me");
+
+    setUser(data.user);
+  } catch (error) {
+    console.log("REFRESH USER ERROR:", error);
+  }
+};
+
   // LOGOUT FUNCTION
   const logout = () => {
     localStorage.removeItem("token");
@@ -56,6 +67,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         logout,
+        refreshUser,
       }}
     >
       {children}
