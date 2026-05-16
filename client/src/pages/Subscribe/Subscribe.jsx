@@ -1,4 +1,4 @@
-import { useState } from "react";
+ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../../services/api";
@@ -9,9 +9,33 @@ import "./Subscribe.css";
 const Subscribe = () => {
   const navigate = useNavigate();
 
-  const { refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   const [loading, setLoading] = useState(false);
+
+  // ALREADY PAID USER
+  if (user?.subscriptionStatus === "paid") {
+    return (
+      <div className="subscribe-page">
+        <div className="subscribe-card">
+          <h1 className="subscribe-title">
+            Already Pro!
+          </h1>
+
+          <p className="subscribe-month">
+            You already have an active premium subscription.
+          </p>
+
+          <button
+            onClick={() => navigate("/challenges")}
+            className="subscribe-btn"
+          >
+            Back to Challenges
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubscribe = async () => {
     try {
@@ -22,7 +46,7 @@ const Subscribe = () => {
 
       const { orderId, razorpayKey } = data;
 
-      // SAFETY CHECK
+      // CHECK RAZORPAY SDK
       if (!window.Razorpay) {
         alert("Razorpay SDK failed to load");
 
@@ -123,9 +147,7 @@ const Subscribe = () => {
         </div>
 
         <button
-          onClick={() =>
-            navigate("/challenges")
-          }
+          onClick={() => navigate("/challenges")}
           className="back-btn-subscribe"
         >
           ← Back to challenges
@@ -136,4 +158,8 @@ const Subscribe = () => {
 };
 
 export default Subscribe;
+
+
+
+
  

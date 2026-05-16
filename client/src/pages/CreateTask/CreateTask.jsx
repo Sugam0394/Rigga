@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import {
   useLocation,
   useNavigate,
@@ -17,6 +16,17 @@ const CreateTask = () => {
   // CHALLENGE DATA
   const challengeData =
     location.state || {};
+
+  // REDIRECT IF NO CHALLENGE
+  useEffect(() => {
+    if (!challengeData.challengeId) {
+      alert(
+        "Please select a challenge first"
+      );
+
+      navigate("/challenges");
+    }
+  }, [challengeData, navigate]);
 
   const [formData, setFormData] =
     useState({
@@ -39,14 +49,6 @@ const CreateTask = () => {
 
   const [loading, setLoading] =
     useState(false);
-
-    
-  useEffect(() => {
-  // NO CHALLENGE DATA
-  if (!challengeData.challengeId) {
-    navigate("/challenges");
-  }
-}, [challengeData, navigate]);
 
   // INPUT HANDLER
   const handleChange = (e) => {
@@ -74,6 +76,8 @@ const CreateTask = () => {
         alert(
           "Please fill all required fields"
         );
+
+        setLoading(false);
 
         return;
       }

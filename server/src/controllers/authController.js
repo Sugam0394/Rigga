@@ -120,6 +120,7 @@ export const loginUser = async (req, res) => {
       token,
        user: {
     _id: user._id,
+    name: user.name,
     whatsappNumber: user.whatsappNumber,
     email: user.email,
     subscriptionStatus: user.subscriptionStatus,

@@ -95,7 +95,7 @@ const Landing = () => {
       <div className="top-bar">
         <h1>Rigga</h1>
         <div className="top-right">
-          <span>{user?.whatsappNumber}</span>
+          <span>{user?.name || "User"}</span>
           <button onClick={handleLogout}>Logout</button>
         </div>
       </div>
