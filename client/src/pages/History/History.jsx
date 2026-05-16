@@ -34,7 +34,7 @@ const History = () => {
 
           const { data } =
             await api.get(
-              "/tasks/history"
+              "/history"
             );
 
           setTasks(
