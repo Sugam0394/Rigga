@@ -4,6 +4,10 @@ import { User } from "../models/userModel.js";
 import { validateProofWithGroq } from "../validators/visionValidator.js";
 import { unlockNextTaskBox } from "../services/taskBoxServices.js";
 import{ protect }from "../middlewares/auth.js";
+import { executeEscalation } from "../services/escalationServices.js";
+import { sendWhatsAppMessage } from "../services/twilioServices.js";
+
+
 
 const router = express.Router();
 
@@ -95,6 +99,49 @@ if (user?.activeTaskBox) {
         taskBoxes: taskBox._id
       }
     });
+
+
+    // ✅ witness onboarding message
+if (taskBox.witness && taskBox.witness.phone) {
+
+  const deadline = new Date(
+    taskBox.deadline
+  ).toLocaleString(
+    "en-IN",
+    {
+      timeZone: "Asia/Kolkata"
+    }
+  );
+
+  const witnessMsg =
+`Hey ${taskBox.witness.name}! 👀
+
+${user.name} ne tumhe apna witness banaya hai.
+
+Challenge: ${taskBox.goal}
+Deadline: ${deadline}
+
+Agar woh fail kare — tumhara phone bajega. 😈
+
+— Rigga`;
+
+  try {
+
+    await sendWhatsAppMessage(
+      taskBox.witness.phone,
+      witnessMsg
+    );
+
+  } catch (err) {
+
+    console.error(
+      "Witness message failed:",
+      err.message
+    );
+
+  }
+
+}
 
     res.status(201).json({
       success: true,
@@ -323,6 +370,8 @@ router.post("/:taskBoxId/submit-proof", protect, async (req, res) => {
         4
       );
 
+      await executeEscalation(taskBox , user);
+
     }
 
     // ✅ SUCCESS
@@ -419,10 +468,7 @@ router.post("/:taskBoxId/submit-proof", protect, async (req, res) => {
   }
 });
 
- router.get(
-  "/history",
-  protect,
-  async (req, res) => {
+ router.get("/history",protect,async (req, res) => {
     try {
 
       // LOGGED-IN USER
