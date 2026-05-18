@@ -119,7 +119,7 @@ const Landing = () => {
         ) : (
           <div className="no-task">
             <h2>No challenge running 🚀</h2>
-            <button onClick={() => navigate("/create")}>Create Challenge</button>
+            <button onClick={() => navigate("/challenges")}>Create Challenge</button>
           </div>
         )}
       </motion.div>

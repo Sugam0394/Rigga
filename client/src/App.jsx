@@ -1,4 +1,4 @@
- import { Routes, Route } from "react-router-dom";
+ import { Routes, Route , Navigate } from "react-router-dom";
 
 import Landing from "./pages/Landing/Landing";
 import Chat from "./pages/Chat/Chat";
@@ -117,6 +117,9 @@ import "./App.css";
     </ProtectedRoute>
   }
 />
+
+ {/* ✅ Catch all */}
+  <Route path="*" element={<Navigate to="/" />} />
 
     </Routes>
   );

@@ -249,3 +249,35 @@
     font-size: 1.1rem;
   }
 }
+
+@media (max-width: 768px) {
+  .challenge-grid,
+  .challenges-grid,
+  .library-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .challenge-card,
+  .library-card {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .challenge-card button,
+  .library-card button {
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .challenge-library,
+  .challenge-container {
+    padding: 16px;
+  }
+
+  h1,
+  h2,
+  p {
+    text-align: center;
+  }
+}
