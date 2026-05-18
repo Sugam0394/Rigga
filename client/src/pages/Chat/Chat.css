@@ -204,7 +204,7 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
-
+}
   .chat-header {
     padding: 14px;
   }
@@ -229,6 +229,41 @@
   .chat-input-area button {
     padding: 0 18px;
   }
+  
+  .chat-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mode-badge {
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  font-size: 0.7rem;
+
+  font-weight: bold;
+}
+
+.mode-badge.emergency {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+.mode-badge.brutal {
+  background: #3f3f46;
+  color: #f87171;
+}
+
+.mode-badge.normal {
+  background: #1f2937;
+  color: #fb923c;
+}
+
+.mode-badge.no_task {
+  background: #27272a;
+  color: #d4d4d8;
 }
 
  

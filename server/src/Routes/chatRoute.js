@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post("/chat", protect ,  chatWithRigga);
 
-router.get("/test", protect, getChatHistory);
+router.get("/history", protect, getChatHistory);
 
 export default router;

@@ -22,6 +22,9 @@ const Chat = () => {
   const [historyLoading, setHistoryLoading] =
     useState(true);
 
+  const [mode, setMode] =
+    useState("normal");
+
   const bottomRef = useRef(null);
 
   /**
@@ -131,6 +134,13 @@ const Chat = () => {
         aiMessage,
       ]);
 
+      /**
+       * UPDATE MODE
+       */
+      setMode(
+        response.data.mode || "normal"
+      );
+
     } catch (error) {
 
       console.log(error);
@@ -164,6 +174,7 @@ const Chat = () => {
    * LOADING SCREEN
    */
   if (historyLoading) {
+
     return (
       <div className="chat-loading">
 
@@ -191,7 +202,29 @@ const Chat = () => {
           ← Back
         </button>
 
-        <span>Rigga AI 🤖</span>
+        <div className="chat-title">
+
+          <span>Rigga AI 🤖</span>
+
+          <div
+            className={`mode-badge ${mode}`}
+          >
+
+            {mode === "emergency" &&
+              "🚨 EMERGENCY"}
+
+            {mode === "brutal" &&
+              "💀 BRUTAL"}
+
+            {mode === "normal" &&
+              "🔥 NORMAL"}
+
+            {mode === "no_task" &&
+              "😴 NO TASK"}
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -207,6 +240,7 @@ const Chat = () => {
                 : "ai-row"
             }`}
           >
+
             <div
               className={`message-bubble ${
                 msg.role === "user"
@@ -216,14 +250,17 @@ const Chat = () => {
             >
               {msg.text}
             </div>
+
           </div>
         ))}
 
         {loading && (
           <div className="message-row ai-row">
+
             <div className="message-bubble ai-bubble">
               ...
             </div>
+
           </div>
         )}
 
