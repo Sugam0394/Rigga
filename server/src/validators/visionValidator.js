@@ -44,7 +44,7 @@ export const validateProofWithGroq = async (imageUrl, taskGoal) => {
           ],
         },
       ],
-      model: "llama-3.2-11b-vision-preview",
+      model: "meta-llama/llama-4-scout-17b-16e-instruct",
       temperature: 0, // 0 for deterministic results
       max_tokens: 5,   // Strict limit taaki AI lambe answer na de
     });

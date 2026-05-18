@@ -17,13 +17,37 @@ const connectDB = async () => {
 };
 
 const challenges = [
+
   {
-    title: "7-Day No Social Media",
+    title: "Subah 5 Baje Uthna",
+
     description:
-      "No Instagram, TikTok, or YouTube scrolling for 7 days.",
+      "Roz subah 5 baje uthna hai. Phone screen ka screenshot bhejno time visible ke saath.",
 
     consequence:
-      "Rigga will send a humiliation message to your accountability witness.",
+      "Tumhari ek embarrassing purani photo witness ko WhatsApp pe jayegi. Woh decide karega kise forward kare.",
+
+    stakeType: "photo",
+
+    isPaid: true,
+
+    price: 199,
+
+    category: "discipline",
+
+    difficulty: "hard",
+
+    isActive: true,
+  },
+
+  {
+    title: "7 Din No Social Media",
+
+    description:
+      "7 din tak Instagram, YouTube, Twitter band. Roz screen time screenshot proof.",
+
+    consequence:
+      "Tere best friend ko Rigga ki taraf se message jayega: tumne bet haari, treat dena padega.",
 
     stakeType: "social",
 
@@ -34,36 +58,40 @@ const challenges = [
     category: "discipline",
 
     difficulty: "medium",
+
+    isActive: true,
   },
 
   {
-    title: "Daily 20 Push-Ups",
+    title: "Roz 100 Push-Ups",
 
     description:
-      "Complete 20 push-ups daily and submit proof.",
+      "Aaj se roz 100 push-ups. Photo ya short video proof bhejni hai session ki.",
 
     consequence:
-      "Miss one day and Rigga roasts your inconsistency.",
+      "Teri mom ko WhatsApp message jayega: aaj ka health goal toda.",
 
     stakeType: "photo",
 
-    isPaid: false,
+    isPaid: true,
 
-    price: 0,
+    price: 199,
 
     category: "fitness",
 
-    difficulty: "easy",
+    difficulty: "hard",
+
+    isActive: true,
   },
 
   {
-    title: "5 AM Wake-Up Challenge",
+    title: "Daily 2 Ghante Padhai",
 
     description:
-      "Wake up before 5 AM for 7 days straight.",
+      "Roz 2 ghante focused study. Notes ya books ki photo timestamp ke saath.",
 
     consequence:
-      "Failure triggers savage AI humiliation messages.",
+      "College group mein message jayega ki tune aaj nahi padha. Public accountability.",
 
     stakeType: "social",
 
@@ -71,10 +99,35 @@ const challenges = [
 
     price: 199,
 
-    category: "discipline",
+    category: "study",
+
+    difficulty: "medium",
+
+    isActive: true,
+  },
+
+  {
+    title: "21 Din Workout Streak",
+
+    description:
+      "21 din lagatar gym ya workout. Daily selfie ya screenshot proof.",
+
+    consequence:
+      "Instagram par manually public apology story post karni padegi. Rigga screenshot maangega proof ke liye.",
+
+    stakeType: "photo",
+
+    isPaid: true,
+
+    price: 199,
+
+    category: "fitness",
 
     difficulty: "hard",
-  },
+
+    isActive: true,
+  }
+
 ];
 
 const seedChallenges = async () => {

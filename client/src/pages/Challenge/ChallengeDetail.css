@@ -8,6 +8,7 @@
 }
 
 /* TOP SECTION */
+
 .detail-top {
   background: #171717;
   border: 1px solid #2a2a2a;
@@ -37,20 +38,29 @@
   background: #333;
 }
 
-.paid-badge, .free-badge {
+.paid-badge,
+.free-badge {
   padding: 8px 14px;
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: bold;
 }
 
-.paid-badge { background: #444; color: #fbbf24; }
-.free-badge { background: #F97316; color: white; }
+.paid-badge {
+  background: #444;
+  color: #fbbf24;
+}
+
+.free-badge {
+  background: #f97316;
+  color: white;
+}
 
 .challenge-meta {
   display: flex;
   gap: 15px;
   margin: 20px 0;
+  flex-wrap: wrap;
 }
 
 .challenge-meta span {
@@ -64,7 +74,7 @@
 
 .description-box h3 {
   margin-bottom: 12px;
-  color: #F97316;
+  color: #f97316;
 }
 
 .description-box p {
@@ -72,7 +82,8 @@
   color: #ccc;
 }
 
-/* SCARY CONSEQUENCE BOX */
+/* CONSEQUENCE SECTION */
+
 .consequence-section {
   background: rgba(120, 0, 0, 0.15);
   border: 2px solid #dc2626;
@@ -103,11 +114,16 @@
 }
 
 /* RULES SECTION */
+
 .rules-section {
   background: #171717;
   border: 1px solid #2a2a2a;
   border-radius: 20px;
   padding: 30px;
+}
+
+.rules-section h3 {
+  margin-bottom: 15px;
 }
 
 .rules-section ul {
@@ -117,11 +133,22 @@
 .rules-section li {
   margin-bottom: 14px;
   color: #ccc;
+  line-height: 1.6;
+}
+
+.locked-warning {
+  background: rgba(120, 0, 0, 0.15);
+  border: 1px solid #dc2626;
+  color: #fca5a5;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .accept-btn {
   width: 100%;
-  background: #F97316;
+  background: #f97316;
   border: none;
   padding: 18px;
   border-radius: 14px;
@@ -138,7 +165,166 @@
   filter: brightness(1.1);
 }
 
-/* SKELETON & ERROR */
+/* CONSENT MODAL */
+
+.consent-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 999;
+}
+
+.consent-modal {
+  width: 100%;
+  max-width: 600px;
+  background: #171717;
+  border: 1px solid #2d2d2d;
+  border-radius: 24px;
+  padding: 30px;
+  animation: modalPop 0.25s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.consent-modal h2 {
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+  color: white;
+  line-height: 1.5;
+}
+
+.challenge-info {
+  margin-bottom: 25px;
+}
+
+.challenge-info p {
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.challenge-info h3 {
+  font-size: 1.4rem;
+  color: #f97316;
+}
+
+/* RED CONSEQUENCE BOX */
+
+.consequence-box {
+  background: rgba(127, 29, 29, 0.25);
+  border: 2px solid #dc2626;
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 25px;
+}
+
+.consequence-box h4 {
+  color: #ef4444;
+  margin-bottom: 14px;
+  font-size: 1.1rem;
+}
+
+.consequence-box p {
+  color: white;
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+/* RULES */
+
+.rules-box {
+  margin-bottom: 30px;
+}
+
+.rules-box p {
+  margin-bottom: 14px;
+  font-weight: bold;
+}
+
+.rules-box ul {
+  padding-left: 20px;
+}
+
+.rules-box li {
+  margin-bottom: 12px;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+/* CHECKBOX */
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.checkbox-row input {
+  margin-top: 5px;
+  width: 18px;
+  height: 18px;
+  accent-color: #f97316;
+}
+
+.checkbox-row span {
+  color: #ddd;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* BUTTONS */
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.cancel-btn,
+.confirm-btn {
+  flex: 1;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.cancel-btn {
+  background: #2a2a2a;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #3a3a3a;
+}
+
+.confirm-btn {
+  background: #f97316;
+  color: white;
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+.confirm-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.confirm-btn:disabled {
+  background: #444;
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* SKELETON */
+
 .skeleton {
   background: #1f1f1f;
   border-radius: 12px;
@@ -146,33 +332,97 @@
   animation: pulse 1.5s infinite;
 }
 
-.skeleton-lg { height: 250px; }
-.skeleton-md { height: 100px; }
-.skeleton-sm { height: 150px; }
+.skeleton-lg {
+  height: 250px;
+}
+
+.skeleton-md {
+  height: 100px;
+}
+
+.skeleton-sm {
+  height: 150px;
+}
+
+/* ANIMATIONS */
 
 @keyframes pulse {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
 }
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* MOBILE */
 
 @media (max-width: 768px) {
-  .challenge-detail-page { padding: 15px; }
-  .top-header { flex-direction: row; align-items: center; }
-}
+  .challenge-detail-page {
+    padding: 15px;
+  }
 
-.locked-warning {
-  background: rgba(120, 0, 0, 0.15);
-  border: 1px solid #dc2626;
-  color: #fca5a5;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  font-weight: bold;
+  .detail-top,
+  .rules-section,
+  .consequence-section {
+    padding: 22px;
+  }
+
+  .consent-modal {
+    padding: 22px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .accept-btn,
+  .confirm-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+
+  .challenge-info h3 {
+    font-size: 1.2rem;
+  }
+
+  .consequence-box p {
+    font-size: 1rem;
+  }
+
+  .checkbox-row {
+    gap: 10px;
+  }
 }

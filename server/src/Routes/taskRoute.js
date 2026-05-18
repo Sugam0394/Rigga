@@ -219,6 +219,25 @@ router.get("/active", protect, async (req, res) => {
 
       await activeTask.save();
 
+      try {
+
+  const fullUser =
+    await User.findById(user._id);
+
+  await executeEscalation(
+    activeTask,
+    fullUser
+  );
+
+} catch (e) {
+
+  console.error(
+    "Auto-expire escalation failed:",
+    e.message
+  );
+
+}
+
       // ✅ update stats
       await User.findByIdAndUpdate(
         user._id,
@@ -365,12 +384,14 @@ router.post("/:taskBoxId/submit-proof", protect, async (req, res) => {
 
       taskBox.status = "failed";
 
+          await executeEscalation(taskBox , user);
+
       taskBox.level = Math.min(
         (taskBox.level || 1) + 1,
         4
       );
 
-      await executeEscalation(taskBox , user);
+   
 
     }
 

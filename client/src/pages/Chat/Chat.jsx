@@ -1,30 +1,97 @@
 import { useEffect, useRef, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
 import api from "../../services/api";
+
 import "./Chat.css";
-import { useNavigate } from 'react-router-dom'
 
 const Chat = () => {
 
   const navigate = useNavigate();
-  
-  const [messages, setMessages] = useState([
-    {
-      role: "ai",
-      text: "Kya haal hai? Task kar raha hai ya excuses bana raha hai? 😈",
-    },
-  ]);
+
+  /**
+   * STATES
+   */
+  const [messages, setMessages] = useState([]);
 
   const [input, setInput] = useState("");
+
   const [loading, setLoading] = useState(false);
+
+  const [historyLoading, setHistoryLoading] =
+    useState(true);
 
   const bottomRef = useRef(null);
 
+  /**
+   * FETCH CHAT HISTORY
+   */
   useEffect(() => {
+
+    const fetchHistory = async () => {
+
+      try {
+
+        setHistoryLoading(true);
+
+        const response =
+          await api.get("/chat/history");
+
+        const historyMessages =
+          response.data.messages;
+
+        if (historyMessages.length > 0) {
+
+          setMessages(historyMessages);
+
+        } else {
+
+          setMessages([
+            {
+              role: "ai",
+              text:
+                "Kya haal hai? Task kar raha hai ya excuses bana raha hai? 😈",
+            },
+          ]);
+        }
+
+      } catch (error) {
+
+        console.log(error);
+
+        setMessages([
+          {
+            role: "ai",
+            text:
+              "Rigga history load nahi kar paaya 💀",
+          },
+        ]);
+
+      } finally {
+
+        setHistoryLoading(false);
+      }
+    };
+
+    fetchHistory();
+
+  }, []);
+
+  /**
+   * AUTO SCROLL
+   */
+  useEffect(() => {
+
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
+
   }, [messages, loading]);
 
+  /**
+   * SEND MESSAGE
+   */
   const sendMessage = async () => {
 
     if (!input.trim()) return;
@@ -34,25 +101,35 @@ const Chat = () => {
       text: input,
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => [
+      ...prev,
+      userMessage,
+    ]);
 
     const currentInput = input;
 
     setInput("");
+
     setLoading(true);
 
     try {
 
-      const response = await api.post("/chat", {
-        message: currentInput,
-      });
+      const response = await api.post(
+        "/chat",
+        {
+          message: currentInput,
+        }
+      );
 
       const aiMessage = {
         role: "ai",
         text: response.data.reply,
       };
 
-      setMessages((prev) => [...prev, aiMessage]);
+      setMessages((prev) => [
+        ...prev,
+        aiMessage,
+      ]);
 
     } catch (error) {
 
@@ -62,30 +139,63 @@ const Chat = () => {
         ...prev,
         {
           role: "ai",
-          text: "Aaj Rigga ka dimag kharab hai 💀",
+          text:
+            "Aaj Rigga ka dimag kharab hai 💀",
         },
       ]);
-    }
 
-    setLoading(false);
+    } finally {
+
+      setLoading(false);
+    }
   };
 
+  /**
+   * ENTER KEY
+   */
   const handleKeyDown = (e) => {
+
     if (e.key === "Enter") {
       sendMessage();
     }
   };
 
+  /**
+   * LOADING SCREEN
+   */
+  if (historyLoading) {
+    return (
+      <div className="chat-loading">
+
+        <div className="chat-loader"></div>
+
+        <p>
+          Rigga purani chats yaad kar raha
+          hai...
+        </p>
+
+      </div>
+    );
+  }
+
   return (
     <div className="chat-page">
 
+      {/* HEADER */}
       <div className="chat-header">
-        <button onClick={() => navigate(-1)}>
+
+        <button
+          className="back-btn"
+          onClick={() => navigate(-1)}
+        >
           ← Back
         </button>
+
         <span>Rigga AI 🤖</span>
+
       </div>
 
+      {/* MESSAGES */}
       <div className="chat-messages">
 
         {messages.map((msg, index) => (
@@ -121,21 +231,29 @@ const Chat = () => {
 
       </div>
 
+      {/* INPUT AREA */}
       <div className="chat-input-area">
 
         <input
           type="text"
           placeholder="Type karo..."
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          disabled={loading}
+          onChange={(e) =>
+            setInput(e.target.value)
+          }
           onKeyDown={handleKeyDown}
         />
 
-        <button onClick={sendMessage}>
-          Send
+        <button
+          onClick={sendMessage}
+          disabled={loading}
+        >
+          {loading ? "..." : "Send"}
         </button>
 
       </div>
+
     </div>
   );
 };
