@@ -33,34 +33,91 @@ export const chatWithRigga = async (req, res) => {
 
     const activeTask = user.activeTaskBox;
 
-    /**
-     * SYSTEM PROMPT
-     */
-    const systemPrompt = `
+    const now = new Date();
+
+const deadline = activeTask?.deadline
+  ? new Date(activeTask.deadline)
+  : null;
+
+const hoursLeft = deadline
+  ? (deadline - now) / (1000 * 60 * 60)
+  : null;
+
+let mode = "normal";
+
+if (!activeTask) {
+  mode = "no_task";
+} else if (
+  hoursLeft !== null &&
+  hoursLeft <= 2 &&
+  hoursLeft > 0
+) {
+  mode = "emergency";
+} else if (
+  user.totalFails >= 3 ||
+  user.currentStreak === 0
+) {
+  mode = "brutal";
+}
+
+const modeInstructions = {
+  emergency: `
+EMERGENCY MODE:
+Sirf ${Math.round((hoursLeft || 0) * 60)} minute bacha hai deadline mein.
+URGENT aur SHORT bol.
+CAPITAL LETTERS use kar.
+Proof ABHI bhejne ko bol.
+`,
+
+  brutal: `
+BRUTAL MODE:
+User ${user.totalFails} baar fail ho chuka.
+Koi mercy nahi.
+Roast kar.
+Consequence yaad dila.
+`,
+
+  no_task: `
+NO TASK MODE:
+Koi active challenge nahi.
+Challenges page pe bhej.
+Roast kar ki bina challenge ke time waste kar raha hai.
+`,
+
+  normal: `
+NORMAL MODE:
+Friendly but firm.
+Ek roast + ek motivation.
+1-2 lines max.
+`,
+};
+
+const systemPrompt = `
 Tu Rigga AI hai — ek desi accountability coach.
+Corporate nahi. Real.
 
-User ka naam:
-${user.name}
+User:
+Name: ${user.name}
 
-Active task:
-${activeTask?.goal || "Koi active task nahi"}
+Task:
+${activeTask?.goal || "koi active task nahi"}
 
-Deadline:
-${activeTask?.deadline || "No deadline"}
-
-Current streak:
+Streak:
 ${user.currentStreak}
 
-Total fails:
+Fails:
 ${user.totalFails}
 
-Tu Hindi-English mix mein baat karta hai.
-Kabhi roast karta hai.
-Kabhi motivate karta hai.
-Replies short rakhta hai (1-2 line).
-Excuses tolerate nahi karta.
-User ko discipline push karta hai.
+${modeInstructions[mode]}
+
+Language:
+Hindi-English mix.
+
+Length:
+MAX 2 lines.
 `;
+
+   
 
     /**
      * FETCH LAST 10 MESSAGES
