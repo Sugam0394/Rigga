@@ -23,6 +23,7 @@
  import challengeRoutes from "./routes/challengeRoutes.js";
  import progressReportRoutes from "./routes/progressReportRoutes.js"
  import reviewSummaryRoutes from "./routes/reviewSummaryRoutes.js"
+ import notificationRoutes from "./routes/notificationRoutes.js"
 
    // Using routes
 
@@ -31,6 +32,8 @@
    app.use("/api/progress-reports", progressReportRoutes);
 
    app.use("/api", reviewSummaryRoutes);
+
+   app.use("/api", notificationRoutes);
 
 
 

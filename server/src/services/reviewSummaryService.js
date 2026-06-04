@@ -3,6 +3,7 @@ import ProgressReport from "../models/progressReportModel.js";
 import checkPointModel from "../models/checkPointModel.js";
 import Appeal from "../models/appealModel.js";
 import Consequence from "../models/consequenceModel.js";
+import { CHECKPOINT_STATUS } from "../constants/checkpointConstants.js"
 
 const getReviewSummary = async (challengeId) => {
   const challenge = await Challenge.findById(challengeId);
@@ -30,16 +31,16 @@ const getReviewSummary = async (challengeId) => {
   });
 
   const completed = checkpoints.filter(
-    (checkpoint) => checkpoint.status === "completed"
-  ).length;
+  (checkpoint) => checkpoint.status === CHECKPOINT_STATUS.COMPLETED
+).length;
 
-  const missed = checkpoints.filter(
-    (checkpoint) => checkpoint.status === "missed"
-  ).length;
+const missed = checkpoints.filter(
+  (checkpoint) => checkpoint.status === CHECKPOINT_STATUS.MISSED
+).length;
 
-  const pending = checkpoints.filter(
-    (checkpoint) => checkpoint.status === "pending"
-  ).length;
+const pending = checkpoints.filter(
+  (checkpoint) => checkpoint.status === CHECKPOINT_STATUS.PENDING
+).length;
 
   const summary = {
     challenge: {

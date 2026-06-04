@@ -2,8 +2,12 @@
 import witnessService from "./witnessServices.js";
 import consequenceService from "./consequenceService.js";
 import checkpointService from "./checkPointService.js";
+import notificationService from "./notificationService.js";
+import {
+  NOTIFICATION_TYPES,
+} from "../constants/notificarionConstants.js";
 
-const createChallenge = async (challengeData) => {
+ const createChallenge = async (challengeData) => {
   const {
     title,
     deadline,
@@ -36,12 +40,21 @@ const createChallenge = async (challengeData) => {
       challengePayload
     );
 
+  await notificationService.createNotification({
+    challengeId: challenge._id,
+    recipientType: "WITNESS",
+    recipientPhone: challenge.witness.phone,
+    type: NOTIFICATION_TYPES.CHALLENGE_CREATED,
+    challengeTitle: challenge.title,
+    userName: witness.name,
+  });
+
   await consequenceService.createConsequence({
     challengeId: challenge._id,
     privateMessage,
   });
 
-    await checkpointService.createCheckpoints({
+  await checkpointService.createCheckpoints({
     challengeId: challenge._id,
     startDate: challenge.createdAt,
     endDate: challenge.deadline,
@@ -50,7 +63,6 @@ const createChallenge = async (challengeData) => {
   await witnessService.notifyWitness(
     challenge
   );
- 
 
   return challenge;
 };
