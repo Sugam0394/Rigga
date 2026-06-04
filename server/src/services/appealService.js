@@ -115,12 +115,12 @@ const validateAppealWindow = (
     existingAppeal
   );
 
-    const appeal = await appealRepository
-      .createAppeal({
-        challengeId,
-        notes,
-        imageUrl,
-      });
+    return await appealRepository
+  .createAppeal({
+    challengeId,
+    notes,
+    imageUrl,
+  });
 
 
 };
