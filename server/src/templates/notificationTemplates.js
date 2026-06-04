@@ -1,4 +1,4 @@
-import { NOTIFICATION_TYPES } from "../constants/notificarionConstants.js";
+import { NOTIFICATION_TYPES } from "../constants/notificationConstants.js";
 
 const buildNotificationMessage = ({
   type,
@@ -7,7 +7,7 @@ const buildNotificationMessage = ({
 }) => {
   switch (type) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
-      return `${userName} has selected you as a witness for a Rigga challenge.`;
+      return ` you have been  selected  as a witness for a Rigga challenge.`;
 
     case NOTIFICATION_TYPES.REVIEW_REQUIRED:
       return "A challenge assigned to you is ready for review.";

@@ -5,7 +5,7 @@ import checkpointService from "./checkPointService.js";
 import notificationService from "./notificationService.js";
 import {
   NOTIFICATION_TYPES,
-} from "../constants/notificarionConstants.js";
+} from "../constants/notificationConstants.js";
 
  const createChallenge = async (challengeData) => {
   const {
