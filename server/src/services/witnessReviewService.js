@@ -40,19 +40,20 @@ const validateRejectionReason = (
   challengeId
 ) => {
 
-  const challenge =
-  await challengeRepository
-    .approveChallenge(
-      challengeId
-    );
+ 
 
-await challengeRepository
+  await challengeRepository
+  .approveChallenge(
+    challengeId
+  );
+
+return challengeRepository
   .updateStatus(
     challengeId,
     CHALLENGE_STATUS.COMPLETED
   );
 
-return challenge;
+  
 };
 
  const rejectChallenge = async ({
@@ -64,23 +65,41 @@ return challenge;
     rejectionReason
   );
 
-  const challenge =
+  const existingChallenge =
+    await challengeRepository
+      .getChallengeById(
+        challengeId
+      );
+
+  const isAppealed =
+    existingChallenge.status ===
+    CHALLENGE_STATUS.APPEALED;
+
   await challengeRepository
     .rejectChallenge({
       challengeId,
       rejectionReason,
     });
 
+  if (isAppealed) {
 
-    const existingChallenge =
-  await challengeRepository
-    .getChallengeById(
-      challengeId
+    await consequenceReleaseService
+      .releaseConsequence(
+        challengeId
+      );
+
+    return challengeRepository
+      .updateStatus(
+        challengeId,
+        CHALLENGE_STATUS.FAILED
+      );
+  }
+
+  return challengeRepository
+    .updateStatus(
+      challengeId,
+      CHALLENGE_STATUS.REJECTED
     );
- 
- 
-
-return challenge;
 };
 
 export default {

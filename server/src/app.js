@@ -22,12 +22,15 @@
 
  import challengeRoutes from "./routes/challengeRoutes.js";
  import progressReportRoutes from "./routes/progressReportRoutes.js"
+ import reviewSummaryRoutes from "./routes/reviewSummaryRoutes.js"
 
    // Using routes
 
    app.use("/api", challengeRoutes);
 
    app.use("/api/progress-reports", progressReportRoutes);
+
+   app.use("/api", reviewSummaryRoutes);
 
 
 

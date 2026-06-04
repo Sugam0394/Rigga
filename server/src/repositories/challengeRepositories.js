@@ -68,17 +68,19 @@ const rejectChallenge = async ({
   );
 };
 
-const updateStatus = async (
+ const updateStatus = async (
   challengeId,
   status
 ) => {
   return Challenge.findByIdAndUpdate(
     challengeId,
     {
-      status,
+      $set: {
+        status,
+      },
     },
     {
-      new: true,
+      returnDocument: "after",
     }
   );
 };
