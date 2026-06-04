@@ -16,7 +16,34 @@ const findByChallengeId = async (
   });
 };
 
+const getByChallengeId = async (
+  challengeId
+) => {
+  return Consequence.findOne({
+    challengeId,
+  });
+};
+
+const releaseConsequence = async (
+  challengeId
+) => {
+  return Consequence.findOneAndUpdate(
+    {
+      challengeId,
+    },
+    {
+      isReleased: true,
+      releasedAt: new Date(),
+    },
+    {
+      new: true,
+    }
+  );
+};
+
 export default {
   createConsequence,
   findByChallengeId,
+  getByChallengeId,
+  releaseConsequence,
 };

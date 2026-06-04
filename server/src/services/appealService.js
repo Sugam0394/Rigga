@@ -2,6 +2,8 @@
 
  import challengeRepository from "../repositories/challengeRepositories.js";
 
+import { CHALLENGE_STATUS } from "../constants/challengeStatus.js";
+
  
 
  const validateAppealNotes = (
@@ -115,12 +117,21 @@ const validateAppealWindow = (
     existingAppeal
   );
 
-    return await appealRepository
-  .createAppeal({
+  const appeal =
+  await appealRepository
+    .createAppeal({
+      challengeId,
+      notes,
+      imageUrl,
+    });
+
+await challengeRepository
+  .updateStatus(
     challengeId,
-    notes,
-    imageUrl,
-  });
+    CHALLENGE_STATUS.APPEALED
+  );
+
+return appeal;
 
 
 };

@@ -29,8 +29,27 @@
 
    app.use("/api/progress-reports", progressReportRoutes);
 
+
+
+
+
+
+
+
+
+
+
+   
+
+ // Global error handler — routes ke baad, export se pehle
+app.use((err, req, res, next) => {
+  res.status(400).json({
+    success: false,
+    message: err.message,
+  });
+});
+
+export default app;
+
+
  
-
-
-
- export default app

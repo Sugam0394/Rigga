@@ -67,6 +67,21 @@ const rejectChallenge = async ({
     challengeId
   );
 };
+
+const updateStatus = async (
+  challengeId,
+  status
+) => {
+  return Challenge.findByIdAndUpdate(
+    challengeId,
+    {
+      status,
+    },
+    {
+      new: true,
+    }
+  );
+};
  
 
 export default {
@@ -75,5 +90,6 @@ export default {
   approveChallenge,
   rejectChallenge,
   getChallengeById,
+  updateStatus,
  
 };

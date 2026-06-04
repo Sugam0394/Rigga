@@ -1,5 +1,9 @@
 import challengeRepository from "../repositories/challengeRepositories.js";
 
+import { CHALLENGE_STATUS } from "../constants/challengeStatus.js";
+
+import consequenceReleaseService from "./consequenceReleaseService.js";
+
 
 const validateRejectionReason = (
   rejectionReason
@@ -37,12 +41,18 @@ const validateRejectionReason = (
 ) => {
 
   const challenge =
-    await challengeRepository
-      .approveChallenge(
-        challengeId
-      );
+  await challengeRepository
+    .approveChallenge(
+      challengeId
+    );
 
-  return challenge;
+await challengeRepository
+  .updateStatus(
+    challengeId,
+    CHALLENGE_STATUS.COMPLETED
+  );
+
+return challenge;
 };
 
  const rejectChallenge = async ({
@@ -54,13 +64,23 @@ const validateRejectionReason = (
     rejectionReason
   );
 
-  const challenge = await challengeRepository
-      .rejectChallenge({
-        challengeId,
-        rejectionReason,
-      });
+  const challenge =
+  await challengeRepository
+    .rejectChallenge({
+      challengeId,
+      rejectionReason,
+    });
 
-  return challenge;
+
+    const existingChallenge =
+  await challengeRepository
+    .getChallengeById(
+      challengeId
+    );
+ 
+ 
+
+return challenge;
 };
 
 export default {

@@ -1,3 +1,18 @@
-export const CHALLENGE_STATUS = {
+ export const CHALLENGE_STATUS = {
   ACTIVE: "ACTIVE",
+
+  UNDER_REVIEW:
+    "UNDER_REVIEW",
+
+  REJECTED:
+    "REJECTED",
+
+  APPEALED:
+    "APPEALED",
+
+  COMPLETED:
+    "COMPLETED",
+
+  FAILED:
+    "FAILED",
 };
