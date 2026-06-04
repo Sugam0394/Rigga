@@ -48,6 +48,16 @@ const challengeSchema = new mongoose.Schema(
     type: Date,
     default: null,
   },
+  
+  reviewToken: {
+  type: String,
+  default: null,
+},
+
+reviewTokenExpiresAt: {
+  type: Date,
+  default: null,
+},
 },
 
     successCriteria: {

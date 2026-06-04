@@ -19,11 +19,15 @@
 
  // Importing routes
 
-
  import challengeRoutes from "./routes/challengeRoutes.js";
  import progressReportRoutes from "./routes/progressReportRoutes.js"
  import reviewSummaryRoutes from "./routes/reviewSummaryRoutes.js"
  import notificationRoutes from "./routes/notificationRoutes.js"
+ import reviewLinkRoutes from "./routes/reviewLinkRoutes.js"
+ import publicRoutes from "./routes/publicReviewRoutes.js"
+
+
+
 
    // Using routes
 
@@ -34,6 +38,10 @@
    app.use("/api", reviewSummaryRoutes);
 
    app.use("/api", notificationRoutes);
+
+   app.use("/api", reviewLinkRoutes);
+
+   app.use("/api" , publicRoutes);
 
 
 
