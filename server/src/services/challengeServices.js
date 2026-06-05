@@ -9,6 +9,7 @@ import {
 
  const createChallenge = async (challengeData) => {
   const {
+    userId,
     title,
     deadline,
     privateMessage,
@@ -17,6 +18,7 @@ import {
   } = challengeData;
 
   if (
+    !userId ||
     !title ||
     !deadline ||
     !privateMessage ||
@@ -29,6 +31,7 @@ import {
   }
 
   const challengePayload = {
+    userId,
     title,
     deadline,
     witness,

@@ -28,6 +28,8 @@
  import reminderRoutes from "./routes/reminderRoutes.js";
  import accountabilityRoutes from "./routes/accountabilityRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js"
+import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 
 
@@ -50,6 +52,10 @@ import dashboardRoutes from "./routes/dashboardRoutes.js"
    app.use("/api" , accountabilityRoutes)
 
    app.use("/api" , dashboardRoutes)
+
+   app.use("/api" , userRoutes)
+
+   app.use("/api" , authRoutes)
 
 
 

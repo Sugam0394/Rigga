@@ -22,11 +22,13 @@ const getChallengeDashboard = async (challengeId) => {
   );
 }
 
-        const reports =
+     const reports =
   await progressReportRepository
-    .getByChallengeId(
-      challengeId
-    );
+    .getByChallengeId(challengeId);
+
+latestReportDate:
+  reports[reports.length - 1]
+    .createdAt
 
     const checkpoints =
   await checkpointRepository
