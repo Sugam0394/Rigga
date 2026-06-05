@@ -85,6 +85,11 @@ const rejectChallenge = async ({
   );
 };
  
+const getByReviewToken = async (token) => {
+  return Challenge.findOne({
+    "witness.reviewToken": token,
+  });
+};
 
 export default {
   createChallenge,
@@ -93,5 +98,6 @@ export default {
   rejectChallenge,
   getChallengeById,
   updateStatus,
+  getByReviewToken,
  
 };

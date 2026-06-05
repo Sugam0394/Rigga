@@ -52,6 +52,7 @@ const challengeSchema = new mongoose.Schema(
   reviewToken: {
   type: String,
   default: null,
+  index: true,
 },
 
 reviewTokenExpiresAt: {

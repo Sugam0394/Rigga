@@ -1,12 +1,14 @@
-import Challenge from "../models/challengeModel.js";
+ import challengeRepository from "../repositories/challengeRepositories.js";
+
+ 
 
 const validateReviewToken = async (
   token
 ) => {
   const challenge =
-    await Challenge.findOne({
-      "witness.reviewToken": token,
-    });
+  await challengeRepository.getByReviewToken(
+    token
+  );
 
   if (!challenge) {
     throw new Error("Invalid review token");
@@ -23,6 +25,8 @@ const validateReviewToken = async (
 
   return challenge;
 };
+
+ 
 
 export default {
   validateReviewToken,

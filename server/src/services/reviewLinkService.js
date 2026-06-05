@@ -28,7 +28,6 @@ const generateReviewLink = async (challengeId) => {
     reviewTokenService.buildReviewUrl(token);
 
   return {
-    token,
     expiresAt,
     reviewUrl,
   };

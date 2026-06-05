@@ -1,5 +1,6 @@
-import checkpointRepository
-  from "../repositories/checkPointRepository.js";
+import checkpointRepository from "../repositories/checkPointRepository.js";
+
+import reminderService from "./reminderService.js";
 
 const calculateDurationDays = (
   startDate,
@@ -151,6 +152,14 @@ const generateScheduledDates = (
     .createMany(
       checkpoints
     );
+
+    for (const checkpoint of savedCheckpoints) {
+  await reminderService.generateCheckpointReminder({
+    challengeId: checkpoint.challengeId,
+    checkpointId: checkpoint._id,
+    scheduledAt: checkpoint.scheduledDate,
+  });
+}
 
 return savedCheckpoints;
 

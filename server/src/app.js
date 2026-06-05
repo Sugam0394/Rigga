@@ -25,6 +25,7 @@
  import notificationRoutes from "./routes/notificationRoutes.js"
  import reviewLinkRoutes from "./routes/reviewLinkRoutes.js"
  import publicRoutes from "./routes/publicReviewRoutes.js"
+ import reminderRoutes from "./routes/reminderRoutes.js";
 
 
 
@@ -42,6 +43,8 @@
    app.use("/api", reviewLinkRoutes);
 
    app.use("/api" , publicRoutes);
+
+   app.use("/api" , reminderRoutes);
 
 
 

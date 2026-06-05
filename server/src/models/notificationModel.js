@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+ import {
+  NOTIFICATION_STATUS, } from "../constants/notificationConstants.js";
 
 const notificationSchema = new mongoose.Schema(
   {
@@ -6,6 +8,7 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Challenge",
       required: true,
+      index: true,
     },
 
     recipientType: {
@@ -21,6 +24,7 @@ const notificationSchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
+       
     },
 
     message: {
@@ -29,9 +33,11 @@ const notificationSchema = new mongoose.Schema(
     },
 
     status: {
-      type: String,
-      required: true,
-    },
+  type: String,
+  required: true,
+  enum: ["PENDING", "SENT", "FAILED"],
+  default: "PENDING",
+},
 
     sentAt: {
       type: Date,

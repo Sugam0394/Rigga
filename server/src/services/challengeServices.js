@@ -40,14 +40,6 @@ import {
       challengePayload
     );
 
-  await notificationService.createNotification({
-    challengeId: challenge._id,
-    recipientType: "WITNESS",
-    recipientPhone: challenge.witness.phone,
-    type: NOTIFICATION_TYPES.CHALLENGE_CREATED,
-    challengeTitle: challenge.title,
-    userName: witness.name,
-  });
 
   await consequenceService.createConsequence({
     challengeId: challenge._id,
@@ -63,6 +55,15 @@ import {
   await witnessService.notifyWitness(
     challenge
   );
+
+   await notificationService.createNotification({
+    challengeId: challenge._id,
+    recipientType: "WITNESS",
+    recipientPhone: challenge.witness.phone,
+    type: NOTIFICATION_TYPES.CHALLENGE_CREATED,
+    challengeTitle: challenge.title,
+    userName: witness.name,
+  });
 
   return challenge;
 };

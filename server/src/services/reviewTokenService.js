@@ -12,8 +12,17 @@ const generateReviewTokenExpiry = () => {
   return expiry;
 };
 
-const buildReviewUrl = (token) => {
-  return `https://rigga.app/review/${token}`;
+ const buildReviewUrl = (token) => {
+  const baseUrl =
+    process.env.FRONTEND_BASE_URL;
+
+  if (!baseUrl) {
+    throw new Error(
+      "FRONTEND_BASE_URL is not configured"
+    );
+  }
+
+  return `${baseUrl}/review/${token}`;
 };
 
 export default {
