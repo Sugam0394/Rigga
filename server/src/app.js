@@ -26,7 +26,8 @@
  import reviewLinkRoutes from "./routes/reviewLinkRoutes.js"
  import publicRoutes from "./routes/publicReviewRoutes.js"
  import reminderRoutes from "./routes/reminderRoutes.js";
-
+ import accountabilityRoutes from "./routes/accountabilityRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js"
 
 
 
@@ -34,7 +35,7 @@
 
    app.use("/api", challengeRoutes);
 
-   app.use("/api/progress-reports", progressReportRoutes);
+   app.use("/api", progressReportRoutes);
 
    app.use("/api", reviewSummaryRoutes);
 
@@ -45,6 +46,10 @@
    app.use("/api" , publicRoutes);
 
    app.use("/api" , reminderRoutes);
+
+   app.use("/api" , accountabilityRoutes)
+
+   app.use("/api" , dashboardRoutes)
 
 
 

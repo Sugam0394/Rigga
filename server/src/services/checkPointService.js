@@ -152,14 +152,30 @@ const generateScheduledDates = (
     .createMany(
       checkpoints
     );
+ 
+    const reminders =
+  savedCheckpoints.map(
+    (checkpoint) => ({
+      challengeId:
+        checkpoint.challengeId,
 
-    for (const checkpoint of savedCheckpoints) {
-  await reminderService.generateCheckpointReminder({
-    challengeId: checkpoint.challengeId,
-    checkpointId: checkpoint._id,
-    scheduledAt: checkpoint.scheduledDate,
-  });
-}
+      checkpointId:
+        checkpoint._id,
+
+      type:
+        "CHECKPOINT_REMINDER",
+
+      scheduledAt:
+        checkpoint.scheduledDate,
+
+      status: "PENDING",
+    })
+  );
+
+await reminderService
+  .createManyReminderSchedules(
+    reminders
+  );
 
 return savedCheckpoints;
 

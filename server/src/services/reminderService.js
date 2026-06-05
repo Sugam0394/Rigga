@@ -8,6 +8,12 @@ const createReminderSchedule = async (reminderData) => {
   return reminderRepository.createReminder(reminderData);
 };
 
+const createManyReminderSchedules = async (reminders) => {
+  return reminderRepository.createManyReminders(
+    reminders
+  );
+};
+
 const generateCheckpointReminder = async ({
   challengeId,
   checkpointId,
@@ -22,7 +28,18 @@ const generateCheckpointReminder = async ({
   });
 };
 
- 
+ const updateReminderStatus = async (
+  reminderId,
+  status,
+  triggeredAt = null
+) => {
+  return reminderRepository
+    .updateReminderStatus(
+      reminderId,
+      status,
+      triggeredAt
+    );
+};
 
 const getChallengeReminders = async (challengeId) => {
   return reminderRepository.getRemindersByChallenge(challengeId);
@@ -30,7 +47,8 @@ const getChallengeReminders = async (challengeId) => {
 
 export default {
   createReminderSchedule,
+  createManyReminderSchedules,
   generateCheckpointReminder,
-
+  updateReminderStatus,
   getChallengeReminders,
 };

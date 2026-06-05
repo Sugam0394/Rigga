@@ -1,0 +1,139 @@
+import challengeRepository from "../repositories/challengeRepositories.js";
+import progressReportRepository from "../repositories/progressReportRepository.js"
+import checkpointRepository from "../repositories/checkPointRepository.js";
+import reminderRepository from "../repositories/reminderRepository.js";
+import consequenceRepository from "../repositories/consequenceRepository.js";
+
+
+
+
+
+const getChallengeDashboard = async (challengeId) => {
+
+    const challenge =
+      await challengeRepository
+        .getChallengeById(
+          challengeId
+        );
+
+      if (!challenge) {
+  throw new Error(
+    "Challenge not found"
+  );
+}
+
+        const reports =
+  await progressReportRepository
+    .getByChallengeId(
+      challengeId
+    );
+
+    const checkpoints =
+  await checkpointRepository
+    .getByChallengeId(
+      challengeId
+    );
+
+  const reminders =
+  await reminderRepository
+    .getRemindersByChallenge(
+      challengeId
+    );
+
+const consequence =
+  await consequenceRepository
+    .getByChallengeId(
+      challengeId
+    );
+
+    return {
+      challenge: {
+        title:
+          challenge.title,
+
+        deadline:
+          challenge.deadline,
+
+        status:
+          challenge.status,
+      },
+
+      witness: {
+  name:
+    challenge.witness?.name,
+
+  decision:
+    challenge.witness?.decision,
+},
+
+     progress: {
+  totalReports:
+    reports.length,
+
+  latestReportDate:
+    reports.length > 0
+      ? reports[
+          reports.length - 1
+        ].createdAt
+      : null,
+},
+
+     checkpoints: {
+  total:
+    checkpoints.length,
+
+  completed:
+    checkpoints.filter(
+      (checkpoint) =>
+        checkpoint.status ===
+        "COMPLETED"
+    ).length,
+
+  pending:
+    checkpoints.filter(
+      (checkpoint) =>
+        checkpoint.status ===
+        "PENDING"
+    ).length,
+
+  missed:
+    checkpoints.filter(
+      (checkpoint) =>
+        checkpoint.status ===
+        "MISSED"
+    ).length,
+},
+
+    reminders: {
+  total:
+    reminders.length,
+
+  pending:
+    reminders.filter(
+      (reminder) =>
+        reminder.status ===
+        "PENDING"
+    ).length,
+
+  triggered:
+    reminders.filter(
+      (reminder) =>
+        reminder.status ===
+        "TRIGGERED"
+    ).length,
+},
+   consequence: {
+  isLocked:
+    consequence
+      ?.isLocked ?? false,
+
+  isReleased:
+    consequence
+      ?.isReleased ?? false,
+},
+    };
+  };
+
+export default {
+  getChallengeDashboard,
+};

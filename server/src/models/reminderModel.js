@@ -47,5 +47,9 @@ const reminderSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+reminderSchema.index({
+  status: 1,
+  scheduledAt: 1,
+});
 
 export const Reminder = mongoose.model("Reminder", reminderSchema);

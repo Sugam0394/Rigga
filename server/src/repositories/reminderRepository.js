@@ -14,13 +14,19 @@ const getRemindersByChallenge = async (challengeId) => {
   });
 };
 
-const updateReminderStatus = async (
+ const updateReminderStatus = async (
   reminderId,
-  updateData
+  status,
+  triggeredAt = null
 ) => {
   return Reminder.findByIdAndUpdate(
     reminderId,
-    updateData,
+    {
+      $set: {
+        status,
+        triggeredAt,
+      },
+    },
     {
       new: true,
     }
