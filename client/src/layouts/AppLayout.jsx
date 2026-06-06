@@ -1,5 +1,11 @@
+import { Outlet } from "react-router-dom";
+
+
+
 const AppLayout = () => {
-  return <div>App Layout</div>;
+   <main>
+    <Outlet />
+  </main>
 };
 
 export default AppLayout;

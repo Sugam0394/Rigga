@@ -10,26 +10,11 @@ const AppRouter = () => {
       <Routes>
         {/* Public Routes */}
 
-        <Route
-          path="/"
-          element={
-            <AuthLayout />
-          }
-        />
-
-        <Route
-          path="/login"
-          element={
-            <AuthLayout />
-          }
-        />
-
-        <Route
-          path="/verify-otp"
-          element={
-            <AuthLayout />
-          }
-        />
+        <Route element={<AuthLayout />}>
+  <Route path="/" />
+  <Route path="/login"  />
+  <Route path="/verify-otp"/>
+</Route>
 
         <Route
           path="/review/:token"

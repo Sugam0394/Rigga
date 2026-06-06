@@ -1,5 +1,11 @@
+import { Outlet } from "react-router-dom";
+
+ 
+
 const PublicLayout = () => {
-  return <div>Public Layout</div>;
+   <main>
+    <Outlet />
+  </main>
 };
 
 export default PublicLayout;
