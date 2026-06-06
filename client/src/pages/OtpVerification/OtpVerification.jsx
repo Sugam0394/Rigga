@@ -1,5 +1,5 @@
- import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+ import { useState , useEffect } from "react";
+ import { useLocation, useNavigate } from "react-router-dom";
 import AuthHeader from "../../features/auth/components/AuthHeader";
 import AuthError from "../../features/auth/components/AuthError";
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton";
@@ -11,13 +11,35 @@ const OtpVerificationPage = () => {
   const [otp, setOtp] = useState("");
   const isOtpValid = /^\d{6}$/.test(otp);
   const navigate = useNavigate();
+  const location = useLocation();
+  
 
-  const error =
-  otp && !isOtpValid
+
+  const error = otp && !isOtpValid
     ? "Enter a valid 6-digit OTP"
     : "";
 
-    const [countdown] = useState(30);
+   const [countdown, setCountdown] = useState(30);
+
+
+   useEffect(() => {
+  if (countdown <= 0) return;
+
+  const timer = setInterval(() => {
+    setCountdown((prev) => prev - 1);
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [countdown]);
+
+    const authData = location.state;
+    
+if (!authData) {
+  navigate("/login");
+  return null;
+}
+
+const { countryCode, phoneNumber } = authData;
 
  
 
@@ -40,7 +62,7 @@ const OtpVerificationPage = () => {
   }}
 >
   
-  {maskPhoneNumber("+1", "9876543210")}
+ {maskPhoneNumber(countryCode, phoneNumber)}
  
 </p>
 
@@ -64,7 +86,10 @@ const OtpVerificationPage = () => {
         onChange={(e) => setOtp(e.target.value)}
       />
 
-      <AuthError message={error} />
+      <AuthError
+  id="otp-error"
+  message={error}
+/>
 
       <div style={{ marginTop: "8px" }}>
   <AuthSubmitButton

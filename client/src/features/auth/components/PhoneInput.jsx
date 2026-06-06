@@ -1,6 +1,3 @@
- 
- 
- 
  const PhoneInput = ({
   value,
   onChange,
@@ -8,8 +5,10 @@
 }) => {
   return (
     <input
+      id="phone-number"
       type="tel"
       inputMode="numeric"
+      aria-describedby="phone-error"
       placeholder={placeholder}
       value={value}
       onChange={onChange}

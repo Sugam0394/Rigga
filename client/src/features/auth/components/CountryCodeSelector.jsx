@@ -21,7 +21,8 @@ const CountryCodeSelector = ({
   onChange,
 }) => {
   return (
-     <select
+ <select
+  id="country-code"
   value={value}
   onChange={onChange}
   style={{
