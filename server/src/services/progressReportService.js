@@ -14,9 +14,13 @@ const submitProgressReport = async (
     );
   }
 
-  return await progressReportRepository.createProgressReport(
-    reportData
-  );
+  return await progressReportRepository.createProgressReport({
+  challengeId,
+  notes,
+  imageUrl:
+    reportData.imageUrl ??
+    null,
+});
 };
 
 export default {

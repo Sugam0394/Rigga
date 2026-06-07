@@ -4,7 +4,9 @@ import AuthHeader from "../../features/auth/components/AuthHeader";
 import AuthError from "../../features/auth/components/AuthError";
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton";
 import OtpInput from "../../features/auth/components/OtpInput"
-import { maskPhoneNumber } from "../../utils/maskPhoneNumber";
+import { verifyOtp } from "../../services/authService";
+import useAuth from  "../../context/AuthContext";
+
 
 
 const OtpVerificationPage = () => {
@@ -12,6 +14,9 @@ const OtpVerificationPage = () => {
   const isOtpValid = /^\d{6}$/.test(otp);
   const navigate = useNavigate();
   const location = useLocation();
+  const { restoreSession } = useAuth();
+
+  const [loading, setLoading] = useState(false);
   
 
 
@@ -39,7 +44,39 @@ if (!authData) {
   return null;
 }
 
-const { countryCode, phoneNumber } = authData;
+ const { phone } =
+  authData;
+
+
+ const handleVerifyOtp =
+  async () => {
+    if (!isOtpValid)
+      return;
+
+    try {
+      setLoading(true);
+
+      await verifyOtp(
+        phone,
+        otp
+      );
+
+      await restoreSession();
+
+      navigate(
+        "/home",
+        {
+          replace: true,
+        }
+      );
+    } catch (error) {
+      console.error(
+        error
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
  
 
@@ -62,7 +99,7 @@ const { countryCode, phoneNumber } = authData;
   }}
 >
   
- {maskPhoneNumber(countryCode, phoneNumber)}
+ {phone}
  
 </p>
 
@@ -92,11 +129,17 @@ const { countryCode, phoneNumber } = authData;
 />
 
       <div style={{ marginTop: "8px" }}>
-  <AuthSubmitButton
-    disabled={!isOtpValid}
-  >
-    Verify OTP
-  </AuthSubmitButton>
+   <AuthSubmitButton
+  disabled={
+    !isOtpValid ||
+    loading
+  }
+  onClick={
+    handleVerifyOtp
+  }
+>
+  Verify OTP
+</AuthSubmitButton>
 </div>
 
   <button

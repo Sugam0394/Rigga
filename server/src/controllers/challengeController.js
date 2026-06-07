@@ -2,10 +2,12 @@ import challengeService from "../services/challengeServices.js";
 
 const createChallenge = async (req, res) => {
   try {
-    const challenge =
-      await challengeService.createChallenge(
-        req.body
-      );
+   const challenge =
+  await challengeService.createChallenge({
+    ...req.body,
+    userId:
+      req.user.userId,
+  });
 
     res.status(201).json({
       success: true,

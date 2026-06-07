@@ -1,4 +1,5 @@
 import express from "express";
+import authMiddleware from "../middlewares/authMiddleware.js"
 
 import dashboardController
   from "../controllers/dashboardController.js";
@@ -6,7 +7,7 @@ import dashboardController
 const router = express.Router();
 
 router.get(
-  "/challenges/:id/dashboard",
+  "/challenges/:id/dashboard", authMiddleware,
   dashboardController
     .getChallengeDashboard
 );

@@ -6,12 +6,24 @@ import CountryCodeSelector from "../../features/auth/components/CountryCodeSelec
 import PhoneInput from "../../features/auth/components/PhoneInput";
 import AuthError from "../../features/auth/components/AuthError";
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton";
+import { requestOtp } from "../../services/authService";
+
+
+
+
+
+
+
+
+
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
   const [countryCode, setCountryCode] = useState("+1");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   const normalizedPhone =
     phoneNumber.replace(/\D/g, "");
@@ -25,15 +37,36 @@ const LoginPage = () => {
       ? "Enter a valid phone number"
       : "";
 
-  const handleContinue = () => {
-    if (!isPhoneValid) return;
+  const handleContinue =
+  async () => {
+    if (!isPhoneValid)
+      return;
 
-    navigate("/verify-otp", {
-      state: {
-        countryCode,
-        phoneNumber,
-      },
-    });
+    try {
+      setLoading(true);
+
+      const phone =
+        `${countryCode}${normalizedPhone}`;
+
+      await requestOtp(
+        phone
+      );
+
+      navigate(
+        "/verify-otp",
+        {
+          state: {
+            phone,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(
+        error
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,7 +114,10 @@ const LoginPage = () => {
 
       <div style={{ marginTop: "8px" }}>
         <AuthSubmitButton
-          disabled={!isPhoneValid}
+  disabled={
+    !isPhoneValid ||
+    loading
+  }
           onClick={handleContinue}
         >
           Continue

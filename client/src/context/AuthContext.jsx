@@ -1,29 +1,83 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState , useEffect } from "react";
+import {getCurrentUser}from "../services/authService";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+ 
+ const [user, setUser] =
+  useState(null);
 
-  const login = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
+const [status, setStatus] =
+  useState("loading");
+
+  const login = (
+  userData
+) => {
+  setUser(userData);
+
+  setStatus(
+    "authenticated"
+  );
+};
+
+   const logout = () => {
+  setUser(null);
+
+  setStatus(
+    "unauthenticated"
+  );
+};
+
+const restoreSession = async () => {
+    try {
+      const response =
+        await getCurrentUser();
+
+      setUser(
+        response.data
+      );
+
+      setStatus(
+        "authenticated"
+      );
+    } catch {
+      setUser(null);
+
+      setStatus(
+        "unauthenticated"
+      );
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
+ useEffect(() => {
+  const initializeSession = async () => {
+    try {
+      const response = await getCurrentUser();
+
+      setUser(response.data);
+      setStatus("authenticated");
+    } catch {
+      setUser(null);
+      setStatus("unauthenticated");
+    }
   };
 
-  const value = {
-    user,
-    token,
-    login,
-    logout,
-  };
+  initializeSession();
+}, []);
+
+ const value = {
+  user,
+  status,
+  login,
+  logout,
+  
+  restoreSession,
+  setUser,
+  setStatus
+};
 
   return (
     <AuthContext.Provider value={value}>

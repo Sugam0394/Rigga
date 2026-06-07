@@ -1,6 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
  import { Navigate } from "react-router-dom";
 
+// Route Guards
+import ProtectedRoute from "./ProtectedRoute";
+import GuestRoute from "./GuestRoute";
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Layouts
 import AuthLayout from "../layouts/AuthLayout";
@@ -17,57 +32,97 @@ import OtpVerification from "../pages/OtpVerification/OtpVerification";
 import Profile from "../pages/ProfilePage/Profile";
 import WitnessReview from "../pages/WitnessReview/WitnessReview";
 
-const AppRouter = () => {
+ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-      <Route element={<AuthLayout />}>
-  <Route path="/" element={<LoginPage />} />
-  <Route path="/login" element={<LoginPage />} />
-  <Route
-    path="/verify-otp"
-    element={<OtpVerification />}
-  />
-</Route>
 
-<Route element={<PublicLayout />}>
-  <Route
-    path="/review/:token"
-    element={<WitnessReview />}
-  />
-</Route>
+        {/* Guest Routes */}
+        <Route
+          element={
+            <GuestRoute>
+              <AuthLayout />
+            </GuestRoute>
+          }
+        >
+          <Route
+            path="/"
+            element={<LoginPage />}
+          />
 
-<Route element={<AppLayout />}>
-  <Route path="/home" element={<HomePage />} />
+          <Route
+            path="/login"
+            element={<LoginPage />}
+          />
 
-  <Route
-    path="/challenges/create"
-    element={<CreateChallengePage />}
-  />
+          <Route
+            path="/verify-otp"
+            element={<OtpVerification />}
+          />
+        </Route>
 
-  <Route
-    path="/challenges/:id"
-    element={<ChallengeDetailsPage />}
-  />
+        {/* Public Routes */}
+        <Route element={<PublicLayout />}>
+          <Route
+            path="/review/:token"
+            element={<WitnessReview />}
+          />
+        </Route>
 
-  <Route
-    path="/profile"
-    element={<Profile />}
-  />
+        {/* Protected Routes */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path="/home"
+            element={<HomePage />}
+          />
 
-  <Route
-  path="*"
-  element={
-    <Navigate
-      to="/login"
-      replace
-    />
-  }
-/>
-</Route>
-  </Routes> 
+          <Route
+            path="/challenges/create"
+            element={<CreateChallengePage />}
+          />
+
+          <Route
+            path="/challenges/:id"
+            element={<ChallengeDetailsPage />}
+          />
+
+          <Route
+            path="/profile"
+            element={<Profile />}
+          />
+        </Route>
+
+        {/* Fallback */}
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/login"
+              replace
+            />
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 };
 
 export default AppRouter;
+
+
+
+
+
+
+
+
+
+
+
+
