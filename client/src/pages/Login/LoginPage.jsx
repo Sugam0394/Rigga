@@ -37,16 +37,15 @@ const LoginPage = () => {
       ? "Enter a valid phone number"
       : "";
 
-  const handleContinue =
-  async () => {
+  const handleContinue = async () => {
     if (!isPhoneValid)
       return;
 
     try {
       setLoading(true);
 
-      const phone =
-        `${countryCode}${normalizedPhone}`;
+     const phone =
+  normalizedPhone;
 
       await requestOtp(
         phone
