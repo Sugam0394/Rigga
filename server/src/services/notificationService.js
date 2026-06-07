@@ -6,7 +6,7 @@ import notificationTemplates from "../templates/notificationTemplates.js";
 
 import { NOTIFICATION_STATUS } from "../constants/notificationConstants.js";
 
- 
+import challengeRepository from "../repositories/challengeRepositories.js"
 
  const createNotification = async ({
   challengeId,
@@ -34,11 +34,33 @@ import { NOTIFICATION_STATUS } from "../constants/notificationConstants.js";
 };
 
 const getNotificationsByChallenge = async (
-  challengeId
+  challengeId , userId
 ) => {
+  const challenge =
+  await challengeRepository
+    .getChallengeById(
+      challengeId
+    );
+
+if (!challenge) {
+  throw new Error(
+    "Challenge not found"
+  );
+}
+
+if (
+  challenge.userId.toString() !==
+  userId
+) {
+  throw new Error(
+    "Forbidden"
+  );
+}
   return notificationRepository.getNotificationsByChallenge(
     challengeId
   );
+
+
 };
 
 export default {

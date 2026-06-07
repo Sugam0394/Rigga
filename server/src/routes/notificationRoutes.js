@@ -1,5 +1,5 @@
  import express from "express";
-
+import authMiddleware from "../middlewares/authMiddleware.js";
 import {
   getChallengeNotifications,
 } from "../controllers/notificationController.js";
@@ -7,7 +7,7 @@ import {
 const router = express.Router();
 
 router.get(
-  "/challenges/:id/notifications",
+  "/challenges/:id/notifications", authMiddleware ,
   getChallengeNotifications
 );
 

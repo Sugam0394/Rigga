@@ -4,8 +4,7 @@ import {
   USER_ROLES,
 } from "../constants/userConstants.js";
 
-const userSchema =
-  new mongoose.Schema(
+const userSchema = new mongoose.Schema(
     {
       name: {
         type: String,

@@ -1,4 +1,5 @@
 import reminderRepository from "../repositories/reminderRepository.js";
+import challengeRepositories from "../repositories/challengeRepositories.js";
 import {
   REMINDER_TYPES,
   REMINDER_STATUS,
@@ -41,8 +42,32 @@ const generateCheckpointReminder = async ({
     );
 };
 
-const getChallengeReminders = async (challengeId) => {
-  return reminderRepository.getRemindersByChallenge(challengeId);
+const getChallengeReminders = async (challengeId , userId) => {
+  const challenge =
+  await challengeRepository
+    .getChallengeById(
+      challengeId
+    );
+
+if (!challenge) {
+  throw new Error(
+    "Challenge not found"
+  );
+}
+
+if (
+  challenge.userId.toString() !==
+  userId
+) {
+  throw new Error(
+    "Forbidden"
+  );
+}
+
+return reminderRepository
+  .getRemindersByChallenge(
+    challengeId
+  );
 };
 
 export default {

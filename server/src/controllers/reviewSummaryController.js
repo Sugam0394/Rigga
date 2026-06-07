@@ -6,17 +6,33 @@ export const getReviewSummary = async (req, res) => {
     const { id } = req.params;
 
     
-  const summary = await reviewSummaryService.getReviewSummary(id);
+  const summary =
+  await reviewSummaryService
+    .getReviewSummary(
+      id,
+      req.user.userId
+    );
 
   res.status(200).json({
     success: true,
     data: summary,
   });
 }  catch (error) {
-  const statusCode =
-    error.message === "Challenge not found"
-      ? 404
-      : 500;
+   let statusCode = 500;
+
+if (
+  error.message ===
+  "Challenge not found"
+) {
+  statusCode = 404;
+}
+
+if (
+  error.message ===
+  "Forbidden"
+) {
+  statusCode = 403;
+}
 
   res.status(statusCode).json({
     success: false,

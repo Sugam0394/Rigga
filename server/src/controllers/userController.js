@@ -30,6 +30,20 @@ const getUserById = async (
   res
 ) => {
   try {
+
+   if (
+      req.user.userId !==
+      req.params.id
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message:
+            "Forbidden",
+        });
+    }
+
     const user =
       await userService
         .getUserById(

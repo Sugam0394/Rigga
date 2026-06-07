@@ -5,17 +5,35 @@ import reminderService from "../services/reminderService.js";
   res
 ) => {
   try {
-    const reminders =
-      await reminderService.getChallengeReminders(
-        req.params.id
-      );
+     const reminders =
+  await reminderService
+    .getChallengeReminders(
+      req.params.id,
+      req.user.userId
+    );
 
     res.status(200).json({
       success: true,
       data: reminders,
     });
   } catch (error) {
-    res.status(500).json({
+    let statusCode = 500;
+
+if (
+  error.message ===
+  "Challenge not found"
+) {
+  statusCode = 404;
+}
+
+if (
+  error.message ===
+  "Forbidden"
+) {
+  statusCode = 403;
+}
+
+res.status(statusCode).json({
       success: false,
       message: error.message,
     });

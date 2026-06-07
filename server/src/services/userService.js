@@ -27,20 +27,39 @@ if (existingPhone) {
     "Phone already exists"
   );
 }
-
-  return userRepository
-    .createUser(
-      userData
-    );
+ const safeUserData = {
+  name: userData.name,
+  email: userData.email,
+  phone: userData.phone,
 };
 
-const getUserById = async (
+return userRepository
+  .createUser(
+    safeUserData
+  );
+};
+
+ const getUserById = async (
   userId
 ) => {
-  return userRepository
-    .getUserById(
-      userId
+  const user =
+    await userRepository
+      .getUserById(
+        userId
+      );
+
+  if (!user) {
+    throw new Error(
+      "User not found"
     );
+  }
+
+  return {
+    id: user._id,
+    name: user.name,
+    phone: user.phone,
+    role: user.role,
+  };
 };
 
 export default {

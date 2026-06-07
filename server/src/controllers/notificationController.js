@@ -1,22 +1,46 @@
-import notificationService from "../services/notificationService.js";
+ import notificationService from "../services/notificationService.js";
 
-export const getChallengeNotifications = async (req, res) => {
-    try {
-      const { id } = req.params;
+export const getChallengeNotifications = async (
+  req,
+  res
+) => {
+  try {
+    const { id } = req.params;
 
-      const notifications =
-        await notificationService.getNotificationsByChallenge(
-          id
+    const notifications =
+      await notificationService
+        .getNotificationsByChallenge(
+          id,
+          req.user.userId
         );
 
-      res.status(200).json({
-        success: true,
-        data: notifications,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
+    res.status(200).json({
+      success: true,
+      data: notifications,
+    });
+
+  } catch (error) {
+
+    let statusCode = 500;
+
+    if (
+      error.message ===
+      "Challenge not found"
+    ) {
+      statusCode = 404;
     }
-  };
+
+    if (
+      error.message ===
+      "Forbidden"
+    ) {
+      statusCode = 403;
+    }
+
+    res.status(statusCode).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+  

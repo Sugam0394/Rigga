@@ -5,8 +5,17 @@ import Appeal from "../models/appealModel.js";
 import Consequence from "../models/consequenceModel.js";
 import { CHECKPOINT_STATUS } from "../constants/checkpointConstants.js"
 
-const getReviewSummary = async (challengeId) => {
+const getReviewSummary = async (challengeId , userId) => {
   const challenge = await Challenge.findById(challengeId);
+
+  if (
+  challenge.userId.toString() !==
+  userId
+) {
+  throw new Error(
+    "Forbidden"
+  );
+}
 
   if (!challenge) {
     throw new Error("Challenge not found");

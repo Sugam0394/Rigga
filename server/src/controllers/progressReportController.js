@@ -5,16 +5,21 @@ const submitProgressReport = async (
   res
 ) => {
   try {
-    await progressReportService.submitProgressReport({
-  challengeId:
-    req.body.challengeId,
+ const report =
+  await progressReportService
+    .submitProgressReport({
+      challengeId:
+        req.body.challengeId,
 
-  notes:
-    req.body.notes,
+      notes:
+        req.body.notes,
 
-  imageUrl:
-    req.body.imageUrl,
-});
+      imageUrl:
+        req.body.imageUrl,
+
+      userId:
+        req.user.userId,
+    });
 
     res.status(201).json({
       success: true,
