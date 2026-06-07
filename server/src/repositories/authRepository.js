@@ -52,9 +52,16 @@ const updateLastLogin = async (userId) => {
     );
   };
 
+  const findUserById = async (
+  userId
+) => {
+  return User.findById(userId);
+};
+
 export default {
   findUserByPhone,
   saveOtp,
   clearOtp,
   updateLastLogin,
+  findUserById,
 };

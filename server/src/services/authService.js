@@ -124,7 +124,30 @@ const verifyOtp = async (
   };
 };
 
+
+const getCurrentUser = async (userId) => {
+    const user =
+      await authRepository
+        .findUserById(
+          userId
+        );
+
+    if (!user) {
+      throw new Error(
+        "User not found"
+      );
+    }
+
+    return {
+      id: user._id,
+      name: user.name,
+      phone: user.phone,
+      role: user.role,
+    };
+  };
+
 export default {
   requestOtp,
   verifyOtp,
+  getCurrentUser,
 };

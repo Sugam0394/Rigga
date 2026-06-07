@@ -1,4 +1,5 @@
  import express from "express";
+ import authMiddleware from "../middlewares/authMiddleware.js"
 
 import authController
   from "../controllers/authController.js";
@@ -15,5 +16,9 @@ router.post(
   "/auth/verify-otp",
   authController.verifyOtp
 );
+
+router.get( "/auth/me", authMiddleware, authController.getCurrentUser);
+
+router.post( "/auth/logout",authMiddleware, authController.logout);
 
 export default router;
