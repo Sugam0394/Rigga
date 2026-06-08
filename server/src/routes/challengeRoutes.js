@@ -11,7 +11,7 @@ router.patch("/challenge/:id/witness-review", authMiddleware, witnessReviewContr
 
 router.post("/challenge/:id/appeal", authMiddleware, appealController.submitAppeal);
 
-router.get("/challenges/:id" , authMiddleware ,challengeController.getUserChallenges )
+router.get("/challenges" , authMiddleware ,challengeController.getUserChallenges )
 
 
 
