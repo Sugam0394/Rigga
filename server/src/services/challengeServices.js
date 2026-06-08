@@ -71,6 +71,13 @@ import {
   return challenge;
 };
 
+const getUserChallenges = async (userId) => {
+  return challengeRepository.getChallengesByUserId(
+    userId
+  );
+};
+
 export default {
   createChallenge,
+  getUserChallenges,
 };

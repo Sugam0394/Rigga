@@ -21,6 +21,30 @@ const createChallenge = async (req, res) => {
   }
 };
 
+const getUserChallenges = async (
+  req,
+  res
+) => {
+  try {
+    const challenges =
+      await challengeService.getUserChallenges(
+        req.user.userId
+      );
+
+    res.status(200).json({
+      success: true,
+      data: challenges,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message:
+        "Failed to retrieve challenges",
+    });
+  }
+};
+
 export default {
   createChallenge,
+  getUserChallenges
 };

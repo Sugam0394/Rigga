@@ -5,11 +5,14 @@ import appealController from "../controllers/appealController.js";
 import authMiddleware from "../middlewares/authMiddleware.js"
 const router = express.Router();
 
-router.post("/challenge", authMiddleware, challengeController.createChallenge);
+router.post("/challenge", authMiddleware  , challengeController.createChallenge);
 
 router.patch("/challenge/:id/witness-review", authMiddleware, witnessReviewController.submitReview);
 
 router.post("/challenge/:id/appeal", authMiddleware, appealController.submitAppeal);
+
+router.get("/challenges/:id" , authMiddleware ,challengeController.getUserChallenges )
+
 
 
 export default router;

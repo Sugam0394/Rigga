@@ -68,6 +68,13 @@ const rejectChallenge = async ({
   );
 };
 
+
+const getChallengesByUserId = async (userId) => {
+  return Challenge.find({ userId }).sort({
+    createdAt: -1,
+  });
+};
+
  const updateStatus = async (
   challengeId,
   status
@@ -99,5 +106,6 @@ export default {
   getChallengeById,
   updateStatus,
   getByReviewToken,
+  getChallengesByUserId
  
 };
