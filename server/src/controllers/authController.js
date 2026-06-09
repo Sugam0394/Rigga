@@ -37,16 +37,29 @@ const verifyOtp = async (
     req.body.otp
   );
 
+ if (result.isNewUser) {
+  return res.status(200).json({
+    success: true,
+    data: {
+      isNewUser: true,
+      verifiedPhone:
+        result.verifiedPhone,
+    },
+  });
+}
+
 res.cookie(
   "token",
   result.token,
   cookieOptions
 );
 
-res.status(200).json({
+return res.status(200).json({
   success: true,
-  message:
-    "OTP verified successfully",
+  data: {
+    isNewUser: false,
+    user: result.user,
+  },
 });
   } catch (error) {
     res.status(400).json({
@@ -56,6 +69,48 @@ res.status(200).json({
     });
   }
 };
+
+ const completeProfile = async (
+  req,
+  res
+) => {
+  try {
+    const result =
+      await authService
+        .completeProfile(
+          req.body
+        );
+
+    res.cookie(
+      "token",
+      result.token,
+      cookieOptions
+    );
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        data: {
+          user:
+            result.user,
+        },
+      });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({
+        success: false,
+        message:
+          error.message,
+      });
+  }
+};
+
+
+
+
+
 
 const getCurrentUser = async (req, res) => {
     try {
@@ -111,5 +166,6 @@ export default {
   verifyOtp,
   getCurrentUser,
   logout,
+  completeProfile
 };
  

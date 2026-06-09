@@ -56,13 +56,35 @@ if (!authData) {
     setLoading(true);
     setSubmitError("");
 
-    await verifyOtp(phone, otp);
+    const response =
+  await verifyOtp(
+    phone,
+    otp
+  );
 
-    await restoreSession();
-
-    navigate("/home", {
+if (
+  response.data.isNewUser
+) {
+  navigate(
+    "/create-profile",
+    {
+      state: {
+        verifiedPhone:
+          response.data
+            .verifiedPhone,
+      },
       replace: true,
-    });
+    }
+  );
+
+  return;
+}
+
+await restoreSession();
+
+navigate("/home", {
+  replace: true,
+});
   } catch (error) {
     setSubmitError(
       error?.response?.data?.message ||

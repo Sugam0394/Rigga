@@ -31,6 +31,9 @@ import LoginPage from "../pages/Login/LoginPage";
 import OtpVerification from "../pages/OtpVerification/OtpVerification";
 import Profile from "../pages/ProfilePage/Profile";
 import WitnessReview from "../pages/WitnessReview/WitnessReview";
+import CreateProfilePage from "../pages/Register/CreateProfilePage";
+
+
 
  const AppRouter = () => {
   return (
@@ -59,6 +62,13 @@ import WitnessReview from "../pages/WitnessReview/WitnessReview";
             path="/verify-otp"
             element={<OtpVerification />}
           />
+
+          <Route
+  path="/create-profile"
+  element={<CreateProfilePage />}
+/>
+
+
         </Route>
 
         {/* Public Routes */}

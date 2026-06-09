@@ -1,6 +1,12 @@
 import authRepository from "../repositories/authRepository.js";
 import jwt from "jsonwebtoken";
 import { OTP_EXPIRY_MINUTES, } from "../constants/authConstants.js";
+import phoneVerificationModel from "../models/phoneVerificationModel.js";
+import phoneVerificationRepository from "../repositories/phoneVerificationRepository.js"
+import userService from "./userService.js";
+
+
+
 
 const generateToken =  (user) => {
     return jwt.sign(
@@ -25,20 +31,7 @@ const generateToken =  (user) => {
 
 const requestOtp = async (
   phone
-) => {
-  const user =
-    await authRepository
-      .findUserByPhone(
-        phone
-      );
-
-  if (!user) {
-    throw new Error(
-      "User not found"
-    );
-  }
-
-   const otpCode =
+) => {  const otpCode =
   Math.floor(
     100000 +
     Math.random() * 900000
@@ -52,12 +45,29 @@ const otpExpiresAt =
       1000
   );
 
-await authRepository
-  .saveOtp(
-    user._id,
-    otpCode,
-    otpExpiresAt
-  );
+ const existingVerification =
+  await phoneVerificationRepository
+    .findByPhone(phone);
+
+if (existingVerification) {
+  await phoneVerificationRepository
+    .updateVerification(
+      phone,
+      {
+        otpCode,
+        otpExpiresAt,
+        verified: false,
+      }
+    );
+} else {
+  await phoneVerificationRepository
+    .createVerification({
+      phone,
+      otpCode,
+      otpExpiresAt,
+      verified: false,
+    });
+}
 
 console.log(
   "OTP:",
@@ -70,24 +80,22 @@ return {
 };
 };
 
-const verifyOtp = async (
+ const verifyOtp = async (
   phone,
   otp
 ) => {
-  const user =
-    await authRepository
-      .findUserByPhone(
-        phone
-      );
+  const verification =
+    await phoneVerificationRepository
+      .findByPhone(phone);
 
-  if (!user) {
+  if (!verification) {
     throw new Error(
-      "User not found"
+      "Verification not found"
     );
   }
 
   if (
-    user.otpCode !== otp
+    verification.otpCode !== otp
   ) {
     throw new Error(
       "Invalid OTP"
@@ -95,8 +103,8 @@ const verifyOtp = async (
   }
 
   if (
-    !user.otpExpiresAt ||
-    user.otpExpiresAt <
+    !verification.otpExpiresAt ||
+    verification.otpExpiresAt <
       new Date()
   ) {
     throw new Error(
@@ -104,15 +112,46 @@ const verifyOtp = async (
     );
   }
 
-  await authRepository
-    .clearOtp(
-      user._id
-    );
+  const user =
+    await authRepository
+      .findUserByPhone(
+        phone
+      );
 
-  await authRepository
-    .updateLastLogin(
-      user._id
-    );
+  
+  if (!user) {
+  return {
+    isNewUser: true,
+    verifiedPhone: phone,
+  };
+}
+
+ await authRepository
+  .updateLastLogin(
+    user._id
+  );
+
+const token =
+  generateToken(
+    user
+  );
+
+return {
+  isNewUser: false,
+  token,
+  user,
+};
+};
+
+
+ const completeProfile = async (
+  profileData
+) => {
+  const user =
+    await userService
+      .createUser(
+        profileData
+      );
 
   const token =
     generateToken(
@@ -120,6 +159,7 @@ const verifyOtp = async (
     );
 
   return {
+    user,
     token,
   };
 };
@@ -150,4 +190,5 @@ export default {
   requestOtp,
   verifyOtp,
   getCurrentUser,
+  completeProfile
 };

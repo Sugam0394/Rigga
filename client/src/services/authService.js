@@ -31,6 +31,18 @@ export const verifyOtp = async (
   return response.data;
 };
 
+ export const completeProfile = async (
+  profileData
+) => {
+  const response =
+    await apiClient.post(
+      "/auth/complete-profile",
+      profileData
+    );
+
+  return response.data;
+};
+
 export const getCurrentUser = async () => {
     const response =
       await apiClient.get(

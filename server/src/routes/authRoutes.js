@@ -17,6 +17,11 @@ router.post(
   authController.verifyOtp
 );
 
+router.post(
+  "/auth/complete-profile",
+  authController.completeProfile
+);
+
 router.get( "/auth/me", authMiddleware, authController.getCurrentUser);
 
 router.post( "/auth/logout",authMiddleware, authController.logout);
