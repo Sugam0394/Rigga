@@ -1,6 +1,4 @@
- 
-
-
+ import CountryCodeSelector from "../../../features/auth/components/CountryCodeSelector";
 
 const WitnessStep = ({
   formData,
@@ -31,14 +29,33 @@ const WitnessStep = ({
         <p>{errors.witnessName}</p>
       )}
 
+      <label>
+        Witness Country
+      </label>
+
+      <CountryCodeSelector
+        value={
+          formData.witnessCountryCode
+        }
+        onChange={(e) =>
+          handleChange(
+            "witnessCountryCode",
+            e.target.value
+          )
+        }
+      />
+
       <input
         type="tel"
-        placeholder="+919876543210"
+        placeholder="Enter witness phone number"
         value={formData.witnessPhone}
         onChange={(e) =>
           handleChange(
             "witnessPhone",
-            e.target.value
+            e.target.value.replace(
+              /[^\d]/g,
+              ""
+            )
           )
         }
       />

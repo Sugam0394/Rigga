@@ -16,6 +16,19 @@
     );
   }
 
+  const phoneRegex =
+  /^\+[1-9]\d{7,14}$/;
+
+if (
+  !phoneRegex.test(
+    userData.phone
+  )
+) {
+  throw new Error(
+    "Phone must be in E.164 format"
+  );
+}
+
   const existingPhone =
   await userRepository
     .getUserByPhone(

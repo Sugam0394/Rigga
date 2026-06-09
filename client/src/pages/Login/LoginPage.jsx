@@ -44,8 +44,8 @@ const LoginPage = () => {
     try {
       setLoading(true);
 
-     const phone =
-  normalizedPhone;
+    const phone =
+  `${countryCode}${normalizedPhone}`;
 
       await requestOtp(
         phone

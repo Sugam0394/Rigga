@@ -3,11 +3,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createChallengeApi } from "../api/createChallengeApi";
 
-const initialFormData = {
+ const initialFormData = {
   title: "",
   deadline: "",
+
   witnessName: "",
+  witnessCountryCode: "+1",
   witnessPhone: "",
+
   successCriteria: "",
   privateMessage: "",
 };
@@ -86,6 +89,11 @@ const handleSubmit = async () => {
     setSubmitError("");
     setIsSubmitting(true);
 
+
+    const witnessPhone =
+  `${formData.witnessCountryCode}${formData.witnessPhone}`;
+
+
     const payload = {
       title: formData.title,
       deadline: formData.deadline,
@@ -96,8 +104,7 @@ const handleSubmit = async () => {
 
       witness: {
         name: formData.witnessName,
-        phone:
-          formData.witnessPhone,
+        phone: witnessPhone,
       },
     };
 
@@ -160,20 +167,23 @@ if (
         "Witness name is required";
     }
 
-    const phoneRegex =
-      /^\+?[1-9]\d{7,14}$/;
+  const phoneRegex =
+  /^\+[1-9]\d{7,14}$/;
 
-    if (!formData.witnessPhone.trim()) {
-      newErrors.witnessPhone =
-        "Witness phone is required";
-    } else if (
-      !phoneRegex.test(
-        formData.witnessPhone
-      )
-    ) {
-      newErrors.witnessPhone =
-        "Enter a valid phone number";
-    }
+const witnessPhone =
+  `${formData.witnessCountryCode}${formData.witnessPhone}`;
+
+if (!formData.witnessPhone.trim()) {
+  newErrors.witnessPhone =
+    "Witness phone is required";
+} else if (
+  !phoneRegex.test(
+    witnessPhone
+  )
+) {
+  newErrors.witnessPhone =
+    "Enter a valid phone number";
+}
 
     const criteria =
       formData.successCriteria.trim();
