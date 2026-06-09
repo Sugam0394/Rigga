@@ -7,11 +7,17 @@ import ActiveChallengeCard from "./components/ActiveChallengeCard";
 import ProgressSummaryCard from "./components/ProgressSummaryCard";
 import CheckpointCard from "./components/CheckpointCard";
 import AccountabilityCard from "./components/AccountabilityCard";
+ 
+
+
 
 function HomePage() {
+ 
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+ 
 
   const fetchChallenges = async () => {
     try {
@@ -73,6 +79,7 @@ function HomePage() {
       gap: "16px",
     }}
   >
+ 
       <HomeHeader />
 
       <ActiveChallengeCard

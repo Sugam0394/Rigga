@@ -4,7 +4,7 @@ import AuthHeader from "../../features/auth/components/AuthHeader";
 import AuthError from "../../features/auth/components/AuthError";
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton";
 import OtpInput from "../../features/auth/components/OtpInput"
-import { verifyOtp } from "../../services/authService";
+import { verifyOtp , requestOtp } from "../../services/authService";
 import useAuth from  "../../context/AuthContext";
 
 
@@ -15,7 +15,8 @@ const OtpVerificationPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { restoreSession } = useAuth();
-
+  const [submitError, setSubmitError] =
+  useState("");
   const [loading, setLoading] = useState(false);
   
 
@@ -48,37 +49,43 @@ if (!authData) {
   authData;
 
 
- const handleVerifyOtp =
-  async () => {
-    if (!isOtpValid)
-      return;
+ const handleVerifyOtp = async () => {
+  if (!isOtpValid) return;
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
+    setSubmitError("");
 
-      await verifyOtp(
-        phone,
-        otp
-      );
+    await verifyOtp(phone, otp);
 
-      await restoreSession();
+    await restoreSession();
 
-      navigate(
-        "/home",
-        {
-          replace: true,
-        }
-      );
-    } catch (error) {
-      console.error(
-        error
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    navigate("/home", {
+      replace: true,
+    });
+  } catch (error) {
+    setSubmitError(
+      error?.response?.data?.message ||
+      "Invalid OTP. Try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+ const handleResendOtp = async () => {
+  try {
+    setSubmitError("");
 
- 
+    await requestOtp(phone);
+
+    setCountdown(30);
+  } catch (error) {
+    setSubmitError(
+      error?.response?.data?.message ||
+      "Failed to resend OTP."
+    );
+  }
+};
 
   return (
     <div style={{
@@ -122,10 +129,14 @@ if (!authData) {
         value={otp}
         onChange={(e) => setOtp(e.target.value)}
       />
-
-      <AuthError
+    <AuthError
   id="otp-error"
   message={error}
+/>
+
+<AuthError
+  id="otp-submit-error"
+  message={submitError}
 />
 
       <div style={{ marginTop: "8px" }}>
@@ -145,6 +156,11 @@ if (!authData) {
   <button
   type="button"
   disabled={countdown > 0}
+    onClick={
+    countdown === 0
+      ? handleResendOtp
+      : undefined
+  }
   style={{
     background: "none",
     border: "none",
