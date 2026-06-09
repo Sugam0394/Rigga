@@ -140,17 +140,17 @@ const isStepValid = () => {
       newErrors.deadline =
         "Deadline is required";
     } else {
-      const selectedDate =
-        new Date(formData.deadline);
+   const today =
+  new Date()
+    .toISOString()
+    .split("T")[0];
 
-      const today = new Date();
-
-      today.setHours(0, 0, 0, 0);
-
-      if (selectedDate <= today) {
-        newErrors.deadline =
-          "Choose a future date";
-      }
+if (
+  formData.deadline <= today
+) {
+  newErrors.deadline =
+    "Choose a future date";
+}
     }
   }
 
