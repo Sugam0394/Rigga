@@ -45,7 +45,18 @@ export const useCreateChallenge = () => {
 };
 
  const handleNext = () => {
-  const valid = isStepValid();
+  console.log(
+    "CURRENT STEP:",
+    currentStep
+  );
+
+  const valid =
+    isStepValid();
+
+  console.log(
+    "VALID:",
+    valid
+  );
 
   if (!valid) return;
 
@@ -64,6 +75,9 @@ const getWordCount = (text) => {
 };
 
 const handleSubmit = async () => {
+    console.log(
+    "HANDLE SUBMIT CALLED"
+  );
   const valid = isStepValid();
 
   if (!valid) return;
