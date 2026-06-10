@@ -8,7 +8,7 @@ import consequenceRepository from "../repositories/consequenceRepository.js";
 
 
 
-const getChallengeDashboard = async (challengeId) => {
+const getChallengeDashboard = async (challengeId , userId) => {
 
     const challenge =
       await challengeRepository
@@ -22,13 +22,20 @@ const getChallengeDashboard = async (challengeId) => {
   );
 }
 
+if (
+  challenge.userId.toString() !==
+  userId
+) {
+  throw new Error(
+    "Unauthorized access"
+  );
+}
+
      const reports =
   await progressReportRepository
     .getByChallengeId(challengeId);
 
-latestReportDate:
-  reports[reports.length - 1]
-    .createdAt
+ 
 
     const checkpoints =
   await checkpointRepository

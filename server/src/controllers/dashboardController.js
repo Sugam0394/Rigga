@@ -4,10 +4,11 @@
 const getChallengeDashboard = async (req, res) => {
     try {
       const dashboard =
-        await dashboardService
-          .getChallengeDashboard(
-            req.params.id
-          );
+         await dashboardService
+  .getChallengeDashboard(
+    req.params.id,
+    req.user.userId
+  );
 
       res.status(200).json({
         success: true,

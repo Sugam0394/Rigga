@@ -14,8 +14,10 @@ const submitProgressReport = async (
       notes:
         req.body.notes,
 
-      imageUrl:
-        req.body.imageUrl,
+       imageUrl:
+  req.file
+    ? `/uploads/${req.file.filename}`
+    : null,
 
       userId:
         req.user.userId,
@@ -33,6 +35,29 @@ const submitProgressReport = async (
   }
 };
 
+const getChallengeReports = async (req, res) => {
+    try {
+      const reports =
+        await progressReportService
+          .getChallengeReports(
+            req.params.id,
+            req.user.userId
+          );
+
+      res.status(200).json({
+        success: true,
+        data: reports,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message:
+          error.message,
+      });
+    }
+  };
+
 export default {
   submitProgressReport,
+  getChallengeReports
 };
