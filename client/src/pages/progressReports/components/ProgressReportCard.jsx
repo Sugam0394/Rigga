@@ -1,3 +1,6 @@
+ const BASE_URL = import.meta.env.VITE_API_BASE_URL
+    ?.replace("/api", "") || "";
+
 const ProgressReportCard = ({
   report,
 }) => {
@@ -21,7 +24,7 @@ const ProgressReportCard = ({
 
       {report.imageUrl && (
         <img
-          src={`http://localhost:3000${report.imageUrl}`}
+          src={`${BASE_URL}${report.imageUrl}`}
           alt="Progress Evidence"
           width="250"
         />

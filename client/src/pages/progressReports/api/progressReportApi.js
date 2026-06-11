@@ -26,12 +26,7 @@ export const submitProgressReport =  async ({
     const response = await api.post(
         "/progress-reports",
         formData,
-        {
-          headers: {
-            "Content-Type":
-              "multipart/form-data",
-          },
-        }
+     
       );
 
     return response.data.data;

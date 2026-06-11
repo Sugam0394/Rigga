@@ -1,8 +1,62 @@
+ import {
+  useEffect,
+  useState,
+} from "react";
+
 const ProgressImageUpload = ({
   image,
   onChange,
   onRemove,
 }) => {
+  const [
+    previewUrl,
+    setPreviewUrl,
+  ] = useState(null);
+
+  useEffect(() => {
+    if (!image) {
+      setPreviewUrl(null);
+      return;
+    }
+
+    const url =
+      URL.createObjectURL(
+        image
+      );
+
+    setPreviewUrl(url);
+
+    return () => {
+      URL.revokeObjectURL(
+        url
+      );
+    };
+  }, [image]);
+
+  const handleFileChange = (
+    event
+  ) => {
+    const file =
+      event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
+      alert(
+        "Please select a valid image."
+      );
+      return;
+    }
+
+    onChange(file);
+  };
+
   return (
     <div>
       <label>
@@ -12,19 +66,15 @@ const ProgressImageUpload = ({
       <input
         type="file"
         accept="image/*"
-        onChange={(event) =>
-          onChange(
-            event.target.files[0]
-          )
+        onChange={
+          handleFileChange
         }
       />
 
       {image && (
         <div>
           <img
-            src={URL.createObjectURL(
-              image
-            )}
+            src={previewUrl}
             alt="Preview"
             width="200"
           />
