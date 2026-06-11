@@ -11,7 +11,7 @@ import {
   const {
     userId,
     title,
-    deadline,
+    deadlineAt,
     privateMessage,
     witness,
     successCriteria,
@@ -20,7 +20,7 @@ import {
   if (
     !userId ||
     !title ||
-    !deadline ||
+    !deadlineAt ||
     !privateMessage ||
     !witness ||
     !witness.name ||
@@ -30,13 +30,36 @@ import {
     throw new Error("All fields are required");
   }
 
+    const deadlineDate =
+  new Date(deadlineAt);
+
+if (
+  Number.isNaN(
+    deadlineDate.getTime()
+  )
+) {
+  throw new Error(
+    "Invalid deadline"
+  );
+}
+
+if (
+  deadlineDate <= new Date()
+) {
+  throw new Error(
+    "Deadline must be in the future"
+  );
+}
+
   const challengePayload = {
     userId,
     title,
-    deadline,
+    deadlineAt: deadlineDate,
     witness,
     successCriteria,
   };
+
+ 
 
   const challenge =
     await challengeRepository.createChallenge(
@@ -52,7 +75,7 @@ import {
   await checkpointService.createCheckpoints({
     challengeId: challenge._id,
     startDate: challenge.createdAt,
-    endDate: challenge.deadline,
+    endDate: challenge.deadlineAt,
   });
 
   await witnessService.notifyWitness(

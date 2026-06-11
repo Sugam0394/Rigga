@@ -1,0 +1,6 @@
+ export const CHALLENGE_DURATION_TYPES = {
+  SHORT: "SHORT",
+  LONG: "LONG",
+};
+
+export const SHORT_CHALLENGE_HOURS = 24;

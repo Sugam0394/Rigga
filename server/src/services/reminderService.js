@@ -1,5 +1,5 @@
 import reminderRepository from "../repositories/reminderRepository.js";
-import challengeRepositories from "../repositories/challengeRepositories.js";
+import challengeRepository from "../repositories/challengeRepositories.js";
 import {
   REMINDER_TYPES,
   REMINDER_STATUS,

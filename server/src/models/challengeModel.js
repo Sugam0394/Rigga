@@ -14,7 +14,7 @@ const challengeSchema = new mongoose.Schema(
       trim: true,
     },
 
-    deadline: {
+    deadlineAt: {
       type: Date,
       required: true,
     },

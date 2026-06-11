@@ -14,7 +14,7 @@ ${challenge.title}
 
 Deadline:
 ${new Date(
-  challenge.deadline
+  challenge.deadlineAt
 ).toDateString()}
 
 Rigga may contact you later for verification.

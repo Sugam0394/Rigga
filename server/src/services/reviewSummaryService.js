@@ -54,7 +54,7 @@ const pending = checkpoints.filter(
   const summary = {
     challenge: {
      title: challenge.title || null,
-deadline: challenge.deadline || null,
+deadlineAt: challenge.deadlineAt || null,
 successCriteria: challenge.successCriteria || null,
 status: challenge.status || null,
     },

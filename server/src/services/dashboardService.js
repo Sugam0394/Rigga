@@ -3,18 +3,22 @@ import progressReportRepository from "../repositories/progressReportRepository.j
 import checkpointRepository from "../repositories/checkPointRepository.js";
 import reminderRepository from "../repositories/reminderRepository.js";
 import consequenceRepository from "../repositories/consequenceRepository.js";
-
+import lifecycleService from "./lifecycleService.js";
 
 
 
 
 const getChallengeDashboard = async (challengeId , userId) => {
 
-    const challenge =
-      await challengeRepository
-        .getChallengeById(
-          challengeId
-        );
+   let challenge =
+  await challengeRepository.getChallengeById(
+    challengeId
+  );
+
+challenge =
+  await lifecycleService.evaluateChallengeLifecycle(
+    challenge
+  );
 
       if (!challenge) {
   throw new Error(
@@ -60,8 +64,8 @@ const consequence =
         title:
           challenge.title,
 
-        deadline:
-          challenge.deadline,
+        deadlineAt:
+          challenge.deadlineAt,
 
         status:
           challenge.status,
@@ -78,11 +82,12 @@ const consequence =
      progress: {
   totalReports:
     reports.length,
-
-  latestReportDate:
+    
+ latestReportDate:
   reports.length > 0
-    ? reports[0]
-        .createdAt
+    ? reports[
+        reports.length - 1
+      ].createdAt
     : null
 },
 
