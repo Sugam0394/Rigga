@@ -80,11 +80,10 @@ const consequence =
     reports.length,
 
   latestReportDate:
-    reports.length > 0
-      ? reports[
-          reports.length - 1
-        ].createdAt
-      : null,
+  reports.length > 0
+    ? reports[0]
+        .createdAt
+    : null
 },
 
      checkpoints: {

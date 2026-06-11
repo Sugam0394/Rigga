@@ -2,11 +2,12 @@ import mongoose from "mongoose";
 
 const progressReportSchema =  new mongoose.Schema(
     {
-      challengeId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Challenge",
-        required: true,
-      },
+       challengeId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Challenge",
+  required: true,
+  index: true,
+},
 
       notes: {
         type: String,

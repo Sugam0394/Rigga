@@ -8,11 +8,13 @@ const createProgressReport = async (
   );
 };
 
-const getByChallengeId = async (
+ const getByChallengeId = async (
   challengeId
 ) => {
   return await ProgressReport.find({
     challengeId,
+  }).sort({
+    createdAt: -1,
   });
 };
 

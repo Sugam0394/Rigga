@@ -29,7 +29,7 @@ const __dirname =
  app.use(express.static("public"))
  app.use(cookieParser());
 
- app.use("/uploads",express.static(path.join( __dirname,"public/uploads")));
+ app.use("/uploads",express.static(path.join(__dirname,"..","public","uploads")));
 
 
 

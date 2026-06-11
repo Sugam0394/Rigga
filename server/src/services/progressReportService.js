@@ -1,80 +1,103 @@
+import mongoose from "mongoose";
+
+
 import progressReportRepository from "../repositories/progressReportRepository.js";
 import challengeRepository from "../repositories/challengeRepositories.js"
 
 
 
 
-const submitProgressReport = async (
+ const submitProgressReport = async (
   reportData
 ) => {
   const {
-  challengeId,
-  notes,
-  userId,
-} = reportData;
+    challengeId,
+    notes,
+    userId,
+  } = reportData;
 
- if (!challengeId) {
-  throw new Error(
-    "Challenge ID is required"
-  );
-}
+  if (!challengeId) {
+    throw new Error(
+      "Challenge ID is required"
+    );
+  }
 
-if (!notes) {
-  throw new Error(
-    "Progress notes are required"
-  );
-}
+  if (
+    !mongoose.Types.ObjectId.isValid(
+      challengeId
+    )
+  ) {
+    throw new Error(
+      "Invalid challenge ID"
+    );
+  }
 
-if (
-  notes.trim().length < 20
-) {
-  throw new Error(
-    "Progress notes must be at least 20 characters"
-  );
-}
+  if (!notes) {
+    throw new Error(
+      "Progress notes are required"
+    );
+  }
 
-if (
-  notes.length > 1000
-) {
-  throw new Error(
-    "Progress notes cannot exceed 1000 characters"
-  );
-}
+  if (
+    notes.trim().length < 20
+  ) {
+    throw new Error(
+      "Progress notes must be at least 20 characters"
+    );
+  }
 
-if (!reportData.imageUrl) {
-  throw new Error(
-    "Evidence image is required"
-  );
-}
+  if (
+    notes.length > 1000
+  ) {
+    throw new Error(
+      "Progress notes cannot exceed 1000 characters"
+    );
+  }
+
+  if (!reportData.imageUrl) {
+    throw new Error(
+      "Evidence image is required"
+    );
+  }
 
   const challenge =
-  await challengeRepository
-    .getChallengeById(
-      challengeId
+    await challengeRepository
+      .getChallengeById(
+        challengeId
+      );
+
+  if (!challenge) {
+    throw new Error(
+      "Challenge not found"
     );
+  }
 
-if (!challenge) {
-  throw new Error(
-    "Challenge not found"
-  );
-}
+  if (
+    challenge.status !==
+    "ACTIVE"
+  ) {
+    throw new Error(
+      "Progress reports can only be submitted for active challenges"
+    );
+  }
 
-if (
-  challenge.userId.toString() !==
-  userId
-) {
-  throw new Error(
-    "Forbidden"
-  );
-}
+  if (
+    challenge.userId.toString() !==
+    userId
+  ) {
+    throw new Error(
+      "Forbidden"
+    );
+  }
 
-  return await progressReportRepository.createProgressReport({
-  challengeId,
-  notes,
-  imageUrl:
-    reportData.imageUrl ??
-    null,
-});
+  return await progressReportRepository
+    .createProgressReport({
+      challengeId,
+      notes,
+      imageUrl:
+        reportData.imageUrl ??
+        null,
+    });
 };
 
 const getChallengeReports = async (
