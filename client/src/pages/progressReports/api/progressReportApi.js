@@ -18,10 +18,12 @@ export const submitProgressReport =  async ({
       notes
     );
 
-    formData.append(
-      "image",
-      image
-    );
+     if (image) {
+  formData.append(
+    "image",
+    image
+  );
+}
 
     const response = await api.post(
         "/progress-reports",

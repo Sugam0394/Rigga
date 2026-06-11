@@ -33,6 +33,31 @@ const validateRejectionReason = (
   }
 };
 
+const validateReviewEligibility = async (challengeId) => {
+
+   const challenge =
+     await challengeRepository
+       .getChallengeById(
+         challengeId
+       );
+
+   if (!challenge) {
+     throw new Error(
+       "Challenge not found"
+     );
+   }
+
+   if (
+     challenge.witness.decision
+   ) {
+     throw new Error(
+       "Review already submitted"
+     );
+   }
+
+   return challenge;
+};
+
 
 
 
@@ -40,7 +65,9 @@ const validateRejectionReason = (
   challengeId
 ) => {
 
- 
+   await validateReviewEligibility(
+    challengeId
+  );
 
   await challengeRepository
   .approveChallenge(
@@ -60,6 +87,10 @@ return challengeRepository
   challengeId,
   rejectionReason,
 }) => {
+
+    await validateReviewEligibility(
+    challengeId
+  );
 
   validateRejectionReason(
     rejectionReason
