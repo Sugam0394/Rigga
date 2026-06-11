@@ -16,9 +16,9 @@ const ChallengeReviewSummary = ({
 
       <p>
         <strong>
-          Deadline:
+          Deadline
         </strong>{" "}
-        {formData.deadline}
+        {formData.deadlineAt}
       </p>
 
       <p>

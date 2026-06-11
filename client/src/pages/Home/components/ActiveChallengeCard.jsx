@@ -33,7 +33,7 @@ const ActiveChallengeCard = ({
         Deadline:
         {" "}
         {new Date(
-          challenge.deadline
+          challenge.deadlineAt
         ).toLocaleDateString()}
       </p>
     </div>

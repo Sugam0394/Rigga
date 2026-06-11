@@ -71,8 +71,8 @@ const handleSubmitProgress =
   title={
     dashboard.challenge.title
   }
-  deadline={
-    dashboard.challenge.deadline
+  deadlineAt={
+    dashboard.challenge.deadlineAt
   }
   status={
     dashboard.challenge.status

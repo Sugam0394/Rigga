@@ -1,4 +1,4 @@
-const DeadlineStep = ({
+ const DeadlineStep = ({
   formData,
   errors,
   handleChange,
@@ -12,10 +12,10 @@ const DeadlineStep = ({
     tomorrow.getDate() + 1
   );
 
-  const minDate =
+  const minDateTime =
     tomorrow
       .toISOString()
-      .split("T")[0];
+      .slice(0, 16);
 
   return (
     <div>
@@ -24,20 +24,22 @@ const DeadlineStep = ({
       </h1>
 
       <input
-        type="date"
-        value={formData.deadline}
-        min={minDate}
+        type="datetime-local"
+        value={
+          formData.deadlineAt
+        }
+        min={minDateTime}
         onChange={(e) =>
           handleChange(
-            "deadline",
+            "deadlineAt",
             e.target.value
           )
         }
       />
 
-      {errors.deadline && (
+      {errors.deadlineAt && (
         <p>
-          {errors.deadline}
+          {errors.deadlineAt}
         </p>
       )}
 

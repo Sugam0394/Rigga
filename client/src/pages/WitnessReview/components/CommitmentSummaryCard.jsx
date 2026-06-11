@@ -1,7 +1,7 @@
 const CommitmentSummaryCard = ({
   title,
   successCriteria,
-  deadline,
+  deadlineAt,
   witnessName,
   consequenceStatus,
 }) => {
@@ -24,7 +24,7 @@ const CommitmentSummaryCard = ({
       <p>
         <strong>Deadline:</strong>
         {" "}
-        {deadline}
+        {deadlineAt}
       </p>
 
       <p>

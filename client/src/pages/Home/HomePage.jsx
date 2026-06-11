@@ -92,7 +92,7 @@ function HomePage() {
       />
 
       <CheckpointCard
-        deadline={activeChallenge.deadline}
+        deadlineAt={activeChallenge.deadlineAt}
       />
 
       <AccountabilityCard

@@ -125,7 +125,7 @@ return ( <div> <ReviewHeader
     successCriteria={
       data.successCriteria
     }
-    deadline={data.deadline}
+    deadlineAt={data.deadlineAt}
     witnessName={
       data.witness?.name
     }

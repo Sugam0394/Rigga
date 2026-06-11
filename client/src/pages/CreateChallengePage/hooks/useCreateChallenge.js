@@ -96,7 +96,7 @@ const handleSubmit = async () => {
 
     const payload = {
       title: formData.title,
-      deadline: formData.deadline,
+      deadline: formData.deadlineAt,
       privateMessage:
         formData.privateMessage,
       successCriteria:
@@ -143,8 +143,8 @@ const isStepValid = () => {
   }
 
   if (currentStep === 2) {
-    if (!formData.deadline) {
-      newErrors.deadline =
+    if (!formData.deadlineAt) {
+      newErrors.deadlineAt =
         "Deadline is required";
     } else {
    const today =
@@ -153,9 +153,9 @@ const isStepValid = () => {
     .split("T")[0];
 
 if (
-  formData.deadline <= today
+  formData.deadlineAt <= today
 ) {
-  newErrors.deadline =
+  newErrors.deadlineAt =
     "Choose a future date";
 }
     }
