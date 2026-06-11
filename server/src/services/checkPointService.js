@@ -24,10 +24,9 @@ const calculateDurationDays = (
   );
 };
 
-const getCheckpointCount = (
+ const getCheckpointCount = (
   durationDays
 ) => {
-
   if (durationDays === 1) {
     return 1;
   }
@@ -123,6 +122,14 @@ const generateScheduledDates = (
     getCheckpointCount(
       durationDays
     );
+
+
+if (checkpointCount < 1) {
+  throw new Error(
+    "Challenge must have at least one checkpoint"
+  );
+}
+
 
     const checkpointDays =
   generateCheckpointDays(

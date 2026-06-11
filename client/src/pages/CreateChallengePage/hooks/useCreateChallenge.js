@@ -5,7 +5,7 @@ import { createChallengeApi } from "../api/createChallengeApi";
 
  const initialFormData = {
   title: "",
-  deadline: "",
+  deadlineAt: "",
 
   witnessName: "",
   witnessCountryCode: "+1",
@@ -93,20 +93,16 @@ const handleSubmit = async () => {
     const witnessPhone =
   `${formData.witnessCountryCode}${formData.witnessPhone}`;
 
-
-    const payload = {
-      title: formData.title,
-      deadline: formData.deadlineAt,
-      privateMessage:
-        formData.privateMessage,
-      successCriteria:
-        formData.successCriteria,
-
-      witness: {
-        name: formData.witnessName,
-        phone: witnessPhone,
-      },
-    };
+  const payload = {
+  title: formData.title,
+  deadlineAt: formData.deadlineAt,
+  privateMessage: formData.privateMessage,
+  successCriteria: formData.successCriteria,
+  witness: {
+    name: formData.witnessName,
+    phone: witnessPhone,
+  },
+};
 
     await createChallengeApi(
       payload

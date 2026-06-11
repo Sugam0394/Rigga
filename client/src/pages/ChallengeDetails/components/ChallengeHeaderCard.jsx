@@ -1,6 +1,6 @@
 const ChallengeHeaderCard = ({
   title,
-  deadline,
+  deadlineAt,
   status,
 }) => {
   return (
@@ -10,9 +10,9 @@ const ChallengeHeaderCard = ({
       <p>
         Deadline:
         {" "}
-        {deadline
+        {deadlineAt
           ? new Date(
-              deadline
+              deadlineAt
             ).toLocaleDateString()
           : "N/A"}
       </p>

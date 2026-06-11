@@ -1,5 +1,5 @@
 const CheckpointCard = ({
-  deadline,
+  deadlineAt,
 }) => {
   return (
     <div>
@@ -9,7 +9,7 @@ const CheckpointCard = ({
 
       <p>
         {new Date(
-          deadline
+          deadlineAt
         ).toLocaleDateString()}
       </p>
     </div>
