@@ -1,26 +1,37 @@
-const STATUS_LABELS = {
-  ACTIVE: "In Progress",
-  UNDER_REVIEW: "Under Review",
-  REJECTED: "Awaiting Your Response",
-  APPEALED: "Under Final Review",
-  FAILED: "Challenge Failed",
-  COMPLETED: "Completed",
+ import challengeStatusLabels from "../../../constants/ChallengeStatusLabels";
+import "./ChallengeStatusCard.css";
+
+const STATUS_VARIANTS = {
+  ACTIVE: "success",
+  UNDER_REVIEW: "warning",
+  REJECTED: "danger",
+  APPEALED: "purple",
+  FAILED: "neutral",
+  COMPLETED: "success",
 };
 
 const ChallengeStatusCard = ({
   status,
 }) => {
   const label =
-    STATUS_LABELS[status] ||
+    challengeStatusLabels[status] ||
     "Unknown Status";
 
+  const variant =
+    STATUS_VARIANTS[status] ||
+    "neutral";
+
   return (
-    <section>
-      <h2>
+    <section className="challenge-status">
+      <h2 className="challenge-status__title">
         Current Status
       </h2>
 
-      <p>{label}</p>
+      <span
+        className={`challenge-status__badge challenge-status__badge--${variant}`}
+      >
+        {label}
+      </span>
     </section>
   );
 };

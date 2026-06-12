@@ -18,13 +18,15 @@ const submitAppeal = async (
       imageUrl,
     } = req.body;
 
-    const appeal =
-      await appealService
-        .submitAppeal({
-          challengeId: id,
-          notes,
-          imageUrl,
-        });
+   const appeal =
+  await appealService
+    .submitAppeal({
+      challengeId: id,
+      userId:
+        req.user.userId,
+      notes,
+      imageUrl,
+    });
 
     return res.status(201).json({
       success: true,

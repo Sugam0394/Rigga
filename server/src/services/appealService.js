@@ -15,23 +15,24 @@ import { CHALLENGE_STATUS } from "../constants/challengeStatus.js";
       "Appeal notes are required"
     );
   }
+ const trimmedNotes =
+  notes.trim();
 
-  const wordCount =
-    notes
-      .trim()
-      .split(/\s+/).length;
+if (
+  trimmedNotes.length < 50
+) {
+  throw new Error(
+    "Appeal explanation must be at least 50 characters"
+  );
+}
 
-  if (wordCount < 50) {
-    throw new Error(
-      "Appeal notes must contain at least 50 words"
-    );
-  }
-
-  if (wordCount > 500) {
-    throw new Error(
-      "Appeal notes cannot exceed 500 words"
-    );
-  }
+if (
+  trimmedNotes.length > 1000
+) {
+  throw new Error(
+    "Appeal explanation cannot exceed 1000 characters"
+  );
+}
 };
 
 const validateAppealEligibility = (
@@ -85,6 +86,7 @@ const validateAppealWindow = (
 
  const submitAppeal = async ({
   challengeId,
+  userId,
   notes,
   imageUrl,
 }) => {
@@ -98,6 +100,21 @@ const validateAppealWindow = (
       .getChallengeById(
         challengeId
       );
+
+      if (!challenge) {
+  throw new Error(
+    "Challenge not found"
+  );
+}
+
+if (
+  challenge.userId.toString() !==
+  userId
+) {
+  throw new Error(
+    "Unauthorized appeal attempt"
+  );
+}
 
   validateAppealEligibility(
     challenge

@@ -1,15 +1,25 @@
  import { useParams , useNavigate } from "react-router-dom";
+ // css 
+import "./ChallengeDetailsPage.css";
 
+// hooks
 import useChallengeDashboard from "./hooks/useChallengeashboard";
+
+// components 
 import ChallengeHeaderCard from "./components/ChallengeHeaderCard";
 import ChallengeStatusCard from "./components/ChallengeStatusCard";
 import CheckpointSummaryCard from "./components/CheckpointSummaryCard";
 import ProgressSummaryCard from "./components/ProgressSummaryCard";
 import WitnessAccountabilityCard from "./components/WitnessAccountabilityCard";
 import ConsequenceStatusCard from "./components/ConsequencesStatusCard";
-import useProgressReports from "../progressReports/hooks/useProgressReports";
-import AppealStatusCard from "../appeals/components/AppealStatusCard";
 import ProgressReportList from "../progressReports/components/ProgressReportList";
+
+// Hooks
+import useProgressReports from "../progressReports/hooks/useProgressReports";
+
+// appeals
+import AppealStatusCard from "../appeals/components/AppealStatusCard";
+ 
 
 
 const ChallengeDetailsPage = () => {
@@ -41,111 +51,135 @@ const handleSubmitProgress =
     );
   };
 
-
-  if (loading) {
-    return (
-      <div>
-        Loading challenge...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div>
-        <p>{error}</p>
-
-        <button
-          onClick={retry}
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
-
-  if (!dashboard) {
-    return (
-      <div>
-        Challenge not found.
-      </div>
-    );
-  }
-
+ if (loading) {
   return (
-    <div>
-     <ChallengeHeaderCard
-  title={
-    dashboard.challenge.title
-  }
-  deadlineAt={
-    dashboard.challenge.deadlineAt
-  }
-  status={
-    dashboard.challenge.status
-  }
-/>
-<ChallengeStatusCard
-  status={
-    dashboard.challenge.status
-  }
-/>
-{dashboard.challenge.status ===
-  "ACTIVE" && (
-  <button
-    onClick={
-      handleSubmitProgress
-    }
-  >
-    Submit Progress Report
-  </button>
-)}
+    <div className="challenge-state">
+      <h2 className="challenge-state__title">
+        Loading Challenge
+      </h2>
 
-{dashboard.challenge.status ===
-  "REJECTED" && (
-  <button
-    onClick={
-      handleSubmitAppeal
-    }
-  >
-    Submit Appeal
-  </button>
-)}
-
-
-{dashboard.challenge.status ===
-  "APPEALED" && (
-  <AppealStatusCard />
-)}
-
-<CheckpointSummaryCard
-  checkpoints={
-    dashboard.checkpoints
-  }
-/>
-
-<ProgressSummaryCard
-  progress={
-    dashboard.progress
-  }
-/>
-<WitnessAccountabilityCard
-  witness={
-    dashboard.witness
-  }
-/>
-<ConsequenceStatusCard
-  consequence={
-    dashboard.consequence
-  }
-/>
-<ProgressReportList
-  reports={reports}
-  loading={reportsLoading}
-  error={reportsError}
-/>
+      <p className="challenge-state__message">
+        Preparing your accountability dashboard...
+      </p>
     </div>
   );
+}
+
+ if (error) {
+  return (
+    <div className="challenge-state">
+      <h2 className="challenge-state__title">
+        Unable To Load Challenge
+      </h2>
+
+      <p className="challenge-state__message">
+        {error}
+      </p>
+
+      <button
+        className="challenge-state__button"
+        onClick={retry}
+      >
+        Try Again
+      </button>
+    </div>
+  );
+}
+
+ if (!dashboard) {
+  return (
+    <div className="challenge-state">
+      <h2 className="challenge-state__title">
+        Challenge Not Found
+      </h2>
+
+      <p className="challenge-state__message">
+        This challenge may have been removed
+        or is no longer available.
+      </p>
+    </div>
+  );
+}
+
+  return (
+  <div className="challenge-details-page">
+    <div className="challenge-details-container">
+
+      <ChallengeHeaderCard
+        title={dashboard.challenge.title}
+        deadlineAt={dashboard.challenge.deadlineAt}
+        status={dashboard.challenge.status}
+      />
+
+      <div className="challenge-details-actions">
+        {dashboard.challenge.status ===
+          "ACTIVE" && (
+          <button
+            className="challenge-details-button"
+            onClick={
+              handleSubmitProgress
+            }
+          >
+            Submit Progress Report
+          </button>
+        )}
+
+        {dashboard.challenge.status ===
+          "REJECTED" && (
+          <button
+            className="challenge-details-button"
+            onClick={
+              handleSubmitAppeal
+            }
+          >
+            Submit Appeal
+          </button>
+        )}
+      </div>
+
+      <ChallengeStatusCard
+        status={
+          dashboard.challenge.status
+        }
+      />
+
+      {dashboard.challenge.status ===
+        "APPEALED" && (
+        <AppealStatusCard />
+      )}
+
+      <CheckpointSummaryCard
+        checkpoints={
+          dashboard.checkpoints
+        }
+      />
+
+      <ProgressSummaryCard
+        progress={
+          dashboard.progress
+        }
+      />
+
+      <WitnessAccountabilityCard
+        witness={
+          dashboard.witness
+        }
+      />
+
+      <ConsequenceStatusCard
+        consequence={
+          dashboard.consequence
+        }
+      />
+
+      <ProgressReportList
+        reports={reports}
+        loading={reportsLoading}
+        error={reportsError}
+      />
+    </div>
+  </div>
+);
 };
 
 export default ChallengeDetailsPage;

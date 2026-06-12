@@ -1,5 +1,5 @@
-import ProgressReportCard
-  from "./ProgressReportCard";
+ import "./ProgressReportList.css";
+import ProgressReportCard from "./ProgressReportCard";
 
 const ProgressReportList = ({
   reports,
@@ -8,57 +8,51 @@ const ProgressReportList = ({
 }) => {
   if (loading) {
     return (
-      <p>
-        Loading reports...
-      </p>
+      <div className="progress-timeline__loading">
+        Loading challenge history...
+      </div>
     );
   }
 
   if (error) {
     return (
-      <p>
+      <div className="progress-timeline__error">
         {error}
-      </p>
+      </div>
     );
   }
 
   if (reports.length === 0) {
     return (
-      <div>
-        <h2>
-          Progress Reports
-        </h2>
+      <div className="progress-timeline__empty">
+        <h2>Challenge History</h2>
 
         <p>
-          No progress reports
-          submitted yet.
+          No progress reports submitted yet.
         </p>
 
         <p>
-          Be the first to
-          submit proof.
+          Submit your first update to begin
+          building your accountability history.
         </p>
       </div>
     );
   }
 
   return (
-    <div>
-      <h2>
-        Progress Reports
+    <section className="progress-timeline">
+      <h2 className="progress-timeline__title">
+        Challenge History
       </h2>
 
-      {reports.map(
-        (report) => (
-          <ProgressReportCard
-            key={report._id}
-            report={report}
-          />
-        )
-      )}
-    </div>
+      {reports.map((report) => (
+        <ProgressReportCard
+          key={report._id}
+          report={report}
+        />
+      ))}
+    </section>
   );
 };
 
-export default
-  ProgressReportList;
+export default ProgressReportList;

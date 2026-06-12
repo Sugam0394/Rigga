@@ -1,0 +1,30 @@
+.progress-report {
+  position: relative;
+  padding: 20px;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.progress-report__date {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.progress-report__notes {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.progress-report__image {
+  width: 100%;
+  margin-top: 16px;
+  border-radius: 12px;
+  display: block;
+  object-fit: cover;
+}
+
+.progress-report__label {
+  margin: 0 0 8px;
+  font-weight: 600;
+}

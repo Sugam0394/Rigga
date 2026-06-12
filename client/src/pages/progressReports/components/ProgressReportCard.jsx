@@ -1,35 +1,45 @@
- const BASE_URL = import.meta.env.VITE_API_BASE_URL
+ import "./ProgressReportCard.css";
+
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL
     ?.replace("/api", "") || "";
 
 const ProgressReportCard = ({
   report,
 }) => {
-  return (
-    <div>
-      <h3>
-        Progress Report
-      </h3>
+  const formattedDate =
+    new Date(
+      report.createdAt
+    ).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
 
-      <p>
-        Date:
-        {" "}
-        {new Date(
-          report.createdAt
-        ).toLocaleDateString()}
+  return (
+    <article className="progress-report">
+      <p className="progress-report__date">
+        {formattedDate}
       </p>
 
-      <p>
+      <p className="progress-report__notes">
         {report.notes}
       </p>
 
       {report.imageUrl && (
-        <img
-          src={`${BASE_URL}${report.imageUrl}`}
-          alt="Progress Evidence"
-          width="250"
-        />
+        <>
+          <p className="progress-report__label">
+            Evidence
+          </p>
+
+          <img
+            className="progress-report__image"
+            src={`${BASE_URL}${report.imageUrl}`}
+            alt="Progress Evidence"
+          />
+        </>
       )}
-    </div>
+    </article>
   );
 };
 

@@ -1,7 +1,16 @@
-export const theme = {
+ export const theme = {
   colors: {
-    primary: "#4F46E5",
+    primary: "#DC2626",
     white: "#FFFFFF",
+
+    text: "#111827",
+    textSecondary: "#6B7280",
+
+    border: "#E5E7EB",
+
+    success: "#16A34A",
+    warning: "#D97706",
+    danger: "#DC2626",
   },
 
   radius: {

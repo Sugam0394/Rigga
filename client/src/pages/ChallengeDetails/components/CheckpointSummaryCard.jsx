@@ -1,27 +1,51 @@
+ import "./CheckpointSummaryCard.css";
+
 const CheckpointSummaryCard = ({
   checkpoints,
 }) => {
   return (
-    <section>
-      <h2>
+    <section className="checkpoint-card">
+      <h2 className="checkpoint-card__title">
         Checkpoints
       </h2>
 
-      <p>
-        Total: {checkpoints.total}
-      </p>
+      <div className="checkpoint-card__stats">
+        <div className="checkpoint-card__stat">
+          <p className="checkpoint-card__label">
+            Total
+          </p>
+          <p className="checkpoint-card__value">
+            {checkpoints.total}
+          </p>
+        </div>
 
-      <p>
-        Completed: {checkpoints.completed}
-      </p>
+        <div className="checkpoint-card__stat">
+          <p className="checkpoint-card__label">
+            Completed
+          </p>
+          <p className="checkpoint-card__value">
+            {checkpoints.completed}
+          </p>
+        </div>
 
-      <p>
-        Pending: {checkpoints.pending}
-      </p>
+        <div className="checkpoint-card__stat">
+          <p className="checkpoint-card__label">
+            Pending
+          </p>
+          <p className="checkpoint-card__value">
+            {checkpoints.pending}
+          </p>
+        </div>
 
-      <p>
-        Missed: {checkpoints.missed}
-      </p>
+        <div className="checkpoint-card__stat">
+          <p className="checkpoint-card__label">
+            Missed
+          </p>
+          <p className="checkpoint-card__value">
+            {checkpoints.missed}
+          </p>
+        </div>
+      </div>
     </section>
   );
 };

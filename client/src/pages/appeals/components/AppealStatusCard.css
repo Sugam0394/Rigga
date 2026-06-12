@@ -1,0 +1,23 @@
+.appeal-status {
+  padding: 24px;
+  border-radius: 16px;
+
+  background: #f5f3ff;
+
+  border: 1px solid #ddd6fe;
+}
+
+.appeal-status__title {
+  margin: 0 0 8px;
+
+  font-size: 1.125rem;
+  font-weight: 700;
+
+  color: #6d28d9;
+}
+
+.appeal-status__message {
+  margin: 0;
+
+  color: #5b21b6;
+}

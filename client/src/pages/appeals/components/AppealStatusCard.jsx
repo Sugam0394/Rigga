@@ -1,14 +1,16 @@
+ import "./AppealStatusCard.css";
+
 const AppealStatusCard = () => {
   return (
-    <div>
-      <h3>
+    <section className="appeal-status">
+      <h3 className="appeal-status__title">
         Appeal Submitted
       </h3>
 
-      <p>
+      <p className="appeal-status__message">
         Awaiting Final Review
       </p>
-    </div>
+    </section>
   );
 };
 

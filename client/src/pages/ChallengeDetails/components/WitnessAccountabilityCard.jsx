@@ -1,24 +1,43 @@
- const WitnessAccountabilityCard = ({
+ import "./WitnessAccountabilityCard.css";
+
+const DECISION_LABELS = {
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+  APPEALED: "Appealed",
+};
+
+const WitnessAccountabilityCard = ({
   witness,
 }) => {
+  const decision =
+    witness?.decision || "PENDING";
+
+  const label =
+    DECISION_LABELS[decision] ||
+    "Pending Review";
+
+  const variant =
+    decision.toLowerCase();
+
   return (
-    <section>
-      <h2>
-        Witness Accountability
+    <section className="witness-card">
+      <h2 className="witness-card__title">
+        Witness
       </h2>
 
-      <p>
-        Witness:
-        {" "}
-        {witness?.name || "N/A"}
+      <p className="witness-card__name">
+        {witness?.name || "No Witness Assigned"}
       </p>
 
-      <p>
-        Decision:
-        {" "}
-        {witness?.decision ||
-          "Pending"}
+      <p className="witness-card__label">
+        Review Status
       </p>
+
+      <span
+        className={`witness-card__badge witness-card__badge--${variant}`}
+      >
+        {label}
+      </span>
     </section>
   );
 };

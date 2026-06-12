@@ -1,5 +1,6 @@
-export const designRules = {
-  philosophy: "Premium accountability product",
+ export const designRules = {
+  philosophy:
+    "Premium accountability product",
 
   principles: [
     "Mobile-first",
@@ -11,5 +12,5 @@ export const designRules = {
     "Professional SaaS feel",
   ],
 
-  primaryColor: "#4F46E5",
+  primaryColor: "#DC2626",
 };
