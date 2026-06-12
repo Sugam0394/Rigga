@@ -28,8 +28,8 @@ const [logoutLoading,
   setLogoutLoading] =
   useState(false);
 
-  const handleLogout =
-  async () => {
+   
+  const handleLogout =  async () => {
     try {
       setLogoutLoading(
         true

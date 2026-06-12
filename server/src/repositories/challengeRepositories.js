@@ -1,5 +1,5 @@
 import Challenge from "../models/challengeModel.js";
-
+import { CHALLENGE_STATUS, } from "../constants/challengeStatus.js";
 const createChallenge = async (challengeData) => {
   return await Challenge.create(challengeData);
 };
@@ -98,6 +98,23 @@ const getByReviewToken = async (token) => {
   });
 };
 
+const getActiveChallenges = async () => {
+    return Challenge.find({
+      status:
+        CHALLENGE_STATUS.ACTIVE,
+    });
+  };
+
+  const getExpiredActiveChallenges = async (currentTime) => {
+    return Challenge.find({
+      status:
+        CHALLENGE_STATUS.ACTIVE,
+      deadlineAt: {
+        $lt: currentTime,
+      },
+    });
+  };
+
 export default {
   createChallenge,
   updateWitnessNotifiedAt,
@@ -106,6 +123,8 @@ export default {
   getChallengeById,
   updateStatus,
   getByReviewToken,
-  getChallengesByUserId
+  getChallengesByUserId,
+  getActiveChallenges,
+  getExpiredActiveChallenges
  
 };

@@ -76,11 +76,11 @@ const remainingLabel =
     </h2>
 
     <span
-      className={`active-challenge-card__badge ${
-        badgeClassMap[
-          challenge.status
-        ]
-      }`}
+       className={`active-challenge-card__badge ${
+  badgeClassMap[
+    challenge.status
+  ] || ""
+}`}
     >
       {statusLabel}
     </span>
