@@ -8,7 +8,7 @@ import ProgressSummaryCard from "./components/ProgressSummaryCard";
 import WitnessAccountabilityCard from "./components/WitnessAccountabilityCard";
 import ConsequenceStatusCard from "./components/ConsequencesStatusCard";
 import useProgressReports from "../progressReports/hooks/useProgressReports";
-
+import AppealStatusCard from "../appeals/components/AppealStatusCard";
 import ProgressReportList from "../progressReports/components/ProgressReportList";
 
 
@@ -31,6 +31,13 @@ const handleSubmitProgress =
   () => {
     navigate(
       `/challenges/${id}/progress-report`
+    );
+  };
+
+  const handleSubmitAppeal =
+  () => {
+    navigate(
+      `/challenges/${id}/appeal`
     );
   };
 
@@ -92,6 +99,23 @@ const handleSubmitProgress =
   >
     Submit Progress Report
   </button>
+)}
+
+{dashboard.challenge.status ===
+  "REJECTED" && (
+  <button
+    onClick={
+      handleSubmitAppeal
+    }
+  >
+    Submit Appeal
+  </button>
+)}
+
+
+{dashboard.challenge.status ===
+  "APPEALED" && (
+  <AppealStatusCard />
 )}
 
 <CheckpointSummaryCard

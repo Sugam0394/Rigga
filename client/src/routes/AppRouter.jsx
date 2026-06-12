@@ -5,23 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 
-
-
-
-
-
-
-
-
-
-
-
-
 // Layouts
 import AuthLayout from "../layouts/AuthLayout";
 import AppLayout from "../layouts/AppLayout";
 import PublicLayout from "../layouts/PublicLayout";
-
 
 // Auth Page
 import LoginPage from "../pages/Login/LoginPage";
@@ -35,7 +22,7 @@ import ChallengeDetailsPage from "../pages/ChallengeDetails/ChallengeDetailsPage
 import Profile from "../pages/ProfilePage/Profile";
 import WitnessReview from "../pages/WitnessReview/WitnessReview";
 import SubmitProgressReportPage from "../pages/progressReports/SubmitProgressReportPage";
-
+import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
 
  const AppRouter = () => {
   return (
@@ -59,6 +46,7 @@ import SubmitProgressReportPage from "../pages/progressReports/SubmitProgressRep
         <Route path="/challenges/create" element={<CreateChallengePage />}/>
         <Route path="/challenges/:id" element={<ChallengeDetailsPage />}/>
         <Route path="/challenges/:id/progress-report"element={<SubmitProgressReportPage/>}/>
+        <Route path="/challenges/:id/appeal" element={<SubmitAppealPage />}/>
         <Route path="/profile" element={<Profile />}/></Route>
 
         {/* Fallback */}
