@@ -1,0 +1,11 @@
+.profile-stats-card {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.profile-stats-card p {
+  color: #6B7280;
+}

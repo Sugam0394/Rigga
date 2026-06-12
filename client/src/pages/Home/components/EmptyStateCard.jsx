@@ -1,23 +1,28 @@
 import { Link } from "react-router-dom";
+import "./EmptyStateCard.css"
+
 
 const EmptyStateCard = () => {
   return (
-    <div>
-      <h2>
-        No commitments yet
-      </h2>
+ <div className="empty-state-card">
+  <h2>
+    Start Your First Commitment
+  </h2>
 
-      <p>
-        You have not created a
-        commitment yet.
-      </p>
+  <p>
+    Create a commitment,
+    assign a witness,
+    and stay accountable
+    until the deadline.
+  </p>
 
-      <Link
-        to="/challenges/create"
-      >
-        Create Commitment
-      </Link>
-    </div>
+  <Link
+    to="/challenges/create"
+    className="empty-state-card__cta"
+  >
+    Create Commitment
+  </Link>
+</div>
   );
 };
 

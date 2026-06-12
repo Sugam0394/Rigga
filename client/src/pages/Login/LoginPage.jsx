@@ -20,6 +20,9 @@ const LoginPage = () => {
  const [phone, setPhone] =
   useState("");
 
+  const [submitError, setSubmitError] =
+  useState("");
+
   const [loading, setLoading] = useState(false);
 
    const isPhoneValid =
@@ -52,10 +55,11 @@ const LoginPage = () => {
         }
       );
     } catch (error) {
-      console.error(
-        error
-      );
-    } finally {
+  setSubmitError(
+    error?.response?.data?.message ||
+    "Failed to send OTP. Please try again."
+  );
+} finally {
       setLoading(false);
     }
   };
@@ -85,6 +89,11 @@ const LoginPage = () => {
         id="phone-error"
         message={error}
       />
+
+      <AuthError
+  id="otp-request-error"
+  message={submitError}
+/>
 
       <div style={{ marginTop: "8px" }}>
         <AuthSubmitButton

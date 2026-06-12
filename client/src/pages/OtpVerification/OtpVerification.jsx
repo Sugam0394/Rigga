@@ -38,10 +38,24 @@ const OtpVerificationPage = () => {
   return () => clearInterval(timer);
 }, [countdown]);
 
-    const authData = location.state;
-    
+useEffect(() => {
+  if (!location.state) {
+    navigate(
+      "/login",
+      {
+        replace: true,
+      }
+    );
+  }
+}, [
+  location.state,
+  navigate,
+]);
+
+ const authData =
+  location.state;
+
 if (!authData) {
-  navigate("/login");
   return null;
 }
 

@@ -1,0 +1,11 @@
+.loading-state {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.loading-state p {
+  color: #6B7280;
+}

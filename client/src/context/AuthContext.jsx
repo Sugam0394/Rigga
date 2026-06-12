@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { createContext, useContext, useState , useEffect } from "react";
-import {getCurrentUser}from "../services/authService";
+import {getCurrentUser , logoutUser }from "../services/authService";
 
 const AuthContext = createContext();
 
@@ -23,12 +23,16 @@ const [status, setStatus] =
   );
 };
 
-   const logout = () => {
-  setUser(null);
+  const logout = async () => {
+  try {
+    await logoutUser();
+  } finally {
+    setUser(null);
 
-  setStatus(
-    "unauthenticated"
-  );
+    setStatus(
+      "unauthenticated"
+    );
+  }
 };
 
 const restoreSession = async () => {
