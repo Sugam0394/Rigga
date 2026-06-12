@@ -2,13 +2,14 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { createChallengeApi } from "../api/createChallengeApi";
+import { validatePhone }from "../../../features/auth/components/phoneValidation"
+
 
  const initialFormData = {
   title: "",
   deadlineAt: "",
 
   witnessName: "",
-  witnessCountryCode: "+1",
   witnessPhone: "",
 
   successCriteria: "",
@@ -90,8 +91,7 @@ const handleSubmit = async () => {
     setIsSubmitting(true);
 
 
-    const witnessPhone =
-  `${formData.witnessCountryCode}${formData.witnessPhone}`;
+ 
 
   const payload = {
   title: formData.title,
@@ -99,9 +99,10 @@ const handleSubmit = async () => {
   privateMessage: formData.privateMessage,
   successCriteria: formData.successCriteria,
   witness: {
-    name: formData.witnessName,
-    phone: witnessPhone,
-  },
+  name: formData.witnessName,
+  phone:
+    formData.witnessPhone,
+}
 };
 
     await createChallengeApi(
@@ -163,24 +164,20 @@ if (
         "Witness name is required";
     }
 
-  const phoneRegex =
-  /^\+[1-9]\d{7,14}$/;
-
-const witnessPhone =
-  `${formData.witnessCountryCode}${formData.witnessPhone}`;
-
-if (!formData.witnessPhone.trim()) {
+ if (
+  !formData.witnessPhone
+) {
   newErrors.witnessPhone =
     "Witness phone is required";
 } else if (
-  !phoneRegex.test(
-    witnessPhone
+  !validatePhone(
+    formData.witnessPhone
   )
 ) {
   newErrors.witnessPhone =
     "Enter a valid phone number";
 }
-
+ 
     const criteria =
       formData.successCriteria.trim();
 

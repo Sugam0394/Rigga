@@ -2,40 +2,33 @@
 import { useNavigate } from "react-router-dom";
 
 import AuthHeader from "../../features/auth/components/AuthHeader";
-import CountryCodeSelector from "../../features/auth/components/CountryCodeSelector";
-import PhoneInput from "../../features/auth/components/PhoneInput";
+ import GlobalPhoneInput from "../../features/auth/components/GlobalPhoneInput";
+
+import {
+  validatePhone,
+} from "../../features/auth/components/phoneValidation";
+ 
 import AuthError from "../../features/auth/components/AuthError";
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton";
 import { requestOtp } from "../../services/authService";
 
 
 
-
-
-
-
-
-
-
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  const [countryCode, setCountryCode] = useState("+1");
-  const [phoneNumber, setPhoneNumber] = useState("");
+ const [phone, setPhone] =
+  useState("");
 
   const [loading, setLoading] = useState(false);
 
-  const normalizedPhone =
-    phoneNumber.replace(/\D/g, "");
-
-  const isPhoneValid =
-    normalizedPhone.length >= 8 &&
-    normalizedPhone.length <= 15;
+   const isPhoneValid =
+  validatePhone(phone);
 
   const error =
-    phoneNumber && !isPhoneValid
-      ? "Enter a valid phone number"
-      : "";
+  phone && !isPhoneValid
+    ? "Enter a valid phone number"
+    : "";
 
   const handleContinue = async () => {
     if (!isPhoneValid)
@@ -44,8 +37,7 @@ const LoginPage = () => {
     try {
       setLoading(true);
 
-    const phone =
-  `${countryCode}${normalizedPhone}`;
+   
 
       await requestOtp(
         phone
@@ -80,31 +72,14 @@ const LoginPage = () => {
         title="Make a commitment. Keep your word."
         subtitle="Rigga helps you stay accountable through witnesses, deadlines, and consequences."
       />
+ 
 
-      <label htmlFor="country-code">
-        Country
-      </label>
+      <GlobalPhoneInput
+  value={phone}
+  onChange={setPhone}
+/>
 
-      <CountryCodeSelector
-        value={countryCode}
-        onChange={(e) =>
-          setCountryCode(e.target.value)
-        }
-      />
-
-      <label htmlFor="phone-number">
-        Phone Number
-      </label>
-
-      <PhoneInput
-        value={phoneNumber}
-        onChange={(e) =>
-          setPhoneNumber(
-            e.target.value.replace(/[^\d]/g, "")
-          )
-        }
-        placeholder="Enter your phone number"
-      />
+     
 
       <AuthError
         id="phone-error"

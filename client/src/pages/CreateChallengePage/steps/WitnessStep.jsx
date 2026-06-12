@@ -1,4 +1,4 @@
- import CountryCodeSelector from "../../../features/auth/components/CountryCodeSelector";
+import GlobalPhoneInput from "../../../features/auth/components/GlobalPhoneInput"
 
 const WitnessStep = ({
   formData,
@@ -29,36 +29,18 @@ const WitnessStep = ({
         <p>{errors.witnessName}</p>
       )}
 
-      <label>
-        Witness Country
-      </label>
+    <GlobalPhoneInput
+  value={formData.witnessPhone}
+  onChange={(value) =>
+    handleChange(
+      "witnessPhone",
+      value || ""
+    )
+  }
+  placeholder="Enter witness phone number"
+/>
 
-      <CountryCodeSelector
-        value={
-          formData.witnessCountryCode
-        }
-        onChange={(e) =>
-          handleChange(
-            "witnessCountryCode",
-            e.target.value
-          )
-        }
-      />
-
-      <input
-        type="tel"
-        placeholder="Enter witness phone number"
-        value={formData.witnessPhone}
-        onChange={(e) =>
-          handleChange(
-            "witnessPhone",
-            e.target.value.replace(
-              /[^\d]/g,
-              ""
-            )
-          )
-        }
-      />
+  
 
       {errors.witnessPhone && (
         <p>{errors.witnessPhone}</p>
