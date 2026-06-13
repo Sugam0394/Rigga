@@ -3,6 +3,9 @@ import NotificationEmptyState from "../components/NotificationEmptyState";
 import NotificationList from "../components/NotificationList";
 import NotificationLoadingState from "../components/NotificationLoadingState";
 import NotificationErrorState from "../components/NotificationErrorState";
+ import { Link }  from "react-router-dom";
+
+
 
 const NotificationsPage = () => {
   const {
@@ -34,6 +37,9 @@ const NotificationsPage = () => {
 
   return (
     <main>
+      <Link to="/home">
+      Back
+    </Link>
       <h1>
         Notifications
       </h1>

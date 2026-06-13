@@ -23,6 +23,10 @@ import Profile from "../pages/ProfilePage/Profile";
 import WitnessReview from "../pages/WitnessReview/WitnessReview";
 import SubmitProgressReportPage from "../pages/progressReports/SubmitProgressReportPage";
 import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
+import NotificationsPage from "../features/notifications/pages/NotificationPage"
+
+
+
 
  const AppRouter = () => {
   return (
@@ -43,6 +47,7 @@ import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
         {/* Protected Routes */}
         <Route element={ <ProtectedRoute> <AppLayout/> </ProtectedRoute> }>
         <Route path="/home" element={<HomePage />}/>
+        <Route path="/notifications" element={ <NotificationsPage />}/>
         <Route path="/challenges/create" element={<CreateChallengePage />}/>
         <Route path="/challenges/:id" element={<ChallengeDetailsPage />}/>
         <Route path="/challenges/:id/progress-report"element={<SubmitProgressReportPage/>}/>
