@@ -1,5 +1,10 @@
  import challengeRepository from "../repositories/challengeRepositories.js";
+import userNotificationService
+  from "./userNotificationService.js";
 
+import {
+  NOTIFICATION_EVENTS,
+} from "../constants/notificationEvents.js";
 import {
   CHALLENGE_STATUS,
 } from "../constants/challengeStatus.js";
@@ -17,10 +22,30 @@ const evaluateChallengeLifecycle = async (challenge) => {
   challenge.deadlineAt &&
   challenge.deadlineAt < now
 )  {
-      return challengeRepository.updateStatus(
-        challenge._id,
-        CHALLENGE_STATUS.UNDER_REVIEW
-      );
+      const updatedChallenge =
+  await challengeRepository
+    .updateStatus(
+      challenge._id,
+      CHALLENGE_STATUS.UNDER_REVIEW
+    );
+
+await userNotificationService
+  .createEventNotification({
+    userId:
+      updatedChallenge.userId,
+
+    type:
+      NOTIFICATION_EVENTS
+        .CHALLENGE_UNDER_REVIEW,
+
+    entityType:
+      "CHALLENGE",
+
+    entityId:
+      updatedChallenge._id,
+  });
+
+return updatedChallenge;
     }
 
     return challenge;

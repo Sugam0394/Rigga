@@ -20,32 +20,36 @@ const useUnreadCount = () => {
     setError,
   ] = useState(null);
 
-  useEffect(() => {
-    const fetchUnreadCount =
-      async () => {
-        try {
-          setLoading(true);
+  
+ useEffect(() => {
+  const fetchUnreadCount = async () => {
+    try {
+      const response =
+        await getUnreadCount();
 
-          const response =
-            await getUnreadCount();
+      setUnreadCount(
+        response.data.count
+      );
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-          setUnreadCount(
-            response.data.count
-          );
+  fetchUnreadCount();
 
-          setError(null);
+  const interval =
+    setInterval(
+      fetchUnreadCount,
+      5000
+    );
 
-        } catch (err) {
-          setError(
-            err.message
-          );
-        } finally {
-          setLoading(false);
-        }
-      };
-
-    fetchUnreadCount();
-  }, []);
+  return () =>
+    clearInterval(
+      interval
+    );
+}, []);
 
   return {
     unreadCount,
@@ -55,3 +59,7 @@ const useUnreadCount = () => {
 };
 
 export default useUnreadCount;
+
+ 
+
+ 

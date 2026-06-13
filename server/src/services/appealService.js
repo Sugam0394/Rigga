@@ -4,6 +4,12 @@
 
 import { CHALLENGE_STATUS } from "../constants/challengeStatus.js";
 
+import userNotificationService
+  from "./userNotificationService.js";
+
+import {
+  NOTIFICATION_EVENTS,
+} from "../constants/notificationEvents.js";
  
 
  const validateAppealNotes = (
@@ -142,11 +148,28 @@ if (
       imageUrl,
     });
 
-await challengeRepository
-  .updateStatus(
-    challengeId,
-    CHALLENGE_STATUS.APPEALED
-  );
+ const updatedChallenge =
+  await challengeRepository
+    .updateStatus(
+      challengeId,
+      CHALLENGE_STATUS.APPEALED
+    );
+
+await userNotificationService
+  .createEventNotification({
+    userId:
+      updatedChallenge.userId,
+
+    type:
+      NOTIFICATION_EVENTS
+        .APPEAL_SUBMITTED,
+
+    entityType:
+      "CHALLENGE",
+
+    entityId:
+      updatedChallenge._id,
+  });
 
 return appeal;
 

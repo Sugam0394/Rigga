@@ -1,7 +1,33 @@
-const NotificationItem = ({  notification,
+ import useMarkNotificationRead from "../hooks/useNotificationRead";
+
+const NotificationItem = ({
+  notification,
 }) => {
+
+  const {
+    markAsRead,
+  } = useMarkNotificationRead();
+
+  const handleClick =
+    async () => {
+
+      if (
+        notification.isRead
+      ) {
+        return;
+      }
+
+      await markAsRead(
+        notification._id
+      );
+    };
+
   return (
-    <article>
+    <article
+      onClick={
+        handleClick
+      }
+    >
       <h3>
         {notification.title}
       </h3>

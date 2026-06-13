@@ -3,7 +3,12 @@ import mongoose from "mongoose";
 
 import progressReportRepository from "../repositories/progressReportRepository.js";
 import challengeRepository from "../repositories/challengeRepositories.js"
+import userNotificationService
+  from "./userNotificationService.js";
 
+import {
+  NOTIFICATION_EVENTS,
+} from "../constants/notificationEvents.js";
 
 
 
@@ -89,8 +94,8 @@ import challengeRepository from "../repositories/challengeRepositories.js"
       "Forbidden"
     );
   }
-
-  return await progressReportRepository
+ const progressReport =
+  await progressReportRepository
     .createProgressReport({
       challengeId,
       notes,
@@ -98,6 +103,24 @@ import challengeRepository from "../repositories/challengeRepositories.js"
         reportData.imageUrl ??
         null,
     });
+
+await userNotificationService
+  .createEventNotification({
+    userId:
+      challenge.userId,
+
+    type:
+      NOTIFICATION_EVENTS
+        .PROGRESS_REPORT_SUBMITTED,
+
+    entityType:
+      "CHALLENGE",
+
+    entityId:
+      challenge._id,
+  });
+
+return progressReport;
 };
 
 const getChallengeReports = async (

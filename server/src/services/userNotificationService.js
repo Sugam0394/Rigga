@@ -1,5 +1,5 @@
 import userNotificationRepository from "../repositories/userNotificationRepository.js";
-import notificationEvents from "./notificationEvents.js";
+import notificationFactory  from "./notificationEvents.js"
 
 const createNotification = async ({
   userId,

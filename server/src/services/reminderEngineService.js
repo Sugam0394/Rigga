@@ -2,6 +2,24 @@ import reminderRepository from "../repositories/reminderRepository.js";
 
 import notificationDispatcher from "./notificationDispatcher.js";
 
+ 
+import challengeRepository
+  from "../repositories/challengeRepositories.js";
+
+import userNotificationService
+  from "./userNotificationService.js";
+
+import {
+  NOTIFICATION_EVENTS,
+} from "../constants/notificationEvents.js";
+
+
+
+
+
+
+
+
 import {
   REMINDER_STATUS,
 } from "../constants/reminderConstants.js";
@@ -27,6 +45,30 @@ const executePendingReminders = async () => {
       .dispatchReminder(
         reminder
       );
+
+      const challenge =
+  await challengeRepository
+    .getChallengeById(
+      reminder.challengeId
+    );
+
+if (challenge) {
+  await userNotificationService
+    .createEventNotification({
+      userId:
+        challenge.userId,
+
+      type:
+        NOTIFICATION_EVENTS
+          .REMINDER_TRIGGERED,
+
+      entityType:
+        "CHALLENGE",
+
+      entityId:
+        challenge._id,
+    });
+}
 
     await reminderRepository
       .updateReminderStatus(

@@ -4,6 +4,18 @@ import { CHALLENGE_STATUS } from "../constants/challengeStatus.js";
 
 import consequenceReleaseService from "./consequenceReleaseService.js";
 
+ 
+
+ import userNotificationService
+  from "./userNotificationService.js";
+
+import {
+  NOTIFICATION_EVENTS,
+} from "../constants/notificationEvents.js";
+
+ 
+
+ 
 
 const validateRejectionReason = (
   rejectionReason
@@ -85,16 +97,35 @@ const validateReviewEligibility = async (challengeId) => {
   challengeId
 );
 
-  await challengeRepository
+ await challengeRepository
   .approveChallenge(
     challengeId
   );
 
-return challengeRepository
-  .updateStatus(
-    challengeId,
-    CHALLENGE_STATUS.COMPLETED
-  );
+const updatedChallenge =
+  await challengeRepository
+    .updateStatus(
+      challengeId,
+      CHALLENGE_STATUS.COMPLETED
+    );
+
+await userNotificationService
+  .createEventNotification({
+    userId:
+      updatedChallenge.userId,
+
+    type:
+      NOTIFICATION_EVENTS
+        .CHALLENGE_APPROVED,
+
+    entityType:
+      "CHALLENGE",
+
+    entityId:
+      updatedChallenge._id,
+  });
+
+return updatedChallenge;
 
   
 };
@@ -132,18 +163,56 @@ return challengeRepository
         challengeId
       );
 
-    return challengeRepository
-      .updateStatus(
-        challengeId,
-        CHALLENGE_STATUS.FAILED
-      );
+    const failedChallenge =
+  await challengeRepository
+    .updateStatus(
+      challengeId,
+      CHALLENGE_STATUS.FAILED
+    );
+
+await userNotificationService
+  .createEventNotification({
+    userId:
+      failedChallenge.userId,
+
+    type:
+      NOTIFICATION_EVENTS
+        .CHALLENGE_FAILED,
+
+    entityType:
+      "CHALLENGE",
+
+    entityId:
+      failedChallenge._id,
+  });
+
+return failedChallenge;
   }
 
-  return challengeRepository
+   const updatedChallenge =
+  await challengeRepository
     .updateStatus(
       challengeId,
       CHALLENGE_STATUS.REJECTED
     );
+
+await userNotificationService
+  .createEventNotification({
+    userId:
+      updatedChallenge.userId,
+
+    type:
+      NOTIFICATION_EVENTS
+        .CHALLENGE_REJECTED,
+
+    entityType:
+      "CHALLENGE",
+
+    entityId:
+      updatedChallenge._id,
+  });
+
+return updatedChallenge;
 };
 
 export default {
