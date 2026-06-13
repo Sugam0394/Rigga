@@ -15,13 +15,23 @@ const validateReviewToken = async (
   }
 
   if (
-    challenge.witness.reviewTokenExpiresAt <
-    new Date()
-  ) {
-    throw new Error(
-      "Review token has expired"
-    );
-  }
+  !challenge.witness
+    ?.reviewTokenExpiresAt
+) {
+  throw new Error(
+    "Review token is invalid"
+  );
+}
+
+if (
+  challenge.witness
+    .reviewTokenExpiresAt <
+  new Date()
+) {
+  throw new Error(
+    "Review token has expired"
+  );
+}
 
   return challenge;
 };

@@ -18,23 +18,30 @@ const executePendingReminders = async () => {
         );
 
     for (const reminder of reminders) {
+  try {
+    console.log(
+      `[REMINDER FOUND] ${reminder._id}`
+    );
 
-      console.log(
-        `[REMINDER FOUND] ${reminder._id}`
+    await notificationDispatcher
+      .dispatchReminder(
+        reminder
       );
 
-      await notificationDispatcher
-        .dispatchReminder(
-          reminder
-        );
+    await reminderRepository
+      .updateReminderStatus(
+        reminder._id,
+        REMINDER_STATUS.TRIGGERED,
+        new Date()
+      );
 
-      await reminderRepository
-        .updateReminderStatus(
-          reminder._id,
-          REMINDER_STATUS.TRIGGERED,
-          new Date()
-        );
-    }
+  } catch (error) {
+    console.error(
+      `[REMINDER ERROR] ${reminder._id}`,
+      error
+    );
+  }
+}
   };
 
 export default {

@@ -5,21 +5,27 @@ import Appeal from "../models/appealModel.js";
 import Consequence from "../models/consequenceModel.js";
 import { CHECKPOINT_STATUS } from "../constants/checkpointConstants.js"
 
-const getReviewSummary = async (challengeId , userId) => {
-  const challenge = await Challenge.findById(challengeId);
+const getReviewSummary = async (challengeId , userId = null) => {
+ const challenge =
+  await Challenge.findById(
+    challengeId
+  );
 
-  if (
+if (!challenge) {
+  throw new Error(
+    "Challenge not found"
+  );
+}
+
+ if (
+  userId &&
   challenge.userId.toString() !==
-  userId
+    userId
 ) {
   throw new Error(
     "Forbidden"
   );
 }
-
-  if (!challenge) {
-    throw new Error("Challenge not found");
-  }
 
   const progressReports = await ProgressReport.find({
     challengeId,
@@ -93,7 +99,7 @@ status: challenge.status || null,
       details: appeal
         ? {
             id: appeal._id.toString(),
-            reason: appeal.reason,
+            notes: appeal.notes,
             status: appeal.status,
             submittedAt: appeal.submittedAt,
             reviewedAt: appeal.reviewedAt,

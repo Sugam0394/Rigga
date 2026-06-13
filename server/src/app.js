@@ -86,10 +86,17 @@ import authRoutes from "./routes/authRoutes.js";
    
 
  // Global error handler — routes ke baad, export se pehle
-app.use((err, req, res, next) => {
-  res.status(400).json({
+ app.use((err, req, res, next) => {
+  const status =
+    err.status ||
+    err.statusCode ||
+    500;
+
+  res.status(status).json({
     success: false,
-    message: err.message,
+    message:
+      err.message ||
+      "Internal Server Error",
   });
 });
 

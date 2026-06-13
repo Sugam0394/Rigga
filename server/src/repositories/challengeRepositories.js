@@ -4,16 +4,19 @@ const createChallenge = async (challengeData) => {
   return await Challenge.create(challengeData);
 };
 
-const updateWitnessNotifiedAt = async (
+ const updateWitnessNotifiedAt = async (
   challengeId
 ) => {
   return await Challenge.findByIdAndUpdate(
     challengeId,
     {
-      "witness.notifiedAt": new Date(),
+      $set: {
+        "witness.notifiedAt":
+          new Date(),
+      },
     },
     {
-       returnDocument: "after",
+      new: true,
     }
   );
 };
@@ -32,7 +35,7 @@ const approveChallenge = async (
       },
     },
     {
-     returnDocument: "after",
+     new: true
     }
   );
 };
@@ -87,7 +90,7 @@ const getChallengesByUserId = async (userId) => {
       },
     },
     {
-      returnDocument: "after",
+       new: true
     }
   );
 };

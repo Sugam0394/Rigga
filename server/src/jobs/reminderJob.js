@@ -4,12 +4,19 @@ import reminderEngineService from "../services/reminderEngineService.js";
 
 const registerReminderJob =  () => {
     cron.schedule(
-      "*/15 * * * *",
-      async () => {
-        await reminderEngineService
-          .executePendingReminders();
-      }
-    );
+  "*/15 * * * *",
+  async () => {
+    try {
+      await reminderEngineService
+        .executePendingReminders();
+    } catch (error) {
+      console.error(
+        "[REMINDER JOB FATAL ERROR]",
+        error
+      );
+    }
+  }
+);
 
     console.log(
       "[REMINDER JOB REGISTERED]"

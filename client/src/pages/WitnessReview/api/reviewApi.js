@@ -6,7 +6,7 @@ import api from "../../../api/apiClient"
 
 
 
-export const getReviewSummary = async (challengeId) => {
+export const getReviewSummary = async (challengeId  ) => {
 
     const response =
       await api.get(

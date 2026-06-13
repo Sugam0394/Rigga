@@ -35,11 +35,17 @@ const validateRejectionReason = (
 
 const validateReviewEligibility = async (challengeId) => {
 
-   const challenge =
-     await challengeRepository
-       .getChallengeById(
-         challengeId
-       );
+ 
+ 
+  const challenge =
+    await challengeRepository
+      .getChallengeById(
+        challengeId
+      );
+
+
+
+ 
 
    if (!challenge) {
      throw new Error(
@@ -48,17 +54,27 @@ const validateReviewEligibility = async (challengeId) => {
    }
 
    if (
-     challenge.witness.decision
-   ) {
-     throw new Error(
-       "Review already submitted"
-     );
-   }
+  challenge.status !==
+    CHALLENGE_STATUS.UNDER_REVIEW &&
+  challenge.status !==
+    CHALLENGE_STATUS.APPEALED
+) {
+  throw new Error(
+    "Challenge is not eligible for review"
+  );
+}
 
-   return challenge;
-};
-
-
+ if (
+  challenge.witness.decision &&
+  challenge.status !==
+    CHALLENGE_STATUS.APPEALED
+) {
+  throw new Error(
+    "Review already submitted"
+  );
+}
+ return challenge;
+}
 
 
  const approveChallenge = async (
@@ -66,8 +82,8 @@ const validateReviewEligibility = async (challengeId) => {
 ) => {
 
    await validateReviewEligibility(
-    challengeId
-  );
+  challengeId
+);
 
   await challengeRepository
   .approveChallenge(
@@ -88,19 +104,16 @@ return challengeRepository
   rejectionReason,
 }) => {
 
-    await validateReviewEligibility(
-    challengeId
-  );
+   
 
   validateRejectionReason(
     rejectionReason
   );
 
-  const existingChallenge =
-    await challengeRepository
-      .getChallengeById(
-        challengeId
-      );
+ const existingChallenge =
+  await validateReviewEligibility(
+    challengeId
+  );
 
   const isAppealed =
     existingChallenge.status ===
