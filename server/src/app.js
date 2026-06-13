@@ -46,6 +46,7 @@ const __dirname =
 import dashboardRoutes from "./routes/dashboardRoutes.js"
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import userNotificationRoutes from "./routes/userNotificationRoutes.js"
 
 
 
@@ -72,6 +73,8 @@ import authRoutes from "./routes/authRoutes.js";
    app.use("/api" , userRoutes)
 
    app.use("/api" , authRoutes)
+
+   app.use("/api" , userNotificationRoutes)
 
 
 

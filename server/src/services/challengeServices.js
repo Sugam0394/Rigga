@@ -3,6 +3,12 @@ import witnessService from "./witnessServices.js";
 import consequenceService from "./consequenceService.js";
 import checkpointService from "./checkPointService.js";
 import notificationService from "./notificationService.js";
+import userNotificationService from "./userNotificationService.js";
+import { NOTIFICATION_EVENTS } from "../constants/notificationEvents.js";
+
+
+
+
 import {
   NOTIFICATION_TYPES,
 } from "../constants/notificationConstants.js";
@@ -89,6 +95,21 @@ if (
     type: NOTIFICATION_TYPES.CHALLENGE_CREATED,
     challengeTitle: challenge.title,
     userName: witness.name,
+  });
+
+
+  await userNotificationService
+  .createEventNotification({
+    userId,
+    type:
+      NOTIFICATION_EVENTS
+        .CHALLENGE_CREATED,
+
+    entityType:
+      "CHALLENGE",
+
+    entityId:
+      challenge._id,
   });
 
   return challenge;
