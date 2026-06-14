@@ -1,5 +1,6 @@
 import progressReportService from "../services/progressReportService.js";
-
+import progressEligibilityService
+  from "../services/progressEligibilityService.js";
 const submitProgressReport = async (
   req,
   res
@@ -57,7 +58,40 @@ const getChallengeReports = async (req, res) => {
     }
   };
 
+  const getProgressEligibility = async (
+  req,
+  res
+) => {
+  try {
+
+    const eligibility =
+      await progressEligibilityService
+        .getProgressEligibility({
+          challengeId:
+            req.params.id,
+
+          userId:
+            req.user.userId,
+        });
+
+    res.status(200).json({
+      success: true,
+      data: eligibility,
+    });
+
+  } catch (error) {
+
+    res.status(400).json({
+      success: false,
+      message:
+        error.message,
+    });
+
+  }
+};
+
 export default {
   submitProgressReport,
-  getChallengeReports
+  getChallengeReports,
+  getProgressEligibility
 };

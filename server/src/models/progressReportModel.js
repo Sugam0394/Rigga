@@ -9,6 +9,13 @@ const progressReportSchema =  new mongoose.Schema(
   index: true,
 },
 
+userId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "User",
+  required: true,
+  index: true,
+},
+
       notes: {
         type: String,
         required: true,

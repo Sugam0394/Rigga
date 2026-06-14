@@ -18,7 +18,45 @@ const createProgressReport = async (
   });
 };
 
+const getReportsSubmittedToday = async ({
+  challengeId,
+  userId,
+  startOfDay,
+  endOfDay,
+}) => {
+  return await ProgressReport.find({
+    challengeId,
+    userId,
+    createdAt: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    },
+  });
+};
+
+const findDuplicateReportToday = async ({
+  challengeId,
+  userId,
+  notes,
+  imageUrl,
+  startOfDay,
+  endOfDay,
+}) => {
+  return await ProgressReport.findOne({
+    challengeId,
+    userId,
+    notes,
+    imageUrl,
+    createdAt: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    },
+  });
+};
+
 export default {
   createProgressReport,
   getByChallengeId,
+  getReportsSubmittedToday,
+  findDuplicateReportToday
 };

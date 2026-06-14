@@ -26,15 +26,17 @@ router.get(
 );
 
 router.patch(
+  "/notifications/read-all",
+  authMiddleware,
+  markAllNotificationsRead
+);
+
+router.patch(
   "/notifications/:id/read",
   authMiddleware,
   markNotificationRead
 );
 
-router.patch(
-  "/notifications/read-all",
-  authMiddleware,
-  markAllNotificationsRead
-);
+ 
 
 export default router;

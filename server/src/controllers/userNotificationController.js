@@ -42,10 +42,11 @@ export const getUnreadCount = async (req, res, next) => {
 export const markNotificationRead =  async (req, res, next) => {
     try {
       const notification =
-        await userNotificationService
-          .markNotificationRead(
-            req.params.id
-          );
+         await userNotificationService
+  .markNotificationRead(
+    req.params.id,
+    req.user.userId
+  );
 
       res.status(200).json({
         success: true,

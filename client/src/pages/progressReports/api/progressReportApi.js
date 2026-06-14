@@ -42,3 +42,13 @@ export const submitProgressReport =  async ({
 
     return response.data.data;
   };
+
+  export const getProgressEligibility = async (challengeId) => {
+
+    const response =
+      await api.get(
+        `/challenges/${challengeId}/progress`
+      );
+
+    return response.data.data;
+  };

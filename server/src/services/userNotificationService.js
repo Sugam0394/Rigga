@@ -34,12 +34,14 @@ const getUnreadCount = async (userId) => {
       );
   };
 
-const markNotificationRead =  async (
-    notificationId
+ const markNotificationRead = async (
+    notificationId,
+    userId
   ) => {
     return userNotificationRepository
       .markNotificationRead(
-        notificationId
+        notificationId,
+        userId
       );
   };
 

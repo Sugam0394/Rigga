@@ -16,7 +16,7 @@ import ProgressReportList from "../progressReports/components/ProgressReportList
 
 // Hooks
 import useProgressReports from "../progressReports/hooks/useProgressReports";
-
+import useProgressEligibility from "../progressReports/hooks/useProgressEligibility";
 // appeals
 import AppealStatusCard from "../appeals/components/AppealStatusCard";
  
@@ -24,6 +24,10 @@ import AppealStatusCard from "../appeals/components/AppealStatusCard";
 
 const ChallengeDetailsPage = () => {
   const { id } = useParams();
+   const {
+  eligibility,
+  loading: eligibilityLoading,
+} = useProgressEligibility(id);
   const {
   reports,
   loading: reportsLoading,
@@ -112,30 +116,48 @@ const handleSubmitProgress =
       />
 
       <div className="challenge-details-actions">
-        {dashboard.challenge.status ===
-          "ACTIVE" && (
-          <button
-            className="challenge-details-button"
-            onClick={
-              handleSubmitProgress
-            }
-          >
-            Submit Progress Report
-          </button>
-        )}
 
-        {dashboard.challenge.status ===
-          "REJECTED" && (
-          <button
-            className="challenge-details-button"
-            onClick={
-              handleSubmitAppeal
-            }
-          >
-            Submit Appeal
-          </button>
-        )}
-      </div>
+  {dashboard.challenge.status ===
+    "ACTIVE" &&
+    !eligibilityLoading &&
+    eligibility?.canSubmit && (
+      <button
+        className="challenge-details-button"
+        onClick={
+          handleSubmitProgress
+        }
+      >
+        Submit Progress Report
+      </button>
+  )}
+
+  {dashboard.challenge.status ===
+    "ACTIVE" &&
+    !eligibilityLoading &&
+    eligibility &&
+    !eligibility.canSubmit && (
+      <p>
+        You have already submitted
+        evidence today.
+
+        Return tomorrow to continue
+        building accountability.
+      </p>
+  )}
+
+  {dashboard.challenge.status ===
+    "REJECTED" && (
+      <button
+        className="challenge-details-button"
+        onClick={
+          handleSubmitAppeal
+        }
+      >
+        Submit Appeal
+      </button>
+  )}
+
+</div>
 
       <ChallengeStatusCard
         status={

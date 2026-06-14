@@ -23,20 +23,26 @@ const getUnreadCount = async (userId) => {
     });
   };
 
-const markNotificationRead =  async (notificationId) => {
-    return UserNotification
-      .findByIdAndUpdate(
-        notificationId,
-        {
-          $set: {
-            isRead: true,
-          },
+ const markNotificationRead = async (
+  notificationId,
+  userId
+) => {
+  return UserNotification
+    .findOneAndUpdate(
+      {
+        _id: notificationId,
+        userId,
+      },
+      {
+        $set: {
+          isRead: true,
         },
-        {
-          new: true,
-        }
-      );
-  };
+      },
+      {
+        new: true,
+      }
+    );
+};
 
 const markAllNotificationsRead = async (userId) => {
     return UserNotification

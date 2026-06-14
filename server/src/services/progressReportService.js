@@ -1,14 +1,9 @@
 import mongoose from "mongoose";
-
-
+import { ACCOUNTABILITY_RULES } from "../constants/accountabilityRules.js";
 import progressReportRepository from "../repositories/progressReportRepository.js";
 import challengeRepository from "../repositories/challengeRepositories.js"
-import userNotificationService
-  from "./userNotificationService.js";
-
-import {
-  NOTIFICATION_EVENTS,
-} from "../constants/notificationEvents.js";
+import userNotificationService from "./userNotificationService.js";
+import { NOTIFICATION_EVENTS, } from "../constants/notificationEvents.js";
 
 
 
@@ -94,10 +89,68 @@ import {
       "Forbidden"
     );
   }
+
+  const startOfDay =
+  new Date();
+
+startOfDay.setHours(
+  0,
+  0,
+  0,
+  0
+);
+
+const endOfDay =
+  new Date();
+
+endOfDay.setHours(
+  23,
+  59,
+  59,
+  999
+);
+
+const reportsToday =
+  await progressReportRepository
+    .getReportsSubmittedToday({
+      challengeId,
+      userId,
+      startOfDay,
+      endOfDay,
+    });
+
+    if (
+  reportsToday.length >=
+  ACCOUNTABILITY_RULES.MAX_REPORTS_PER_DAY
+) {
+  throw new Error(
+    "You have already submitted a progress report today."
+  );
+}
+const duplicateReport =
+  await progressReportRepository
+    .findDuplicateReportToday({
+      challengeId,
+      userId,
+      notes,
+      imageUrl:
+        reportData.imageUrl,
+      startOfDay,
+      endOfDay,
+    });
+
+if (duplicateReport) {
+  throw new Error(
+    "Duplicate evidence detected."
+  );
+}
+
+
  const progressReport =
   await progressReportRepository
     .createProgressReport({
       challengeId,
+      userId,
       notes,
       imageUrl:
         reportData.imageUrl ??

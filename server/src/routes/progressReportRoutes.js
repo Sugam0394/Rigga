@@ -11,5 +11,6 @@ const router = express.Router();
 
 router.get("/challenges/:id/progress-reports",authMiddleware,progressReportController.getChallengeReports);
  
+router.get( "/challenges/:id/progress", authMiddleware, progressReportController.getProgressEligibility);
 
 export default router;
