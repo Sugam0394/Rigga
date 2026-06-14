@@ -19,7 +19,8 @@ import useProgressReports from "../progressReports/hooks/useProgressReports";
 import useProgressEligibility from "../progressReports/hooks/useProgressEligibility";
 // appeals
 import AppealStatusCard from "../appeals/components/AppealStatusCard";
- 
+// utils
+import { openWhatsAppShare } from "../../utils/whatsappShare";
 
 
 const ChallengeDetailsPage = () => {
@@ -49,11 +50,27 @@ const handleSubmitProgress =
     );
   };
 
-  const handleSubmitAppeal =
-  () => {
+  const handleSubmitAppeal = () => {
     navigate(
       `/challenges/${id}/appeal`
     );
+  };
+
+  const handleShareWithWitness = () => {
+
+    const witness =
+      dashboard.witness;
+
+    const message =
+      `Hey ${witness.name},
+
+Please review my Rigga commitment.`;
+
+    openWhatsAppShare({
+      phone:
+        witness.phone,
+      message,
+    });
   };
 
  if (loading) {
@@ -105,6 +122,10 @@ const handleSubmitProgress =
     </div>
   );
 }
+
+console.log(
+  dashboard?.witness
+);
 
   return (
   <div className="challenge-details-page">
@@ -160,6 +181,17 @@ const handleSubmitProgress =
     Unable to check submission eligibility.
     Please refresh.
   </p>
+)}
+
+{dashboard.witness?.phone && (
+  <button
+    className="challenge-details-button"
+    onClick={
+      handleShareWithWitness
+    }
+  >
+    Share With Witness
+  </button>
 )}
 
 </div>

@@ -1,7 +1,7 @@
  import challengeRepository from "../repositories/challengeRepositories.js";
 import userNotificationService
   from "./userNotificationService.js";
-
+import reviewLinkGeneratorService from "./reviewLinkService.js"
 import {
   NOTIFICATION_EVENTS,
 } from "../constants/notificationEvents.js";
@@ -28,6 +28,11 @@ const evaluateChallengeLifecycle = async (challenge) => {
       challenge._id,
       CHALLENGE_STATUS.UNDER_REVIEW
     );
+
+    await reviewLinkGeneratorService
+  .generateReviewLink(
+    updatedChallenge._id
+  );
 
 await userNotificationService
   .createEventNotification({

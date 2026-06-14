@@ -71,12 +71,18 @@ const consequence =
           challenge.status,
       },
 
-      witness: {
+    witness: {
   name:
     challenge.witness?.name,
 
+  phone:
+    challenge.witness?.phone,
+
   decision:
     challenge.witness?.decision,
+
+  reviewToken:
+    challenge.witness?.reviewToken,
 },
 
      progress: {

@@ -49,7 +49,7 @@ const validateReviewEligibility = async (challengeId) => {
 
  
  
-  const challenge =
+const challenge =
     await challengeRepository
       .getChallengeById(
         challengeId
