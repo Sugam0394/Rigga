@@ -4,9 +4,10 @@
 
   return (
     <div>
-      <h2>
-        Review Completed
-      </h2>
+      <p>
+  Review submitted successfully.
+  Your review helps maintain accountability.
+</p>
 
       {
         decision ===
@@ -15,9 +16,10 @@
             Review submitted successfully.
           </p>
         ) : (
-          <p>
-            Your feedback has been sent to the user.
-          </p>
+         <p>
+  Your feedback has been sent to the user.
+  Thank you for helping maintain accountability.
+</p>
         )
       }
     </div>

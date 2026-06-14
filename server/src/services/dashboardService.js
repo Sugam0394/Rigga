@@ -71,7 +71,7 @@ const consequence =
           challenge.status,
       },
 
-    witness: {
+ witness: {
   name:
     challenge.witness?.name,
 
@@ -83,6 +83,9 @@ const consequence =
 
   reviewToken:
     challenge.witness?.reviewToken,
+
+  reviewTokenExpiresAt:
+    challenge.witness?.reviewTokenExpiresAt,
 },
 
      progress: {

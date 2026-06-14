@@ -31,6 +31,7 @@ error: summaryError,
 } = useReviewSummary(challengeId);
 
 const {
+ 
 loading,
 error,
 success,
@@ -119,6 +120,16 @@ return ( <div> <ReviewHeader
      status={data.status}
    />
 
+   <section className="witness-review-info">
+  <p>
+    You were selected as an accountability witness.
+    Review the evidence below and decide whether
+    this commitment was completed successfully.
+  </p>
+</section>
+
+
+
 ```
   <CommitmentSummaryCard
     title={data.title}
@@ -170,10 +181,11 @@ return ( <div> <ReviewHeader
       ? "Submitting..."
       : "Submit Review"}
   </button>
-
-  {error && (
-    <p>{error}</p>
-  )}
+ {error && (
+  <p className="review-error">
+    {error}
+  </p>
+)}
 </div>
  
 

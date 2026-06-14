@@ -72,7 +72,7 @@ if (
       challengePayload
     );
 
-    await reviewLinkGeneratorService
+    await generateReviewLink
   .generateReviewLink(
     challenge._id
   );
