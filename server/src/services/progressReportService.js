@@ -4,7 +4,7 @@ import progressReportRepository from "../repositories/progressReportRepository.j
 import challengeRepository from "../repositories/challengeRepositories.js"
 import userNotificationService from "./userNotificationService.js";
 import { NOTIFICATION_EVENTS, } from "../constants/notificationEvents.js";
-
+import { getTodayRange } from "../utils/dateUtils.js";
 
 
  const submitProgressReport = async (
@@ -31,6 +31,17 @@ import { NOTIFICATION_EVENTS, } from "../constants/notificationEvents.js";
       "Invalid challenge ID"
     );
   }
+
+
+  if (
+  !mongoose.Types.ObjectId.isValid(
+    userId
+  )
+) {
+  throw new Error(
+    "Invalid user session"
+  );
+}
 
   if (!notes) {
     throw new Error(
@@ -82,53 +93,34 @@ import { NOTIFICATION_EVENTS, } from "../constants/notificationEvents.js";
   }
 
   if (
-    challenge.userId.toString() !==
+  !challenge.userId.equals(
     userId
-  ) {
-    throw new Error(
-      "Forbidden"
-    );
-  }
+  )
+) {
+  throw new Error(
+    "Forbidden"
+  );
+}
 
-  const startOfDay =
-  new Date();
+ const {
+  startOfDay,
+  endOfDay,
+} = getTodayRange();
+ 
 
-startOfDay.setHours(
-  0,
-  0,
-  0,
-  0
-);
-
-const endOfDay =
-  new Date();
-
-endOfDay.setHours(
-  23,
-  59,
-  59,
-  999
-);
-
-const reportsToday =
-  await progressReportRepository
+ const [
+  reportsToday,
+  duplicateReport,
+] = await Promise.all([
+  progressReportRepository
     .getReportsSubmittedToday({
       challengeId,
       userId,
       startOfDay,
       endOfDay,
-    });
+    }),
 
-    if (
-  reportsToday.length >=
-  ACCOUNTABILITY_RULES.MAX_REPORTS_PER_DAY
-) {
-  throw new Error(
-    "You have already submitted a progress report today."
-  );
-}
-const duplicateReport =
-  await progressReportRepository
+  progressReportRepository
     .findDuplicateReportToday({
       challengeId,
       userId,
@@ -137,11 +129,21 @@ const duplicateReport =
         reportData.imageUrl,
       startOfDay,
       endOfDay,
-    });
+    }),
+]);
 
 if (duplicateReport) {
   throw new Error(
     "Duplicate evidence detected."
+  );
+}
+
+if (
+  reportsToday.length >=
+  ACCOUNTABILITY_RULES.MAX_REPORTS_PER_DAY
+) {
+  throw new Error(
+    "You have already submitted a progress report today."
   );
 }
 
@@ -153,8 +155,8 @@ if (duplicateReport) {
       userId,
       notes,
       imageUrl:
-        reportData.imageUrl ??
-        null,
+        reportData.imageUrl,
+         
     });
 
 await userNotificationService

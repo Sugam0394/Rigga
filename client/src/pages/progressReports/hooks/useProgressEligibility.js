@@ -22,9 +22,9 @@ const useProgressEligibility = (
   ] = useState(true);
 
   const [
-    error,
-    setError,
-  ] = useState("");
+  error,
+  setError,
+] = useState(null);
 
   useEffect(() => {
 

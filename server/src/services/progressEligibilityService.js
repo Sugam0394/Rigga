@@ -1,9 +1,9 @@
 import progressReportRepository from "../repositories/progressReportRepository.js";
-
+import mongoose from "mongoose";
 import {
   ACCOUNTABILITY_RULES,
 } from "../constants/accountabilityRules.js";
-
+import { getTodayRange } from "../utils/dateUtils.js";
 
 
 
@@ -14,25 +14,30 @@ import {
   userId,
 }) => {
 
-  const startOfDay =
-    new Date();
+  if (
+    !mongoose.Types.ObjectId.isValid(
+      challengeId
+    )
+  ) {
+    throw new Error(
+      "Invalid challenge ID"
+    );
+  }
 
-  startOfDay.setHours(
-    0,
-    0,
-    0,
-    0
-  );
+  if (
+    !mongoose.Types.ObjectId.isValid(
+      userId
+    )
+  ) {
+    throw new Error(
+      "Invalid user session"
+    );
+  }
 
-  const endOfDay =
-    new Date();
-
-  endOfDay.setHours(
-    23,
-    59,
-    59,
-    999
-  );
+  const {
+    startOfDay,
+    endOfDay,
+  } = getTodayRange();
 
   const reportsToday =
     await progressReportRepository

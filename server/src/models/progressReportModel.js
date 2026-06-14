@@ -25,20 +25,27 @@ userId: {
         type: String,
         default: null,
       },
-
-      submittedAt: {
-        type: Date,
-        default: Date.now,
-      },
+submittedAt: {
+  type: Date,
+  default: Date.now,
+},
+     
     },
     {
       timestamps: true,
     }
   );
+  progressReportSchema.index({
+  challengeId: 1,
+  userId: 1,
+  createdAt: -1,
+});
 
 const ProgressReport = mongoose.model(
   "ProgressReport",
   progressReportSchema
 );
+
+ 
 
 export default ProgressReport;

@@ -27,6 +27,7 @@ const ChallengeDetailsPage = () => {
    const {
   eligibility,
   loading: eligibilityLoading,
+  error: eligibilityError,
 } = useProgressEligibility(id);
   const {
   reports,
@@ -136,13 +137,10 @@ const handleSubmitProgress =
     !eligibilityLoading &&
     eligibility &&
     !eligibility.canSubmit && (
-      <p>
-        You have already submitted
-        evidence today.
-
-        Return tomorrow to continue
-        building accountability.
-      </p>
+    <p className="challenge-details-accountability-message">
+  You have already submitted evidence today.
+  Return tomorrow to continue building accountability.
+</p>
   )}
 
   {dashboard.challenge.status ===
@@ -156,6 +154,13 @@ const handleSubmitProgress =
         Submit Appeal
       </button>
   )}
+
+  {eligibilityError && (
+  <p className="challenge-details-error">
+    Unable to check submission eligibility.
+    Please refresh.
+  </p>
+)}
 
 </div>
 

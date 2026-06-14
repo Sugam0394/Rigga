@@ -1,6 +1,9 @@
 import progressReportService from "../services/progressReportService.js";
 import progressEligibilityService
   from "../services/progressEligibilityService.js";
+
+
+  
 const submitProgressReport = async (
   req,
   res
@@ -29,11 +32,32 @@ const submitProgressReport = async (
       data: report,
     });
   } catch (error) {
-    res.status(400).json({
+
+  if (
+    error.message ===
+    "Forbidden"
+  ) {
+    return res.status(403).json({
       success: false,
       message: error.message,
     });
   }
+
+  if (
+    error.message ===
+    "Challenge not found"
+  ) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  res.status(400).json({
+    success: false,
+    message: error.message,
+  });
+}
 };
 
 const getChallengeReports = async (req, res) => {
@@ -49,13 +73,33 @@ const getChallengeReports = async (req, res) => {
         success: true,
         data: reports,
       });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message:
-          error.message,
-      });
-    }
+     } catch (error) {
+
+  if (
+    error.message ===
+    "Forbidden"
+  ) {
+    return res.status(403).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  if (
+    error.message ===
+    "Challenge not found"
+  ) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  res.status(400).json({
+    success: false,
+    message: error.message,
+  });
+}
   };
 
   const getProgressEligibility = async (
@@ -79,15 +123,33 @@ const getChallengeReports = async (req, res) => {
       data: eligibility,
     });
 
-  } catch (error) {
+   } catch (error) {
 
-    res.status(400).json({
+  if (
+    error.message ===
+    "Forbidden"
+  ) {
+    return res.status(403).json({
       success: false,
-      message:
-        error.message,
+      message: error.message,
     });
-
   }
+
+  if (
+    error.message ===
+    "Challenge not found"
+  ) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  res.status(400).json({
+    success: false,
+    message: error.message,
+  });
+}
 };
 
 export default {
