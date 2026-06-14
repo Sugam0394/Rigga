@@ -5,7 +5,7 @@ import checkpointService from "./checkPointService.js";
 import notificationService from "./notificationService.js";
 import userNotificationService from "./userNotificationService.js";
 import { NOTIFICATION_EVENTS } from "../constants/notificationEvents.js";
-
+import generateReviewLink from "./reviewLinkService.js";
 
 
 
@@ -71,6 +71,11 @@ if (
     await challengeRepository.createChallenge(
       challengePayload
     );
+
+    await reviewLinkGeneratorService
+  .generateReviewLink(
+    challenge._id
+  );
 
 
   await consequenceService.createConsequence({

@@ -2,6 +2,15 @@
 import challengeRepository from "../repositories/challengeRepositories.js";
 
 const generateReviewLink = async (challengeId) => {
+console.log(
+  "[GENERATE REVIEW LINK]",
+  challengeId
+);
+console.log(
+  "[TOKEN SAVED]",
+  challenge.witness.reviewToken
+);
+
   const challenge =
     await challengeRepository.getChallengeById(
       challengeId
