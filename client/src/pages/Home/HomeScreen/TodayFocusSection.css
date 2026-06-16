@@ -1,0 +1,46 @@
+.today-focus-section {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.today-focus-section__title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.today-focus-section__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.today-focus-section__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.today-focus-section__count {
+  min-width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  background: #FFF7ED;
+  color: #F97316;
+
+  font-weight: 700;
+}
+
+.today-focus-section__label {
+  color: #374151;
+  font-weight: 500;
+}

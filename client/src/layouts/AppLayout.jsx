@@ -1,21 +1,30 @@
  import { Outlet } from "react-router-dom";
- import AppHeader from "../components/AppHeader";
-import BottomNavigation from "../components/BottomNavigation";
-import "./AppLayout.css"
+import AuthBrand from "../components/AuthBrand";
 
-
- const AppLayout = () => {
+const AuthLayout = () => {
   return (
-    <>
-      <AppHeader />
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#FFFFFF",
+        padding: "24px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+        }}
+      >
+        <AuthBrand />
 
-      <main className="app-content">
         <Outlet />
-      </main>
-
-      <BottomNavigation />
-    </>
+      </div>
+    </main>
   );
 };
 
-export default AppLayout;
+export default AuthLayout;

@@ -3,6 +3,13 @@ import { useState } from "react";
 import { completeProfile } from "../../services/authService";
 import useAuth from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "./CreateProfilePage.css"
+import CreateProfileHero from "./CreateProfileHero";
+import AuthError from "../../features/auth/components/AuthError"
+import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton"
+
+
+
 
 
 const CreateProfilePage = () => {
@@ -60,53 +67,56 @@ navigate("/home", {
   }
 };
   return (
-    <div>
-      <h1>
-        Complete Your Profile
-      </h1>
+  <div className="profile-page">
+    <CreateProfileHero
+      verifiedPhone={
+        verifiedPhone
+      }
+    />
 
-      <p>
-        {verifiedPhone}
-      </p>
+    <input
+      type="text"
+      placeholder="Full Name"
+      value={name}
+      onChange={(e) =>
+        setName(
+          e.target.value
+        )
+      }
+      className="profile-input"
+    />
 
-      <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) =>
-          setName(
-            e.target.value
-          )
+    <input
+      type="email"
+      placeholder="Email Address"
+      value={email}
+      onChange={(e) =>
+        setEmail(
+          e.target.value
+        )
+      }
+      className="profile-input"
+    />
+
+    <AuthError
+      id="profile-error"
+      message={error}
+    />
+
+    <div className="profile-submit-wrapper">
+      <AuthSubmitButton
+        disabled={loading}
+        onClick={
+          handleSubmit
         }
-      />
-
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) =>
-          setEmail(
-            e.target.value
-          )
-        }
-      />
-
-      {error && (
-        <p>{error}</p>
-      )}
-
-       <button
-  onClick={
-    handleSubmit
-  }
-  disabled={loading}
->
-  {loading
-    ? "Creating..."
-    : "Continue"}
-</button>
+      >
+        {loading
+          ? "Creating Profile..."
+          : "Continue"}
+      </AuthSubmitButton>
     </div>
-  );
+  </div>
+);
 };
 
 export default CreateProfilePage;

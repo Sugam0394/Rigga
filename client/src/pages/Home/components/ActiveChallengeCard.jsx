@@ -65,6 +65,30 @@ const remainingLabel =
     `/challenges/${challenge._id}`
   );
 };
+const nextActionMap = {
+  ACTIVE:
+    "Submit Progress Report",
+
+  UNDER_REVIEW:
+    "Await Witness Review",
+
+  REJECTED:
+    "Review Rejection",
+
+  APPEALED:
+    "Await Appeal Decision",
+
+  FAILED:
+    "Challenge Failed",
+
+  COMPLETED:
+    "Challenge Completed",
+};
+
+const nextAction =
+  nextActionMap[
+    challenge.status
+  ] || "Review Status";
 
  return (
   <div
@@ -84,6 +108,16 @@ const remainingLabel =
     >
       {statusLabel}
     </span>
+
+    <div className="active-challenge-card__next-action">
+  <p className="active-challenge-card__next-action-label">
+    Next Action
+  </p>
+
+  <p className="active-challenge-card__next-action-value">
+    {nextAction}
+  </p>
+</div>
 
  <p className="active-challenge-card__deadline">
   Deadline:

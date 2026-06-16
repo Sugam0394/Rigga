@@ -1,12 +1,12 @@
  import { useState , useEffect } from "react";
  import { useLocation, useNavigate } from "react-router-dom";
-import AuthHeader from "../../features/auth/components/AuthHeader";
+ import OtpHero from "./Otp";
 import AuthError from "../../features/auth/components/AuthError";
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton";
 import OtpInput from "../../features/auth/components/OtpInput"
 import { verifyOtp , requestOtp } from "../../services/authService";
 import useAuth from  "../../context/AuthContext";
-
+import "./OtpVerification.css"
 
 
 const OtpVerificationPage = () => {
@@ -102,7 +102,7 @@ navigate("/home", {
   } catch (error) {
     setSubmitError(
       error?.response?.data?.message ||
-      "Invalid OTP. Try again."
+       "The verification code is incorrect. Please check the code and try again."
     );
   } finally {
     setLoading(false);
@@ -118,105 +118,73 @@ navigate("/home", {
   } catch (error) {
     setSubmitError(
       error?.response?.data?.message ||
-      "Failed to resend OTP."
+      "We couldn't send a new code right now. Please try again in a moment."
     );
   }
 };
 
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "16px",
-    }}
-    >
-      <AuthHeader
-        title="Verify your number"
-        subtitle="Enter the 6-digit code sent to your phone."
-      />
+  <div className="otp-page">
+    <OtpHero
+      phone={phone}
+      onChangeNumber={() =>
+        navigate("/login")
+      }
+    />
 
-       <p
-  style={{
-    color: "#6B7280",
-    fontSize: "14px",
-  }}
->
-  
- {phone}
- 
-</p>
+    <OtpInput
+      value={otp}
+      onChange={(e) =>
+        setOtp(e.target.value)
+      }
+    />
 
-   <button
-  type="button"
-  onClick={() => navigate("/login")}
-  style={{
-    background: "none",
-    border: "none",
-    color: "#4F46E5",
-    cursor: "pointer",
-    textAlign: "left",
-    padding: 0,
-  }}
->
-  Change number
-</button>
-
-      <OtpInput
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
-      />
     <AuthError
-  id="otp-error"
-  message={error}
-/>
+      id="otp-error"
+      message={error}
+    />
 
-<AuthError
-  id="otp-submit-error"
-  message={submitError}
-/>
+    <AuthError
+      id="otp-submit-error"
+      message={submitError}
+    />
 
-      <div style={{ marginTop: "8px" }}>
-   <AuthSubmitButton
-  disabled={
-    !isOtpValid ||
-    loading
-  }
-  onClick={
-    handleVerifyOtp
-  }
->
-  Verify OTP
-</AuthSubmitButton>
-</div>
-
-  <button
-  type="button"
-  disabled={countdown > 0}
-    onClick={
-    countdown === 0
-      ? handleResendOtp
-      : undefined
-  }
-  style={{
-    background: "none",
-    border: "none",
-    color:
-      countdown > 0
-        ? "#9CA3AF"
-        : "#4F46E5",
-    cursor:
-      countdown > 0
-        ? "not-allowed"
-        : "pointer",
-    padding: 0,
-  }}
->
-  {countdown > 0
-    ? `Resend OTP in ${countdown}s`
-    : "Resend OTP"}
-</button>
+    <div className="otp-submit-wrapper">
+      <AuthSubmitButton
+        disabled={
+          !isOtpValid ||
+          loading
+        }
+        onClick={
+          handleVerifyOtp
+        }
+      >
+        {loading
+          ? "Verifying..."
+          : "Verify OTP"}
+      </AuthSubmitButton>
     </div>
-  );
+
+    <button
+      type="button"
+      disabled={countdown > 0}
+      onClick={
+        countdown === 0
+          ? handleResendOtp
+          : undefined
+      }
+      className={`otp-resend-button ${
+        countdown > 0
+          ? "disabled"
+          : "enabled"
+      }`}
+    >
+      {countdown > 0
+        ? `Resend OTP in ${countdown}s`
+        : "Resend OTP"}
+    </button>
+  </div>
+);
 };
 
 export default OtpVerificationPage;

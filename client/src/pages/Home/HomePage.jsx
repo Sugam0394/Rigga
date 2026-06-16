@@ -10,7 +10,10 @@ import ActiveChallengeCard from "./components/ActiveChallengeCard";
 import LoadingState from "./state/LoadingState"
 import ErrorState from "./state/ErrorState";
 
-
+// HomeScreen 
+import WelcomeSection from "./HomeScreen/WelcomeSection";
+import TodayFocusSection from "./HomeScreen/TodayFocusSection";
+import RecentActivitySection from "./HomeScreen/RecentActivitySection"
 
  function HomePage() {
   const [challenges, setChallenges] =
@@ -62,45 +65,57 @@ import ErrorState from "./state/ErrorState";
   );
 }
 
-  if (
-    challenges.length === 0
-  ) {
-    return (
-      <div>
-        <HomeHeader />
-
-        <EmptyStateCard />
-      </div>
-    );
-  }
+ 
  
   return (
-    <div
-      style={{
-        maxWidth: "900px",
-        margin: "0 auto",
-        padding: "16px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-      }}
-    >
-      <HomeHeader />
+  <div
+    style={{
+      maxWidth: "900px",
+      margin: "0 auto",
+      padding: "16px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "24px",
+    }}
+  >
+    <HomeHeader />
 
-      {challenges.map(
-        (challenge) => (
-          <ActiveChallengeCard
-            key={
-              challenge._id
-            }
-            challenge={
-              challenge
-            }
-          />
-        )
-      )}
-    </div>
-  );
+    <WelcomeSection
+      commitmentCount={
+        challenges.length
+      }
+    />
+
+    <TodayFocusSection />
+
+    {challenges.length === 0 ? (
+      <EmptyStateCard />
+    ) : (
+      <>
+        <section>
+          <h2>
+            Active Commitments
+          </h2>
+        </section>
+
+        {challenges.map(
+          (challenge) => (
+            <ActiveChallengeCard
+              key={
+                challenge._id
+              }
+              challenge={
+                challenge
+              }
+            />
+          )
+        )}
+
+        <RecentActivitySection />
+      </>
+    )}
+  </div>
+);
 }
 
 export default HomePage;

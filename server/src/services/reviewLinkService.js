@@ -1,15 +1,13 @@
  import reviewTokenService from "./reviewTokenService.js";
 import challengeRepository from "../repositories/challengeRepositories.js";
 
-const generateReviewLink = async (challengeId) => {
-console.log(
-  "[GENERATE REVIEW LINK]",
+ const generateReviewLink = async (
   challengeId
-);
-console.log(
-  "[TOKEN SAVED]",
-  challenge.witness.reviewToken
-);
+) => {
+  console.log(
+    "[GENERATE REVIEW LINK]",
+    challengeId
+  );
 
   const challenge =
     await challengeRepository.getChallengeById(
@@ -17,7 +15,9 @@ console.log(
     );
 
   if (!challenge) {
-    throw new Error("Challenge not found");
+    throw new Error(
+      "Challenge not found"
+    );
   }
 
   const token =
@@ -26,15 +26,23 @@ console.log(
   const expiresAt =
     reviewTokenService.generateReviewTokenExpiry();
 
-  challenge.witness.reviewToken = token;
+  challenge.witness.reviewToken =
+    token;
 
   challenge.witness.reviewTokenExpiresAt =
     expiresAt;
 
   await challenge.save();
 
+  console.log(
+    "[TOKEN SAVED]",
+    challenge.witness.reviewToken
+  );
+
   const reviewUrl =
-    reviewTokenService.buildReviewUrl(token);
+    reviewTokenService.buildReviewUrl(
+      token
+    );
 
   return {
     expiresAt,

@@ -1,0 +1,65 @@
+ .login-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  margin-bottom: 32px;
+}
+
+.login-hero-logo {
+  width: 120px;
+  height: 120px;
+
+  object-fit: contain;
+
+  margin-bottom: 20px;
+}
+
+.login-hero-title {
+  font-size: 32px;
+  font-weight: 800;
+
+  line-height: 1.1;
+
+  letter-spacing: -1px;
+
+  color: #111827;
+
+  margin-bottom: 12px;
+
+  max-width: 320px;
+}
+
+.login-hero-description {
+  font-size: 15px;
+
+  line-height: 1.7;
+
+  color: #6B7280;
+
+  max-width: 340px;
+
+  margin: 0;
+}
+.login-hero-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background: #FFF7ED;
+
+  color: #EA580C;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  margin-bottom: 16px;
+}

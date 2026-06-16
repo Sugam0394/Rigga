@@ -1,0 +1,78 @@
+.profile-hero {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.profile-badge {
+  display: inline-flex;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background: #fff7ed;
+
+  color: #ea580c;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  margin-bottom: 16px;
+}
+
+.profile-title {
+  font-size: 32px;
+
+  font-weight: 800;
+
+  line-height: 1.1;
+
+  letter-spacing: -1px;
+
+  color: #111827;
+
+  margin: 0 0 12px;
+}
+
+.profile-description {
+  font-size: 15px;
+
+  line-height: 1.6;
+
+  color: #6b7280;
+
+  margin: 0 0 20px;
+}
+
+ .profile-phone-card {
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+
+  padding: 18px;
+
+  background: #ffffff;
+
+  text-align: left;
+}
+
+.profile-phone-label {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  color: #6b7280;
+
+  margin-bottom: 6px;
+}
+
+.profile-phone-value {
+  font-size: 16px;
+
+  font-weight: 700;
+
+  color: #111827;
+}

@@ -1,5 +1,5 @@
 import PhoneInput from "react-phone-number-input";
-
+import "./GlobalInput.css"
 import "react-phone-number-input/style.css";
 
 const GlobalPhoneInput = ({

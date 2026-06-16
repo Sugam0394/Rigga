@@ -131,6 +131,20 @@ import { getTodayRange } from "../utils/dateUtils.js";
       endOfDay,
     }),
 ]);
+ console.log(
+  "REPORTS TODAY:",
+  reportsToday.length
+);
+
+console.log(
+  "DUPLICATE REPORT:",
+  !!duplicateReport
+);
+
+console.log(
+  "MAX REPORTS:",
+  ACCOUNTABILITY_RULES.MAX_REPORTS_PER_DAY
+);
 
 if (duplicateReport) {
   throw new Error(

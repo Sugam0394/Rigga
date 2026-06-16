@@ -1,8 +1,7 @@
  import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import AuthHeader from "../../features/auth/components/AuthHeader";
- import GlobalPhoneInput from "../../features/auth/components/GlobalPhoneInput";
+import LoginHero from "../../components/LoginHero"
+import LoginPhoneSection from "../../components/LoginPhoneSection";
 
 import {
   validatePhone,
@@ -11,7 +10,7 @@ import {
 import AuthError from "../../features/auth/components/AuthError";
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton";
 import { requestOtp } from "../../services/authService";
-
+import "./LoginPage.css"
 
 
 const LoginPage = () => {
@@ -65,49 +64,59 @@ const LoginPage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-      }}
-    >
-      <AuthHeader
-        title="Make a commitment. Keep your word."
-        subtitle="Rigga helps you stay accountable through witnesses, deadlines, and consequences."
-      />
- 
+  <div className="login-page">
+    <LoginHero
+      title="Verify your identity to get started"
+      subtitle="Rigga connects commitments to verified identities and verified witnesses. Start by verifying your phone number."
+    />
 
-      <GlobalPhoneInput
-  value={phone}
-  onChange={setPhone}
-/>
+    <div className="login-journey">
+      <div className="login-journey-title">
+        What happens next?
+      </div>
 
-     
+      <div className="login-journey-list">
+        <div className="login-journey-item">
+          1. Verify your phone number
+        </div>
 
-      <AuthError
-        id="phone-error"
-        message={error}
-      />
+        <div className="login-journey-item">
+          2. Create your profile
+        </div>
 
-      <AuthError
-  id="otp-request-error"
-  message={submitError}
-/>
-
-      <div style={{ marginTop: "8px" }}>
-        <AuthSubmitButton
-  disabled={
-    !isPhoneValid ||
-    loading
-  }
-          onClick={handleContinue}
-        >
-          Continue
-        </AuthSubmitButton>
+        <div className="login-journey-item">
+          3. Start your first commitment
+        </div>
       </div>
     </div>
-  );
+
+     <LoginPhoneSection
+  phone={phone}
+  setPhone={setPhone}
+/>
+
+    <AuthError
+      id="phone-error"
+      message={error}
+    />
+
+    <AuthError
+      id="otp-request-error"
+      message={submitError}
+    />
+
+    <div className="login-submit-wrapper">
+      <AuthSubmitButton
+        disabled={!isPhoneValid || loading}
+        onClick={handleContinue}
+      >
+        {loading
+          ? "Sending OTP..."
+          : "Continue"}
+      </AuthSubmitButton>
+    </div>
+  </div>
+);
 };
 
 export default LoginPage;
