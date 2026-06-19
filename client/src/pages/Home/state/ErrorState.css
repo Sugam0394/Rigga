@@ -1,0 +1,22 @@
+.error-state {
+  background: white;
+  border: 1px solid #FECACA;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.error-state p {
+  color: #991B1B;
+}
+
+.error-state__button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #DC2626;
+  color: white;
+  font-weight: 600;
+}

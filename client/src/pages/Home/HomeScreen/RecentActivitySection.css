@@ -1,0 +1,32 @@
+ .recent-activity-section {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.recent-activity-section h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.recent-activity-section ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recent-activity-section li {
+  padding: 12px 0;
+  border-bottom: 1px solid #F3F4F6;
+
+  font-size: 14px;
+  color: #374151;
+}
+
+.recent-activity-section li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}

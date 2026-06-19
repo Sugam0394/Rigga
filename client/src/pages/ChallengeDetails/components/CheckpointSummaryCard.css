@@ -1,0 +1,33 @@
+ .checkpoint-card {
+  padding: 24px;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.checkpoint-card__title {
+  margin: 0 0 20px;
+}
+
+.checkpoint-card__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.checkpoint-card__stat {
+  padding: 12px;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.checkpoint-card__label {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.checkpoint-card__value {
+  margin: 6px 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}

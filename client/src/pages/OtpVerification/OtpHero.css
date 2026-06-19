@@ -1,0 +1,90 @@
+.otp-hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.otp-badge {
+  display: inline-block;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background: #FFF7ED;
+
+  color: #EA580C;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  margin-bottom: 16px;
+}
+
+.otp-title {
+  font-size: 32px;
+
+  font-weight: 800;
+
+  line-height: 1.1;
+
+  color: #111827;
+
+  margin-bottom: 12px;
+}
+
+.otp-description {
+  font-size: 15px;
+
+  color: #6B7280;
+
+  line-height: 1.6;
+
+  margin-bottom: 20px;
+}
+
+ .otp-phone-card {
+  border: 1px solid #E5E7EB;
+
+  border-radius: 16px;
+
+  padding: 18px;
+
+  background: #FFFFFF;
+
+  text-align: left;
+
+  margin-bottom: 16px;
+}
+
+.otp-change-button {
+  background: transparent;
+
+  border: none;
+
+  color: #FF6B00;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+.otp-phone-label {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  color: #6B7280;
+
+  margin-bottom: 6px;
+}
+
+.otp-phone-value {
+  font-size: 16px;
+
+  font-weight: 700;
+
+  color: #111827;
+}

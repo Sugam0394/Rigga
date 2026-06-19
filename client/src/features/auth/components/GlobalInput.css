@@ -1,0 +1,55 @@
+ .PhoneInput {
+  height: 56px;
+
+  border: 1px solid #D1D5DB;
+
+  border-radius: 16px;
+
+  padding: 0 16px;
+
+  background: #FFFFFF;
+
+  transition: all 0.2s ease;
+}
+
+.PhoneInput:hover {
+  border-color: #9CA3AF;
+}
+
+.PhoneInput:focus-within {
+  border-color: #F97316;
+
+  box-shadow:
+    0 0 0 3px rgba(
+      249,
+      115,
+      22,
+      0.12
+    );
+}
+
+.PhoneInputInput {
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  font-size: 16px;
+
+  font-weight: 500;
+
+  color: #111827;
+}
+
+.PhoneInputInput::placeholder {
+  color: #9CA3AF;
+}
+
+.PhoneInputCountry {
+  margin-right: 12px;
+}
+
+.PhoneInputCountrySelect {
+  cursor: pointer;
+}
