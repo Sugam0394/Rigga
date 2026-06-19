@@ -33,3 +33,25 @@ export const submitReview = async ({
 
     return response.data.data;
 };
+
+ 
+
+export const trackWitnessShare = async (
+    challengeId
+  ) => {
+
+    await api.post(
+      `/analytics/${challengeId}/share`
+    );
+  };
+
+  export const getWitnessAnalytics =
+  async (challengeId) => {
+
+    const response =
+      await api.get(
+        `/analytics/${challengeId}`
+      );
+
+    return response.data.data;
+  };

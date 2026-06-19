@@ -2,6 +2,12 @@
 
 import witnessReviewService from "../services/witnessReviewService.js";
 
+import witnessAnalyticsService from "../services/witnessAnalyticsService.js";
+
+import {
+  WITNESS_ANALYTICS_EVENTS,
+} from "../constants/witnessAnalyticsEvents.js";
+
 const submitPublicReview = async (
   req,
   res,
@@ -57,6 +63,29 @@ const submitPublicReview = async (
           });
     }
 
+    await witnessAnalyticsService
+      .trackEvent({
+        challengeId:
+          challenge._id,
+
+        eventType:
+          WITNESS_ANALYTICS_EVENTS
+            .REVIEW_SUBMITTED,
+
+        metadata: {
+          decision,
+        },
+      });
+
+    console.log(
+      "[REVIEW_SUBMITTED]",
+      {
+        challengeId:
+          challenge._id,
+        decision,
+      }
+    );
+
     console.log(
       "[PUBLIC REVIEW SUBMITTED]",
       {
@@ -70,6 +99,7 @@ const submitPublicReview = async (
       success: true,
       data: updatedChallenge,
     });
+
   } catch (error) {
     next(error);
   }

@@ -5,7 +5,7 @@ import appealController from "../controllers/appealController.js";
 import authMiddleware from "../middlewares/authMiddleware.js"
 const router = express.Router();
 
-router.post("/challenge", authMiddleware  , challengeController.createChallenge);
+router.post("/challenge",  authMiddleware ,challengeController.createChallenge);
 
 router.patch("/challenge/:id/witness-review", authMiddleware, witnessReviewController.submitReview);
 

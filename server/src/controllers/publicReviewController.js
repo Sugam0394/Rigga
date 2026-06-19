@@ -1,6 +1,7 @@
 import tokenValidationService from "../services/tokenValidationService.js";
  import reviewSummaryService from "../services/reviewSummaryService.js";
-
+import witnessAnalyticsService from "../services/witnessAnalyticsService.js";
+import { WITNESS_ANALYTICS_EVENTS } from "../constants/witnessAnalyticsEvents.js";
 
 
 export const getPublicReview = async (
@@ -15,10 +16,40 @@ export const getPublicReview = async (
     token
   );
 
+  await witnessAnalyticsService
+  .trackEvent({
+    challengeId:
+      challenge._id,
+
+    eventType:
+      WITNESS_ANALYTICS_EVENTS
+        .REVIEW_LINK_OPENED,
+  });
+
+console.log(
+  "[LINK_OPENED]",
+  challenge._id
+);
+
 const summary =
   await reviewSummaryService.getReviewSummary(
     challenge._id
   );
+
+  await witnessAnalyticsService
+  .trackEvent({
+    challengeId:
+      challenge._id,
+
+    eventType:
+      WITNESS_ANALYTICS_EVENTS
+        .REVIEW_STARTED,
+  });
+
+console.log(
+  "[REVIEW_STARTED]",
+  challenge._id
+);
 
 res.status(200).json({
   success: true,

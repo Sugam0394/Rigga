@@ -47,7 +47,7 @@ import dashboardRoutes from "./routes/dashboardRoutes.js"
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userNotificationRoutes from "./routes/userNotificationRoutes.js"
-
+ import router from './routes/witnessAnalyticsRoutes.js';
 
 
    // Using routes
@@ -75,6 +75,8 @@ import userNotificationRoutes from "./routes/userNotificationRoutes.js"
    app.use("/api" , authRoutes)
 
    app.use("/api" , userNotificationRoutes)
+
+   app.use("/api" , router)
 
 
 

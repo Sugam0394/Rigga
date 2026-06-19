@@ -21,7 +21,8 @@ import useProgressEligibility from "../progressReports/hooks/useProgressEligibil
 import AppealStatusCard from "../appeals/components/AppealStatusCard";
 // utils
 import { openWhatsAppShare } from "../../utils/whatsappShare";
-
+import WitnessAnalyticsCard from "../WitnessReview/WitnessAnalyticsCard";
+import { trackWitnessShare } from "../WitnessReview/api/reviewApi";
 
 const ChallengeDetailsPage = () => {
   const { id } = useParams();
@@ -56,7 +57,7 @@ const handleSubmitProgress =
     );
   };
 
-  const handleShareWithWitness = () => {
+ const handleShareWithWitness =  async () => {
 
     const witness =
       dashboard.witness;
@@ -66,12 +67,24 @@ const handleSubmitProgress =
 
 Please review my Rigga commitment.`;
 
+    await trackWitnessShare(
+      id
+    );
+
     openWhatsAppShare({
       phone:
         witness.phone,
       message,
     });
   };
+
+   const {
+  analytics,
+  loading:
+    analyticsLoading,
+  error:
+    analyticsError,
+} = useWitnessAnalytics(id);
 
  if (loading) {
   return (
@@ -192,6 +205,24 @@ console.log(
   >
     Share With Witness
   </button>
+)}
+
+{analyticsLoading && (
+  <p>
+    Loading witness analytics...
+  </p>
+)}
+
+{analyticsError && (
+  <p>
+    Unable to load witness analytics.
+  </p>
+)}
+
+ {analytics && (
+  <WitnessAnalyticsCard
+    analytics={analytics}
+  />
 )}
 
 </div>

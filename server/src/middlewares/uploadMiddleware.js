@@ -1,5 +1,6 @@
  import multer from "multer";
 import path from "path";
+import fs from "fs";
 
 const storage = multer.diskStorage({
   destination: (
@@ -7,10 +8,30 @@ const storage = multer.diskStorage({
     file,
     cb
   ) => {
-    cb(
-      null,
-      "public/uploads"
-    );
+ 
+
+const uploadPath =
+  path.join(
+    process.cwd(),
+    "public",
+    "uploads"
+  );
+
+if (
+  !fs.existsSync(
+    uploadPath
+  )
+) {
+  fs.mkdirSync(
+    uploadPath,
+    { recursive: true }
+  );
+}
+
+cb(
+  null,
+  uploadPath
+);
   },
 
   filename: (
