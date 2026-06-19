@@ -15,6 +15,12 @@ const validateReviewToken = async (
       );
 
   if (!challenge) {
+
+    console.log(
+      "[INVALID REVIEW ATTEMPT]",
+      token
+    );
+
     throw new Error(
       "Invalid review token"
     );
@@ -24,6 +30,12 @@ const validateReviewToken = async (
     !challenge.witness
       ?.reviewTokenExpiresAt
   ) {
+
+    console.log(
+      "[INVALID REVIEW ATTEMPT]",
+      token
+    );
+
     throw new Error(
       "Review token is invalid"
     );
@@ -34,6 +46,12 @@ const validateReviewToken = async (
       .reviewTokenExpiresAt <
     new Date()
   ) {
+
+    console.log(
+      "[REVIEW TOKEN EXPIRED]",
+      token
+    );
+
     throw new Error(
       "Review token has expired"
     );
@@ -43,6 +61,12 @@ const validateReviewToken = async (
     challenge.witness
       ?.decision
   ) {
+
+    console.log(
+      "[REVIEW ALREADY SUBMITTED]",
+      token
+    );
+
     throw new Error(
       "Review already submitted"
     );
@@ -54,10 +78,30 @@ const validateReviewToken = async (
     challenge.status !==
       CHALLENGE_STATUS.APPEALED
   ) {
+
+    console.log(
+      "[INVALID REVIEW ATTEMPT]",
+      {
+        token,
+        challengeId:
+          challenge._id,
+        status:
+          challenge.status,
+      }
+    );
+
     throw new Error(
       "This challenge is not yet ready for review"
     );
   }
+
+  console.log(
+    "[REVIEW TOKEN VALIDATED]",
+    {
+      challengeId:
+        challenge._id,
+    }
+  );
 
   return challenge;
 };
