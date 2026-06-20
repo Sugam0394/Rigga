@@ -49,6 +49,14 @@ import authRoutes from "./routes/authRoutes.js";
 import userNotificationRoutes from "./routes/userNotificationRoutes.js"
  import router from './routes/witnessAnalyticsRoutes.js';
 import aiInsight from './routes/aiInsightRoutes.js';
+import aiNarrative from './routes/aiNarrativeRoutes.js';
+import aiCouch from './routes/aiCouchRoutes.js';
+
+
+
+
+
+
 
    // Using routes
 
@@ -79,6 +87,10 @@ import aiInsight from './routes/aiInsightRoutes.js';
    app.use("/api" , router)
 
    app.use('/api' , aiInsight)
+
+   app.use("/api" , aiNarrative)
+
+   app.use("/api" , aiCouch )
 
 
 

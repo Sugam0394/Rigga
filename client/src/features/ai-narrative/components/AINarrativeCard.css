@@ -1,0 +1,22 @@
+.ai-narrative-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.ai-narrative-card__header {
+  margin-bottom: 20px;
+}
+
+.ai-narrative-card__master {
+  margin-bottom: 24px;
+}
+
+.ai-narrative-card__section {
+  margin-bottom: 20px;
+}
+
+.ai-narrative-card__footer {
+  margin-top: 20px;
+}

@@ -41,10 +41,39 @@ import AIInsightsEmptyState from "../../features/ai-insights/state/AIEmptyState"
 import AIInsightsErrorState from "../../features/ai-insights/state/AIErrorState";
 import AIInsightsLoadingState from "../../features/ai-insights/state/AILoadingState";
 
+// A INarrative
 
+ import useAINarrative
+  from "../../features/ai-narrative/hooks/useAINarrative";
 
+import AINarrativeCard
+  from "../../features/ai-narrative/components/AINarrativeCard";
 
+import AINarrativeLoadingState
+  from "../../features/ai-narrative/state/LoadingState";
 
+import AINarrativeErrorState
+  from "../../features/ai-narrative/state/ErrorState";
+
+import AINarrativeEmptyState
+  from "../../features/ai-narrative/state/EmptyState";
+
+// AI COUCH
+
+import useAICoach
+  from "../../features/ai-couch/hooks/useAiCounch";
+
+import AICoachCard
+  from "../../features/ai-couch/components/AICouchCard";
+
+import AICoachLoadingState
+  from "../../features/ai-couch/state/loadingState";
+
+import AICoachErrorState
+  from "../../features/ai-couch/state/ErrorState";
+
+import AICoachEmptyState
+  from "../../features/ai-couch/state/EmptyState";
 
 
 
@@ -113,6 +142,15 @@ Please review my Rigga commitment.`;
 } =
 useAIInsights(id);
 
+const {
+  narrative,
+  loading:
+    narrativeLoading,
+  error:
+    narrativeError,
+} =
+useAINarrative(id);
+
    const {
   analytics,
   loading:
@@ -120,6 +158,15 @@ useAIInsights(id);
   error:
     analyticsError,
 } = useWitnessAnalytics(id);
+
+const {
+  coach,
+  loading:
+    coachLoading,
+  error:
+    coachError,
+} =
+useAICoach(id);
 
  if (loading) {
   return (
@@ -322,6 +369,50 @@ console.log(
 {insights && (
   <AIInsightsCard
     insights={insights}
+  />
+)}
+
+{narrativeLoading && (
+  <AINarrativeLoadingState />
+)}
+
+{narrativeError && (
+  <AINarrativeErrorState
+    error={narrativeError}
+  />
+)}
+
+{!narrativeLoading &&
+ !narrativeError &&
+ !narrative && (
+  <AINarrativeEmptyState />
+)}
+
+{narrative && (
+  <AINarrativeCard
+    narrative={narrative}
+  />
+)}
+
+{coachLoading && (
+  <AICoachLoadingState />
+)}
+
+{coachError && (
+  <AICoachErrorState
+    error={coachError}
+  />
+)}
+
+{!coachLoading &&
+ !coachError &&
+ !coach && (
+  <AICoachEmptyState />
+)}
+
+{coach && (
+  <AICoachCard
+    coach={coach}
   />
 )}
 
