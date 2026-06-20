@@ -1,12 +1,11 @@
+ import "./HomeHeader.css";
+
 const HomeHeader = () => {
   return (
-    <header>
-      <h1>Rigga</h1>
-
-      <p>
-        Your active commitments
-        and accountability.
-      </p>
+    <header className="home-header">
+      <h1 className="home-header__logo">
+        Rigga
+      </h1>
     </header>
   );
 };

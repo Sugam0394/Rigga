@@ -23,6 +23,8 @@ import AppealStatusCard from "../appeals/components/AppealStatusCard";
 import { openWhatsAppShare } from "../../utils/whatsappShare";
 import WitnessAnalyticsCard from "../WitnessReview/WitnessAnalyticsCard";
 import { trackWitnessShare } from "../WitnessReview/api/reviewApi";
+import useWitnessAnalytics from "../WitnessReview/hooks/useWitnessAnalytics";
+
 
 const ChallengeDetailsPage = () => {
   const { id } = useParams();

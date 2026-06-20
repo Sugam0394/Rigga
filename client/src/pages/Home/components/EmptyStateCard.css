@@ -24,3 +24,39 @@
   color: white;
   font-weight: 600;
 }
+
+.empty-state-card__description {
+  color: #6B7280;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.empty-state-card__journey {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-bottom: 24px;
+}
+
+.empty-state-card__step {
+  padding: 8px 12px;
+
+  border-radius: 999px;
+
+  background: #FFF7ED;
+
+  color: #F97316;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.empty-state-card__arrow {
+  color: #9CA3AF;
+
+  font-weight: 700;
+}

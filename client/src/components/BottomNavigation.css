@@ -1,21 +1,42 @@
-.bottom-nav {
+ .bottom-nav {
   position: fixed;
 
   bottom: 0;
   left: 0;
   right: 0;
 
+  height: 72px;
+
   display: flex;
   justify-content: space-around;
   align-items: center;
 
-  padding: 1rem;
-
   background: white;
 
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #E5E7EB;
+
+  box-shadow:
+    0 -4px 12px rgba(
+      0,
+      0,
+      0,
+      0.06
+    );
+
+  z-index: 1000;
+}
+
+.bottom-nav a {
+  text-decoration: none;
+
+  color: #6B7280;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: all 0.2s ease;
 }
 
 .active-tab {
-  font-weight: bold;
+  color: #F97316;
 }

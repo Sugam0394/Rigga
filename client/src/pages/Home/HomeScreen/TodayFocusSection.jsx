@@ -1,6 +1,15 @@
-import "./TodayFocusSection.css";
+ import "./TodayFocusSection.css";
 
-const TodayFocusSection = () => {
+const TodayFocusSection = ({
+  focusItems,
+}) => {
+  if (
+    !focusItems ||
+    focusItems.length === 0
+  ) {
+    return null;
+  }
+
   return (
     <section className="today-focus-section">
       <h2 className="today-focus-section__title">
@@ -8,35 +17,31 @@ const TodayFocusSection = () => {
       </h2>
 
       <div className="today-focus-section__list">
-        <div className="today-focus-section__item">
-          <span className="today-focus-section__count">
-            1
-          </span>
+        {focusItems.map(
+          (
+            item,
+            index
+          ) => (
+            <div
+              key={index}
+              className="today-focus-section__item"
+            >
+              <div className="today-focus-section__indicator">
+                !
+              </div>
 
-          <span className="today-focus-section__label">
-            Progress Report Due
-          </span>
-        </div>
+              <div>
+                <p className="today-focus-section__action">
+                  {item.action}
+                </p>
 
-        <div className="today-focus-section__item">
-          <span className="today-focus-section__count">
-            1
-          </span>
-
-          <span className="today-focus-section__label">
-            Witness Review Pending
-          </span>
-        </div>
-
-        <div className="today-focus-section__item">
-          <span className="today-focus-section__count">
-            1
-          </span>
-
-          <span className="today-focus-section__label">
-            Deadline This Week
-          </span>
-        </div>
+                <p className="today-focus-section__challenge">
+                  {item.title}
+                </p>
+              </div>
+            </div>
+          )
+        )}
       </div>
     </section>
   );

@@ -24,9 +24,11 @@
   gap: 12px;
 }
 
-.today-focus-section__count {
-  min-width: 32px;
-  height: 32px;
+ .today-focus-section__indicator {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -40,7 +42,19 @@
   font-weight: 700;
 }
 
-.today-focus-section__label {
-  color: #374151;
-  font-weight: 500;
+.today-focus-section__action {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.today-focus-section__challenge {
+  margin: 4px 0 0;
+
+  color: #6B7280;
+
+  font-size: 13px;
 }

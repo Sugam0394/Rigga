@@ -111,3 +111,39 @@
   font-weight: 700;
   color: #111827;
 }
+
+.active-challenge-card__remaining--urgent {
+  color: #EA580C;
+}
+
+.active-challenge-card__remaining--danger {
+  color: #DC2626;
+}
+
+.active-challenge-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.active-challenge-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 24px rgba(
+      0,
+      0,
+      0,
+      0.08
+    );
+}
+
+.active-challenge-card__context {
+  margin-top: 12px;
+
+  color: #6B7280;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { getChallenges } from "./api/challengeApi";
+import "./HomePage.css";
+
+
 
 import HomeHeader from "./components/HomeHeader";
 import EmptyStateCard from "./components/EmptyStateCard";
@@ -15,6 +18,11 @@ import WelcomeSection from "./HomeScreen/WelcomeSection";
 import TodayFocusSection from "./HomeScreen/TodayFocusSection";
 import RecentActivitySection from "./HomeScreen/RecentActivitySection"
 
+// utils
+import { generateFocusItems , sortChallenges } from "./utils/homePriority";
+
+
+
  function HomePage() {
   const [challenges, setChallenges] =
     useState([]);
@@ -24,6 +32,17 @@ import RecentActivitySection from "./HomeScreen/RecentActivitySection"
 
   const [error, setError] =
     useState(null);
+
+const focusItems =
+  generateFocusItems(
+    challenges
+  );
+
+  const sortedChallenges =
+  sortChallenges(
+    challenges
+  );
+
 
   const fetchChallenges =
     async () => {
@@ -68,16 +87,7 @@ import RecentActivitySection from "./HomeScreen/RecentActivitySection"
  
  
   return (
-  <div
-    style={{
-      maxWidth: "900px",
-      margin: "0 auto",
-      padding: "16px",
-      display: "flex",
-      flexDirection: "column",
-      gap: "24px",
-    }}
-  >
+   <div className="home-page">
     <HomeHeader />
 
     <WelcomeSection
@@ -85,20 +95,23 @@ import RecentActivitySection from "./HomeScreen/RecentActivitySection"
         challenges.length
       }
     />
-
-    <TodayFocusSection />
+  {focusItems.length > 0 && (
+  <TodayFocusSection
+    focusItems={focusItems}
+  />
+)}
 
     {challenges.length === 0 ? (
       <EmptyStateCard />
     ) : (
       <>
-        <section>
-          <h2>
-            Active Commitments
-          </h2>
-        </section>
+       <section>
+  <h2 className="home-page__section-title">
+  Commitments Requiring Attention
+</h2>
+</section>
 
-        {challenges.map(
+        {sortedChallenges.map(
           (challenge) => (
             <ActiveChallengeCard
               key={

@@ -1,6 +1,13 @@
 import witnessAnalyticsRepository
   from "../repositories/witnessAnalyticsRepository.js";
 
+ import challengeRepository
+  from "../repositories/challengeRepositories.js";
+
+
+
+
+
 const trackEvent = async ({
   challengeId,
   eventType,
@@ -47,7 +54,38 @@ const getFunnelMetrics = async (
     );
 };
 
+const validateOwnership = async ({
+  challengeId,
+  userId,
+}) => {
+
+  const challenge =
+    await challengeRepository
+      .getChallengeById(
+        challengeId
+      );
+
+  if (!challenge) {
+    throw new Error(
+      "Challenge not found"
+    );
+  }
+
+  if (
+    challenge.userId
+      .toString() !==
+    userId
+  ) {
+    throw new Error(
+      "Forbidden"
+    );
+  }
+
+  return challenge;
+};
+
 export default {
   trackEvent,
-  getFunnelMetrics
+  getFunnelMetrics,
+  validateOwnership
 };

@@ -1,30 +1,25 @@
  import { Outlet } from "react-router-dom";
-import AuthBrand from "../components/AuthBrand";
+ 
+import BottomNavigation from "../components/BottomNavigation";
 
-const AuthLayout = () => {
+const AppLayout = () => {
   return (
-    <main
+    <div
       style={{
         minHeight: "100vh",
-        background: "#FFFFFF",
-        padding: "24px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        background: "#F9FAFB",
+        paddingBottom: "90px",
       }}
     >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "420px",
-        }}
-      >
-        <AuthBrand />
+    
 
+      <main>
         <Outlet />
-      </div>
-    </main>
+      </main>
+
+      <BottomNavigation />
+    </div>
   );
 };
 
-export default AuthLayout;
+export default AppLayout;
