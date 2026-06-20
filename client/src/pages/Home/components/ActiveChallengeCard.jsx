@@ -3,10 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./ActiveChallengeCard.css";
 
-import {
-  getNextAction,
-  getUrgencyContext,
-} from "../utils/rity";
+import { getNextAction , getUrgencyContext } from "../utils/homePriority";
 
 const ActiveChallengeCard = ({
   challenge,

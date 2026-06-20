@@ -18,3 +18,13 @@
 .progress-timeline__error {
   padding: 24px;
 }
+
+.progress-timeline__subtitle {
+  margin: 0;
+
+  color: #6B7280;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}

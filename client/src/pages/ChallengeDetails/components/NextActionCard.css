@@ -1,0 +1,48 @@
+ .next-action-card {
+  padding: 24px;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  border: 2px solid #F97316;
+}
+
+.next-action-card__eyebrow {
+  margin: 0 0 8px;
+
+  color: #F97316;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.next-action-card__title {
+  margin: 0;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.next-action-card__description {
+  margin: 12px 0 0;
+
+  color: #6B7280;
+
+  line-height: 1.6;
+}
+
+.next-action-card__actions {
+  margin-top: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}

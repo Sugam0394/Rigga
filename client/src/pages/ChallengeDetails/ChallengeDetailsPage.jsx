@@ -13,7 +13,7 @@ import ProgressSummaryCard from "./components/ProgressSummaryCard";
 import WitnessAccountabilityCard from "./components/WitnessAccountabilityCard";
 import ConsequenceStatusCard from "./components/ConsequencesStatusCard";
 import ProgressReportList from "../progressReports/components/ProgressReportList";
-
+import NextActionCard from "./components/NextActionCard";
 // Hooks
 import useProgressReports from "../progressReports/hooks/useProgressReports";
 import useProgressEligibility from "../progressReports/hooks/useProgressEligibility";
@@ -142,7 +142,7 @@ console.log(
   dashboard?.witness
 );
 
-  return (
+ return (
   <div className="challenge-details-page">
     <div className="challenge-details-container">
 
@@ -152,93 +152,134 @@ console.log(
         status={dashboard.challenge.status}
       />
 
-      <div className="challenge-details-actions">
-
-  {dashboard.challenge.status ===
-    "ACTIVE" &&
-    !eligibilityLoading &&
-    eligibility?.canSubmit && (
-      <button
-        className="challenge-details-button"
-        onClick={
-          handleSubmitProgress
-        }
-      >
-        Submit Progress Report
-      </button>
-  )}
-
-  {dashboard.challenge.status ===
-    "ACTIVE" &&
-    !eligibilityLoading &&
-    eligibility &&
-    !eligibility.canSubmit && (
-    <p className="challenge-details-accountability-message">
-  You have already submitted evidence today.
-  Return tomorrow to continue building accountability.
-</p>
-  )}
-
-  {dashboard.challenge.status ===
-    "REJECTED" && (
-      <button
-        className="challenge-details-button"
-        onClick={
-          handleSubmitAppeal
-        }
-      >
-        Submit Appeal
-      </button>
-  )}
-
-  {eligibilityError && (
-  <p className="challenge-details-error">
-    Unable to check submission eligibility.
-    Please refresh.
-  </p>
-)}
-
-{dashboard.witness?.phone && (
-  <button
-    className="challenge-details-button"
-    onClick={
-      handleShareWithWitness
-    }
-  >
-    Share With Witness
-  </button>
-)}
-
-{analyticsLoading && (
-  <p>
-    Loading witness analytics...
-  </p>
-)}
-
-{analyticsError && (
-  <p>
-    Unable to load witness analytics.
-  </p>
-)}
-
- {analytics && (
-  <WitnessAnalyticsCard
-    analytics={analytics}
-  />
-)}
-
-</div>
-
       <ChallengeStatusCard
         status={
           dashboard.challenge.status
         }
       />
 
+      <NextActionCard
+        title={
+          dashboard.challenge.status ===
+          "ACTIVE"
+            ? "Submit Progress Report"
+            : dashboard.challenge.status ===
+              "UNDER_REVIEW"
+            ? "Await Witness Review"
+            : dashboard.challenge.status ===
+              "REJECTED"
+            ? "Review Rejection"
+            : dashboard.challenge.status ===
+              "APPEALED"
+            ? "Await Appeal Outcome"
+            : dashboard.challenge.status ===
+              "COMPLETED"
+            ? "Commitment Verified"
+            : "Commitment Closed"
+        }
+        description={
+          dashboard.challenge.status ===
+          "ACTIVE"
+            ? "Continue building accountability by submitting evidence."
+            : dashboard.challenge.status ===
+              "UNDER_REVIEW"
+            ? "Your witness is currently reviewing submitted evidence."
+            : dashboard.challenge.status ===
+              "REJECTED"
+            ? "Review the witness decision and submit an appeal if necessary."
+            : dashboard.challenge.status ===
+              "APPEALED"
+            ? "Your appeal is under review."
+            : dashboard.challenge.status ===
+              "COMPLETED"
+            ? "No further action required."
+            : "This commitment is no longer active."
+        }
+      >
+        {dashboard.challenge.status ===
+          "ACTIVE" &&
+          !eligibilityLoading &&
+          eligibility?.canSubmit && (
+            <button
+              className="challenge-details-button"
+              onClick={
+                handleSubmitProgress
+              }
+            >
+              Submit Progress Report
+            </button>
+        )}
+
+        {dashboard.challenge.status ===
+          "REJECTED" && (
+            <button
+              className="challenge-details-button"
+              onClick={
+                handleSubmitAppeal
+              }
+            >
+              Submit Appeal
+            </button>
+        )}
+
+        {dashboard.witness?.phone && (
+          <button
+            className="challenge-details-button"
+            onClick={
+              handleShareWithWitness
+            }
+          >
+            Share With Witness
+          </button>
+        )}
+
+        {dashboard.challenge.status ===
+          "ACTIVE" &&
+          !eligibilityLoading &&
+          eligibility &&
+          !eligibility.canSubmit && (
+            <p className="challenge-details-accountability-message">
+              You have already submitted evidence today.
+              Return tomorrow to continue building accountability.
+            </p>
+        )}
+
+        {eligibilityError && (
+          <p className="challenge-details-error">
+            Unable to check submission eligibility.
+            Please refresh.
+          </p>
+        )}
+      </NextActionCard>
+
+      {analyticsLoading && (
+        <p>
+          Loading witness analytics...
+        </p>
+      )}
+
+      {analyticsError && (
+        <p>
+          Unable to load witness analytics.
+        </p>
+      )}
+
+      {analytics && (
+        <WitnessAnalyticsCard
+          analytics={analytics}
+        />
+      )}
+
       {dashboard.challenge.status ===
         "APPEALED" && (
         <AppealStatusCard />
       )}
+
+       <WitnessAccountabilityCard
+        witness={
+          dashboard.witness
+        }
+      />
 
       <CheckpointSummaryCard
         checkpoints={
@@ -252,11 +293,7 @@ console.log(
         }
       />
 
-      <WitnessAccountabilityCard
-        witness={
-          dashboard.witness
-        }
-      />
+      
 
       <ConsequenceStatusCard
         consequence={
@@ -269,6 +306,7 @@ console.log(
         loading={reportsLoading}
         error={reportsError}
       />
+
     </div>
   </div>
 );

@@ -1,6 +1,26 @@
  import challengeStatusLabels from "../../../constants/ChallengeStatusLabels";
 import "./ChallengeStatusCard.css";
 
+
+const STATUS_CONTEXT = {
+  ACTIVE:
+    "You are currently working toward this commitment.",
+
+  UNDER_REVIEW:
+    "Your witness is reviewing submitted evidence.",
+
+  REJECTED:
+    "Your witness rejected this commitment.",
+
+  APPEALED:
+    "This commitment is under appeal review.",
+
+  FAILED:
+    "This commitment was not successfully completed.",
+
+  COMPLETED:
+    "This commitment has been successfully verified.",
+};
 const STATUS_VARIANTS = {
   ACTIVE: "success",
   UNDER_REVIEW: "warning",
@@ -32,6 +52,9 @@ const ChallengeStatusCard = ({
       >
         {label}
       </span>
+      <p className="challenge-status__context">
+  {STATUS_CONTEXT[status]}
+</p>
     </section>
   );
 };

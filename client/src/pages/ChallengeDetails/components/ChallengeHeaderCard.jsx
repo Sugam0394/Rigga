@@ -66,6 +66,9 @@ const ChallengeHeaderCard = ({
           </p>
         )}
       </div>
+      <p className="challenge-header__context">
+  This commitment is being tracked and verified through Rigga.
+</p>
     </section>
   );
 };

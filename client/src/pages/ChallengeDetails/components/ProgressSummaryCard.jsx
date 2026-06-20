@@ -5,9 +5,9 @@ const ProgressSummaryCard = ({
 }) => {
   return (
     <section className="progress-summary-card">
-      <h2 className="progress-summary-card__title">
-        Progress
-      </h2>
+     <h2 className="progress-summary-card__title">
+  Evidence Summary
+</h2>
 
       <p className="progress-summary-card__count">
         {progress.totalReports}
@@ -17,20 +17,25 @@ const ProgressSummaryCard = ({
         Reports Submitted
       </p>
 
-      <div className="progress-summary-card__latest">
-        {progress.latestReportDate ? (
-          <p>
-            Latest Report:{" "}
-            {new Date(
-              progress.latestReportDate
-            ).toLocaleDateString()}
-          </p>
-        ) : (
-          <p>
-            No progress reports submitted yet.
-          </p>
-        )}
-      </div>
+       <div className="progress-summary-card__latest">
+  {progress.latestReportDate ? (
+    <>
+      <p>
+        Latest Evidence Submitted
+      </p>
+
+      <p>
+        {new Date(
+          progress.latestReportDate
+        ).toLocaleDateString()}
+      </p>
+    </>
+  ) : (
+    <p>
+      No evidence submitted yet.
+    </p>
+  )}
+</div>
     </section>
   );
 };

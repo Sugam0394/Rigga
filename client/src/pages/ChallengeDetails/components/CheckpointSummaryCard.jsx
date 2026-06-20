@@ -5,9 +5,9 @@ const CheckpointSummaryCard = ({
 }) => {
   return (
     <section className="checkpoint-card">
-      <h2 className="checkpoint-card__title">
-        Checkpoints
-      </h2>
+       <h2 className="checkpoint-card__title">
+  Accountability Milestones
+</h2>
 
       <div className="checkpoint-card__stats">
         <div className="checkpoint-card__stat">
