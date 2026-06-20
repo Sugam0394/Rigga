@@ -1,15 +1,10 @@
- import Challenge from "../models/challengeModel.js";
-import ProgressReport from "../models/progressReportModel.js";
-import checkPointModel from "../models/checkPointModel.js";
-import Appeal from "../models/appealModel.js";
-import Consequence from "../models/consequenceModel.js";
-import { CHECKPOINT_STATUS } from "../constants/checkpointConstants.js"
+ import accountabilityAggregateService from "./accountabilityAggregateService.js";
 
 const getReviewSummary = async (challengeId , userId = null) => {
  const challenge =
-  await Challenge.findById(
-    challengeId
-  );
+ await challengeRepository.getChallengeById(
+   challengeId
+ );
 
 if (!challenge) {
   throw new Error(
@@ -27,23 +22,16 @@ if (!challenge) {
   );
 }
 
-  const progressReports = await ProgressReport.find({
-    challengeId,
-  }).sort({
-    submittedAt: -1,
-  });
-
-  const checkpoints = await checkPointModel.find({
-    challengeId,
-  });
-
-  const appeal = await Appeal.findOne({
-    challengeId,
-  });
-
-  const consequence = await Consequence.findOne({
-    challengeId,
-  });
+ const {
+  progressReports,
+  checkpoints,
+  appeal,
+  consequence,
+} =
+await  accountabilityAggregateService
+  .getAccountabilityContext(
+    challengeId
+  );
 
   const completed = checkpoints.filter(
   (checkpoint) => checkpoint.status === CHECKPOINT_STATUS.COMPLETED

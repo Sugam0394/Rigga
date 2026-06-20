@@ -35,17 +35,11 @@ if (
   );
 }
 
-     const reports =
-  await progressReportRepository
-    .getByChallengeId(challengeId);
+  
 
  
 
-    const checkpoints =
-  await checkpointRepository
-    .getByChallengeId(
-      challengeId
-    );
+ 
 
   const reminders =
   await reminderRepository
@@ -53,11 +47,17 @@ if (
       challengeId
     );
 
-const consequence =
-  await consequenceRepository
-    .getByChallengeId(
-      challengeId
-    );
+    const {
+  progressReports,
+  checkpoints,
+  consequence,
+} =
+await accountabilityAggregationService
+  .getAccountabilityContext(
+    challengeId
+  );
+
+ 
 
     return {
       challenge: {
@@ -90,13 +90,13 @@ const consequence =
 
      progress: {
   totalReports:
-    reports.length,
+    progressReports.length,
     
  latestReportDate:
-  reports.length > 0
-    ? reports[
-        reports.length - 1
-      ].createdAt
+  progressReports.length > 0
+    ? progressReports[
+  progressReports.length - 1
+].createdAt
     : null
 },
 
