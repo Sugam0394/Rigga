@@ -1,0 +1,36 @@
+.ai-insights-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.ai-insights-card__header h2 {
+  margin: 0;
+}
+
+.ai-insights-card__header p {
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.ai-insights-card__grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.ai-insights-card__item {
+  padding: 12px;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.ai-insights-card__summary {
+  margin-top: 20px;
+}
+
+.ai-insights-card__summary p {
+  line-height: 1.6;
+}

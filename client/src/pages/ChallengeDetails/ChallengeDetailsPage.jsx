@@ -14,16 +14,40 @@ import WitnessAccountabilityCard from "./components/WitnessAccountabilityCard";
 import ConsequenceStatusCard from "./components/ConsequencesStatusCard";
 import ProgressReportList from "../progressReports/components/ProgressReportList";
 import NextActionCard from "./components/NextActionCard";
+
+
 // Hooks
 import useProgressReports from "../progressReports/hooks/useProgressReports";
 import useProgressEligibility from "../progressReports/hooks/useProgressEligibility";
+
+
 // appeals
 import AppealStatusCard from "../appeals/components/AppealStatusCard";
+
+
+
 // utils
 import { openWhatsAppShare } from "../../utils/whatsappShare";
 import WitnessAnalyticsCard from "../WitnessReview/WitnessAnalyticsCard";
 import { trackWitnessShare } from "../WitnessReview/api/reviewApi";
 import useWitnessAnalytics from "../WitnessReview/hooks/useWitnessAnalytics";
+
+// AiInsight 
+import useAIInsights from "../../features/ai-insights/hooks/useAIInsights";
+
+import AIInsightsCard from "../../features/ai-insights/components/AIInsightsCard";
+
+import AIInsightsEmptyState from "../../features/ai-insights/state/AIEmptyState";
+import AIInsightsErrorState from "../../features/ai-insights/state/AIErrorState";
+import AIInsightsLoadingState from "../../features/ai-insights/state/AILoadingState";
+
+
+
+
+
+
+
+
 
 
 const ChallengeDetailsPage = () => {
@@ -79,6 +103,15 @@ Please review my Rigga commitment.`;
       message,
     });
   };
+
+  const {
+  insights,
+  loading:
+    insightsLoading,
+  error:
+    insightsError,
+} =
+useAIInsights(id);
 
    const {
   analytics,
@@ -269,6 +302,28 @@ console.log(
           analytics={analytics}
         />
       )}
+
+      {insightsLoading && (
+  <AIInsightsLoadingState />
+)}
+
+{insightsError && (
+  <AIInsightsErrorState
+    error={insightsError}
+  />
+)}
+
+{!insightsLoading &&
+ !insightsError &&
+ !insights && (
+  <AIInsightsEmptyState />
+)}
+
+{insights && (
+  <AIInsightsCard
+    insights={insights}
+  />
+)}
 
       {dashboard.challenge.status ===
         "APPEALED" && (

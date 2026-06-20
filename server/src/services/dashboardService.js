@@ -4,6 +4,7 @@ import checkpointRepository from "../repositories/checkPointRepository.js";
 import reminderRepository from "../repositories/reminderRepository.js";
 import consequenceRepository from "../repositories/consequenceRepository.js";
 import lifecycleService from "./lifecycleService.js";
+import accountabilityAggregateService from "./accountabilityAggregateService.js";
 
 
 
@@ -52,7 +53,7 @@ if (
   checkpoints,
   consequence,
 } =
-await accountabilityAggregationService
+await accountabilityAggregateService
   .getAccountabilityContext(
     challengeId
   );
