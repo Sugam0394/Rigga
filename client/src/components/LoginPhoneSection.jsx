@@ -1,33 +1,31 @@
-import "./LoginPhoneSection.css";
-
-import GlobalPhoneInput
-from "../features/auth/components/GlobalPhoneInput";
+ import "./LoginPhoneSection.css";
+import GlobalPhoneInput from "../features/auth/components/GlobalPhoneInput";
 
 function LoginPhoneSection({
   phone,
   setPhone,
 }) {
   return (
-    <div className="phone-section">
-      <label
-        className="phone-section-label"
-      >
-        Phone Number
+    <section className="phone-section">
+      <label className="phone-section-label">
+        Verify Your Identity
       </label>
+
+      <p className="phone-section-description">
+        Enter your phone number to verify that
+        your commitments belong to a real person.
+      </p>
 
       <GlobalPhoneInput
         value={phone}
         onChange={setPhone}
       />
 
-      <p
-        className="phone-section-helper"
-      >
-        We use phone verification to
-        protect commitments and witness
-        records.
+      <p className="phone-section-helper">
+        Your phone number is never shared with
+        witnesses or other users.
       </p>
-    </div>
+    </section>
   );
 }
 

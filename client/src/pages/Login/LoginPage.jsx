@@ -3,14 +3,18 @@ import { useNavigate } from "react-router-dom";
 import LoginHero from "../../components/LoginHero"
 import LoginPhoneSection from "../../components/LoginPhoneSection";
 
-import {
-  validatePhone,
-} from "../../features/auth/components/phoneValidation";
+import { validatePhone } from "../../features/auth/components/phoneValidation";
  
 import AuthError from "../../features/auth/components/AuthError";
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton";
 import { requestOtp } from "../../services/authService";
 import "./LoginPage.css"
+ 
+import LegalConsent from "../../features/auth/components/LegalConsent";
+import TrustSection from "../../features/auth/components/TrustSection";
+
+
+
 
 
 const LoginPage = () => {
@@ -64,36 +68,18 @@ const LoginPage = () => {
   };
 
   return (
-  <div className="login-page">
-    <LoginHero
-      title="Verify your identity to get started"
-      subtitle="Rigga connects commitments to verified identities and verified witnesses. Start by verifying your phone number."
-    />
 
-    <div className="login-journey">
-      <div className="login-journey-title">
-        What happens next?
-      </div>
+    <div className="login-page">  
+ <LoginHero />
 
-      <div className="login-journey-list">
-        <div className="login-journey-item">
-          1. Verify your phone number
-        </div>
-
-        <div className="login-journey-item">
-          2. Create your profile
-        </div>
-
-        <div className="login-journey-item">
-          3. Start your first commitment
-        </div>
-      </div>
-    </div>
+ <TrustSection />
 
      <LoginPhoneSection
   phone={phone}
   setPhone={setPhone}
 />
+
+<LegalConsent />
 
     <AuthError
       id="phone-error"
