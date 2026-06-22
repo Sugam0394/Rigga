@@ -4,6 +4,8 @@
   margin: 0 auto;
 
   padding: 40px 24px 64px;
+
+  color: #FFFFFF;
 }
 
 .legal-title {
@@ -51,4 +53,29 @@
 
 .legal-section li + li {
   margin-top: 8px;
+}
+
+.legal-section {
+  margin-bottom: 40px;
+
+  background: #221A15;
+
+  border: 1px solid #2A211C;
+
+  border-radius: 20px;
+
+  padding: 24px;
+}
+
+.legal-description {
+  color: #A1A1AA;
+}
+
+.legal-section p,
+.legal-section li {
+  color: #D4D4D8;
+}
+
+.legal-section h2 {
+  color: #FFFFFF;
 }

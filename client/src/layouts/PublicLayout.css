@@ -1,5 +1,8 @@
-.public-layout {
+ .public-layout {
   min-height: 100vh;
+
+  background: #1A1410;
+  color: #FFFFFF;
 
   display: flex;
   justify-content: center;

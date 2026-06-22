@@ -1,6 +1,7 @@
-.auth-layout {
+ .auth-layout {
   min-height: 100vh;
-  background: #111111;
+
+  background: #1A1410;
   color: #FFFFFF;
 
   display: flex;
@@ -25,9 +26,12 @@
 
 .auth-layout-footer a {
   color: #A1A1AA;
+
   text-decoration: none;
+
+  transition: color 0.2s ease;
 }
 
 .auth-layout-footer a:hover {
-  color: #FFFFFF;
+  color: #F97316;
 }
