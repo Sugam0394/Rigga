@@ -1,21 +1,39 @@
  .profile-page {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+
+  gap: 24px;
 }
 
 .profile-label {
+  display: block;
+
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 6px;
+
+  margin-bottom: 8px;
 }
 
 .profile-input {
   width: 100%;
+
+  min-height: 56px;
+
+  padding: 14px 16px;
+
+  border-radius: 16px;
+
+  font-size: 15px;
 }
 
 .profile-helper {
   font-size: 13px;
-  line-height: 1.5;
-  margin-top: 6px;
+
+  line-height: 1.6;
+
+  margin-top: 8px;
+}
+
+.profile-submit-wrapper {
+  margin-top: 8px;
 }

@@ -1,0 +1,33 @@
+.auth-layout {
+  min-height: 100vh;
+  background: #111111;
+  color: #FFFFFF;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 24px;
+}
+
+.auth-layout-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+.auth-layout-footer {
+  margin-top: 32px;
+
+  text-align: center;
+
+  font-size: 14px;
+}
+
+.auth-layout-footer a {
+  color: #A1A1AA;
+  text-decoration: none;
+}
+
+.auth-layout-footer a:hover {
+  color: #FFFFFF;
+}

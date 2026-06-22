@@ -1,22 +1,30 @@
  .phone-section {
-  margin-bottom: 24px;
+  padding: 24px;
+
+  border-radius: 20px;
+
+  margin-bottom: 28px;
 }
 
 .phone-section-label {
   display: block;
-  font-size: 18px;
+
+  font-size: 20px;
   font-weight: 700;
-  margin-bottom: 8px;
+
+  margin-bottom: 10px;
 }
 
 .phone-section-description {
   font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 16px;
+  line-height: 1.7;
+
+  margin-bottom: 18px;
 }
 
 .phone-section-helper {
   font-size: 13px;
-  line-height: 1.5;
-  margin-top: 10px;
+  line-height: 1.6;
+
+  margin-top: 12px;
 }

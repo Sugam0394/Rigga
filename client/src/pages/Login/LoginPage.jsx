@@ -11,7 +11,7 @@ import { requestOtp } from "../../services/authService";
 import "./LoginPage.css"
  
 import LegalConsent from "../../features/auth/components/LegalConsent";
-import TrustSection from "../../features/auth/components/TrustSection";
+ 
 
 
 
@@ -83,7 +83,7 @@ if (!hasConsent) {
     <div className="login-page">  
  <LoginHero />
 
- <TrustSection />
+ 
 
      <LoginPhoneSection
   phone={phone}

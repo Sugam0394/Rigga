@@ -1,78 +1,69 @@
-.profile-hero {
+ .profile-hero {
   text-align: center;
-  margin-bottom: 24px;
+
+  margin-bottom: 32px;
 }
 
 .profile-badge {
   display: inline-flex;
 
+  align-items: center;
+
   padding: 6px 12px;
 
   border-radius: 999px;
 
-  background: #fff7ed;
-
-  color: #ea580c;
-
-  font-size: 13px;
+  font-size: 11px;
 
   font-weight: 600;
 
-  margin-bottom: 16px;
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  margin-bottom: 18px;
 }
 
 .profile-title {
-  font-size: 32px;
+  font-size: 36px;
 
-  font-weight: 800;
+  font-weight: 700;
 
   line-height: 1.1;
 
-  letter-spacing: -1px;
-
-  color: #111827;
-
-  margin: 0 0 12px;
+  margin-bottom: 16px;
 }
 
 .profile-description {
   font-size: 15px;
 
-  line-height: 1.6;
+  line-height: 1.7;
 
-  color: #6b7280;
+  max-width: 36ch;
 
-  margin: 0 0 20px;
+  margin: 0 auto 24px;
 }
 
- .profile-phone-card {
-  border: 1px solid #e5e7eb;
+.profile-phone-card {
+  padding: 20px;
 
-  border-radius: 16px;
-
-  padding: 18px;
-
-  background: #ffffff;
+  border-radius: 20px;
 
   text-align: left;
 }
 
 .profile-phone-label {
-  font-size: 12px;
+  font-size: 11px;
 
   font-weight: 700;
 
   letter-spacing: 0.08em;
 
-  color: #6b7280;
-
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .profile-phone-value {
   font-size: 16px;
 
   font-weight: 700;
-
-  color: #111827;
 }

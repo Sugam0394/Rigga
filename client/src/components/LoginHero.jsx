@@ -11,24 +11,15 @@ function LoginHero() {
       />
 
       <div className="login-hero-badge">
-      TRUSTED ACCOUNTABILITY
+       Rigga
       </div>
 
       <h1 className="login-hero-title">
         Commit to what matters.
-Prove you followed through.
+        Prove you followed through.
       </h1>
-
-      <p className="login-hero-description">
-       Rigga helps you create commitments that are
-verified by real people, not self-reported.
-      </p>
-
-      <p className="login-hero-description">
-     Set a goal, invite a witness, track your
-progress, and build a record of commitments
-you actually completed.
-      </p>
+ 
+ 
     </section>
   );
 }

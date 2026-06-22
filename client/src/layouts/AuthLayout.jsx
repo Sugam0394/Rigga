@@ -1,35 +1,17 @@
- import {
+import {
   Outlet,
   Link,
 } from "react-router-dom";
 
+import "./AuthLayout.css";
+
 const AuthLayout = () => {
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#FFFFFF",
-        padding: "24px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "420px",
-        }}
-      >
+    <main className="auth-layout">
+      <div className="auth-layout-container">
         <Outlet />
 
-        <footer
-          style={{
-            marginTop: "24px",
-            textAlign: "center",
-            fontSize: "14px",
-          }}
-        >
+        <footer className="auth-layout-footer">
           <Link to="/legal/terms">
             Terms of Service
           </Link>

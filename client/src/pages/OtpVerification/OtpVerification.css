@@ -1,5 +1,26 @@
  .otp-page {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+
+  gap: 28px;
+}
+
+.otp-submit-wrapper {
+  margin-top: 4px;
+}
+
+.otp-resend-button {
+  align-self: center;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  background: transparent;
+  border: none;
+
+  cursor: pointer;
+}
+
+.otp-resend-button:disabled {
+  cursor: not-allowed;
 }
