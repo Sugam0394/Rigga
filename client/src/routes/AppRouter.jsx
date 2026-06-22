@@ -24,8 +24,8 @@ import WitnessReview from "../pages/WitnessReview/WitnessReview";
 import SubmitProgressReportPage from "../pages/progressReports/SubmitProgressReportPage";
 import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
 import NotificationsPage from "../features/notifications/pages/NotificationPage"
-
-
+import TermsOfServicePage from "../pages/legal/TermsOfServicePage";
+import PrivacyPolicyPage from "../pages/legal/PrivacyPolicyPage";
 
 
  const AppRouter = () => {
@@ -40,9 +40,8 @@ import NotificationsPage from "../features/notifications/pages/NotificationPage"
         <Route path="/verify-otp" element={<OtpVerification />} />
         <Route path="/create-profile" element={<CreateProfilePage />}/>
         </Route>
-
-        {/* Public Routes */}
-        <Route element={<PublicLayout />}> <Route  path="/review/:token" element={<WitnessReview />}/> </Route>
+ 
+  
 
         {/* Protected Routes */}
         <Route element={ <ProtectedRoute> <AppLayout/> </ProtectedRoute> }>
@@ -53,8 +52,17 @@ import NotificationsPage from "../features/notifications/pages/NotificationPage"
         <Route path="/challenges/:id/progress-report"element={<SubmitProgressReportPage/>}/>
         <Route path="/challenges/:id/appeal" element={<SubmitAppealPage />}/>
         <Route path="/profile" element={<Profile />}/></Route>
+        
+      
+      
+        {/* Public Routes */}
 
-        {/* Fallback */}
+       <Route element={<PublicLayout />}>
+       <Route  path="/review/:token" element={<WitnessReview />}/>
+       <Route path="/legal/terms"element={<TermsOfServicePage />}/>
+       <Route path="/legal/privacy" element={<PrivacyPolicyPage />} />
+      </Route> 
+       {/* Fallback */}
         <Route path="*" element={<Navigate to="/login" replace />}/>
         </Routes>
         </BrowserRouter>

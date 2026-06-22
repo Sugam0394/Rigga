@@ -13,9 +13,8 @@ function TrustSection() {
         </p>
 
         <p className="trust-section-text">
-          Create a commitment, assign a witness,
-          complete the commitment, and verify
-          the outcome.
+           Create a commitment, invite a trusted witness,
+track your progress, and verify the final outcome.
         </p>
       </div>
 
@@ -27,8 +26,8 @@ function TrustSection() {
         </p>
 
         <p className="trust-section-text">
-          Witnesses independently verify whether
-          a commitment was completed.
+          Witnesses help create accountability by
+independently reviewing challenge outcomes.
         </p>
       </div>
 
@@ -40,8 +39,9 @@ function TrustSection() {
         </p>
 
         <p className="trust-section-text">
-          Identity verification helps ensure every
-          commitment belongs to a real person.
+        Identity verification helps protect trust,
+reduce misuse, and ensure commitments are
+connected to real people.
         </p>
       </div>
     </section>

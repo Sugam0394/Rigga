@@ -19,7 +19,8 @@ import TrustSection from "../../features/auth/components/TrustSection";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
+const [hasConsent, setHasConsent] =
+  useState(false);
  const [phone, setPhone] =
   useState("");
 
@@ -37,6 +38,16 @@ const LoginPage = () => {
     : "";
 
   const handleContinue = async () => {
+
+if (!hasConsent) {
+  setSubmitError(
+    "Please accept the Terms of Service and Privacy Policy to continue."
+  );
+
+  return;
+}
+
+
     if (!isPhoneValid)
       return;
 
@@ -79,7 +90,16 @@ const LoginPage = () => {
   setPhone={setPhone}
 />
 
-<LegalConsent />
+ <LegalConsent
+  checked={hasConsent}
+  onChange={(e) => {
+    setHasConsent(
+      e.target.checked
+    );
+
+    setSubmitError("");
+  }}
+/>
 
     <AuthError
       id="phone-error"
@@ -93,7 +113,11 @@ const LoginPage = () => {
 
     <div className="login-submit-wrapper">
       <AuthSubmitButton
-        disabled={!isPhoneValid || loading}
+      disabled={
+  !isPhoneValid ||
+  !hasConsent ||
+  loading
+}
         onClick={handleContinue}
       >
         {loading

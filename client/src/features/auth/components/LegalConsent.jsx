@@ -1,9 +1,37 @@
- 
+ import { Link } from "react-router-dom";
+import "./LegalConsent.css";
 
-function LegalConsent() {
+const LegalConsent = ({
+  checked,
+  onChange,
+}) => {
   return (
-    <div>LegalConsent</div>
-  )
-}
+    <div className="legal-consent">
+      <label
+        htmlFor="legal-consent"
+        className="legal-consent-label"
+      >
+        <input
+          id="legal-consent"
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+        />
 
-export default LegalConsent
+        <span>
+          By continuing, I agree to
+          Rigga's{" "}
+          <Link to="/legal/terms">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link to="/legal/privacy">
+            Privacy Policy
+          </Link>.
+        </span>
+      </label>
+    </div>
+  );
+};
+
+export default LegalConsent;
