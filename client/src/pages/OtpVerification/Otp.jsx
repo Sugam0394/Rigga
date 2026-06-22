@@ -4,22 +4,22 @@ function OtpHero({ phone, onChangeNumber }) {
   return (
     <section className="otp-hero">
       <span className="otp-badge">
-        Verification
+        IDENTITY VERIFICATION
       </span>
 
       <h1 className="otp-title">
-        Verify your identity
+        Confirm your identity
       </h1>
 
       <p className="otp-description">
-        Your commitments and witness
-        records are connected to a
-        verified phone number.
+        Enter the verification code sent to
+your phone number to securely confirm
+your identity.
       </p>
 
      <div className="otp-phone-card">
   <div className="otp-phone-label">
-    VERIFIED PHONE
+     PHONE NUMBER
   </div>
 
   <div className="otp-phone-value">

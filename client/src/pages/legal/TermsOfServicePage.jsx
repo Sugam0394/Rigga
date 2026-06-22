@@ -1,9 +1,22 @@
+import "./legal.css";
+
+
+
 const TermsOfServicePage = () => {
   return (
-    <main>
-      <h1>Terms of Service</h1>
+    <main className="legal-page">
+     <h1 className="legal-title">
+  Terms of Service
+</h1>
 
-      <section>
+<p className="legal-description">
+  These terms explain how Rigga operates,
+  the responsibilities of users, and the
+  role of witnesses in the accountability
+  process.
+</p>
+
+     <section className="legal-section">
         <h2>About Rigga</h2>
         <p>
           Rigga is an accountability platform that helps users
@@ -12,7 +25,7 @@ const TermsOfServicePage = () => {
         </p>
       </section>
 
-      <section>
+      <section className="legal-section">
         <h2>Account Responsibility</h2>
         <p>
           You are responsible for maintaining access to your
@@ -20,7 +33,7 @@ const TermsOfServicePage = () => {
         </p>
       </section>
 
-      <section>
+      <section className="legal-section">
         <h2>Commitment Ownership</h2>
         <p>
           All commitments are created by users. Rigga does not
@@ -28,7 +41,7 @@ const TermsOfServicePage = () => {
         </p>
       </section>
 
-      <section>
+      <section className="legal-section">
         <h2>Witness Responsibility</h2>
         <p>
           Witnesses participate in reviewing challenge outcomes.
@@ -36,7 +49,7 @@ const TermsOfServicePage = () => {
         </p>
       </section>
 
-      <section>
+      <section className="legal-section">
         <h2>Platform Limitations</h2>
         <p>
           Rigga provides accountability tools but does not
@@ -44,7 +57,7 @@ const TermsOfServicePage = () => {
         </p>
       </section>
 
-      <section>
+      <section className="legal-section">
         <h2>Acceptable Use</h2>
         <ul>
           <li>No fraud or impersonation.</li>
@@ -54,7 +67,7 @@ const TermsOfServicePage = () => {
         </ul>
       </section>
 
-      <section>
+      <section className="legal-section">
         <h2>Consequence Disclosure</h2>
         <p>
           Consequences and private accountability messages operate
@@ -62,7 +75,7 @@ const TermsOfServicePage = () => {
         </p>
       </section>
 
-      <section>
+      <section className="legal-section">
         <h2>Contact</h2>
         <p>
           Support contact information will be provided in a future

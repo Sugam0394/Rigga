@@ -8,12 +8,13 @@ function LoginPhoneSection({
   return (
     <section className="phone-section">
       <label className="phone-section-label">
-        Verify Your Identity
+        Identity Verification
       </label>
 
       <p className="phone-section-description">
-        Enter your phone number to verify that
-        your commitments belong to a real person.
+       Verify your phone number to secure your
+account and connect your commitments to a
+verified identity.
       </p>
 
       <GlobalPhoneInput
@@ -22,8 +23,9 @@ function LoginPhoneSection({
       />
 
       <p className="phone-section-helper">
-        Your phone number is never shared with
-        witnesses or other users.
+         Your phone number is used only for account
+verification and security. It is never shown
+to witnesses or other users.
       </p>
     </section>
   );

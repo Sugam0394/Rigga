@@ -1,6 +1,6 @@
 import DataUsageDisclosure from "./DetailUsageDisclosure";
 import CookieDisclosure from "./CookieDisclosure";
-
+import "./legal.css";
 
 
 
@@ -9,14 +9,20 @@ import CookieDisclosure from "./CookieDisclosure";
 
 const PrivacyPolicyPage = () => {
   return (
-    <main>
-      <h1>Privacy Policy</h1>
-
+    <main className="legal-page">
+      <h1 className="legal-title">
+  Privacy Policy
+</h1>
+<p className="legal-description">
+  This page explains what information Rigga
+  collects, why it is collected, and how it
+  helps provide accountability services.
+</p>
       <DataUsageDisclosure />
 
       <CookieDisclosure />
 
-      <section>
+     <section className="legal-section">
         <h2>Information We Collect</h2>
 
         <h3>Phone Number</h3>
@@ -46,7 +52,7 @@ const PrivacyPolicyPage = () => {
         </p>
       </section>
 
-      <section>
+       <section className="legal-section">
         <h2>Data Protection</h2>
 
         <p>
@@ -63,7 +69,7 @@ const PrivacyPolicyPage = () => {
         </p>
       </section>
 
-      <section>
+     <section className="legal-section">
         <h2>User Rights</h2>
 
         <p>

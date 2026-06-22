@@ -1,5 +1,8 @@
-.legal-consent {
-  margin-top: 16px;
+ .legal-consent {
+  margin: 24px 0;
+  padding: 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
 }
 
 .legal-consent-label {
@@ -7,11 +10,14 @@
   align-items: flex-start;
   gap: 12px;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .legal-consent-label input {
   margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .legal-consent-label a {

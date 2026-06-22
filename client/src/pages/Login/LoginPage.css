@@ -1,9 +1,5 @@
  .login-page {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-}
-
-.login-submit-wrapper {
-  margin-top: 8px;
+  gap: 24px;
 }

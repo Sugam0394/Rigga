@@ -11,23 +11,23 @@ function LoginHero() {
       />
 
       <div className="login-hero-badge">
-        ACCOUNTABILITY PLATFORM
+      TRUSTED ACCOUNTABILITY
       </div>
 
       <h1 className="login-hero-title">
-        Make commitments that can be witnessed
-        and verified.
+        Commit to what matters.
+Prove you followed through.
       </h1>
 
       <p className="login-hero-description">
-        Rigga helps people turn intentions into
-        accountable commitments.
+       Rigga helps you create commitments that are
+verified by real people, not self-reported.
       </p>
 
       <p className="login-hero-description">
-        Create a commitment, assign a witness,
-        verify the outcome, and build a permanent
-        record of what you said you would do.
+     Set a goal, invite a witness, track your
+progress, and build a record of commitments
+you actually completed.
       </p>
     </section>
   );

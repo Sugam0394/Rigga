@@ -1,18 +1,22 @@
-.phone-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+ .phone-section {
+  margin-bottom: 24px;
 }
 
 .phone-section-label {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.phone-section-description {
   font-size: 14px;
-  font-weight: 600;
-  color: #111827;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
 .phone-section-helper {
   font-size: 13px;
   line-height: 1.5;
-  color: #6b7280;
-  margin: 0;
+  margin-top: 10px;
 }

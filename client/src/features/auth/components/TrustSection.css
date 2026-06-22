@@ -1,41 +1,26 @@
-.trust-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+ .trust-section {
+  margin-bottom: 32px;
 }
 
 .trust-section-title {
-  margin: 0;
-
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
-  line-height: 1.2;
-
-  color: #111827;
+  margin-bottom: 20px;
 }
 
 .trust-section-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  padding: 16px 0;
 }
 
 .trust-section-heading {
-  margin: 0;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  color: #111827;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
 .trust-section-text {
-  margin: 0;
-
   font-size: 14px;
   line-height: 1.6;
-
-  color: #6B7280;
 }
 
 .trust-section-divider {
