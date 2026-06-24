@@ -4,7 +4,7 @@ import "./HomePage.css";
 
 
 
-import HomeHeader from "./components/HomeHeader";
+ 
 import EmptyStateCard from "./components/EmptyStateCard";
 import ActiveChallengeCard from "./components/ActiveChallengeCard";
  
@@ -14,9 +14,9 @@ import LoadingState from "./state/LoadingState"
 import ErrorState from "./state/ErrorState";
 
 // HomeScreen 
-import WelcomeSection from "./HomeScreen/WelcomeSection";
+ 
 import TodayFocusSection from "./HomeScreen/TodayFocusSection";
-import RecentActivitySection from "./HomeScreen/RecentActivitySection"
+ 
 
 // utils
 import { generateFocusItems , sortChallenges } from "./utils/homePriority";
@@ -88,13 +88,9 @@ const focusItems =
  
   return (
    <div className="home-page">
-    <HomeHeader />
+   
 
-    <WelcomeSection
-      commitmentCount={
-        challenges.length
-      }
-    />
+    
   {focusItems.length > 0 && (
   <TodayFocusSection
     focusItems={focusItems}
@@ -123,8 +119,7 @@ const focusItems =
             />
           )
         )}
-
-        <RecentActivitySection />
+ 
       </>
     )}
   </div>

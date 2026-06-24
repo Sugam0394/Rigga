@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import {
   getChallengeDashboard,
-} from "../api/pi";
+} from "../api/dashboardApi";
 
 const useChallengeDashboard = (
   challengeId
