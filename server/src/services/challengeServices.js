@@ -81,10 +81,7 @@ const {
   category,
 } = accountabilityPlan;
 
-console.log(
-  "ACCOUNTABILITY PLAN",
-  accountabilityPlan
-);
+ 
 
  const challengePayload = {
   userId,

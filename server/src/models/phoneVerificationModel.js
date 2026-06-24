@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-const phoneVerificationSchema =
-  new mongoose.Schema(
+const phoneVerificationSchema = new mongoose.Schema(
     {
       phone: {
         type: String,
         required: true,
         trim: true,
+        unique: true,
       },
 
       otpCode: {

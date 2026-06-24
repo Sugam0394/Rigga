@@ -5,7 +5,7 @@ const ProgressReportList = ({
   reports,
   loading,
   error,
-}) => {
+}) => {ProgressReportList
   if (loading) {
     return (
       <div className="progress-timeline__loading">
