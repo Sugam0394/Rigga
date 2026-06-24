@@ -5,7 +5,7 @@ import reminderRepository from "../repositories/reminderRepository.js";
 import consequenceRepository from "../repositories/consequenceRepository.js";
 import lifecycleService from "./lifecycleService.js";
 import accountabilityAggregateService from "./accountabilityAggregateService.js";
-
+import accountabilityPlanService from "./accountabilityPlanService.js";
 
 
 
@@ -35,7 +35,30 @@ if (
     "Unauthorized access"
   );
 }
+const durationDays =
+  Math.floor(
+    (
+      new Date(
+        challenge.deadlineAt
+      ).getTime() -
+      new Date(
+        challenge.createdAt
+      ).getTime()
+    ) /
+    (1000 * 60 * 60 * 24)
+  ) + 1;
 
+const accountabilityPlan =
+  accountabilityPlanService
+    .generateAccountabilityPlan({
+      title:
+        challenge.title,
+
+      successCriteria:
+        challenge.successCriteria,
+
+      durationDays,
+    });
   
 
  
@@ -60,102 +83,110 @@ await accountabilityAggregateService
 
  
 
-    return {
-      challenge: {
-        title:
-          challenge.title,
+     return {
+    challenge: {
+      title:
+        challenge.title,
 
-        deadlineAt:
-          challenge.deadlineAt,
+      category:
+        challenge.category,
 
-        status:
-          challenge.status,
-      },
+      deadlineAt:
+        challenge.deadlineAt,
 
- witness: {
-  name:
-    challenge.witness?.name,
+      status:
+        challenge.status,
+    },
 
-  phone:
-    challenge.witness?.phone,
+    accountabilityPlan,
 
-  decision:
-    challenge.witness?.decision,
+    witness: {
+      name:
+        challenge.witness?.name,
 
-  reviewToken:
-    challenge.witness?.reviewToken,
+      phone:
+        challenge.witness?.phone,
 
-  reviewTokenExpiresAt:
-    challenge.witness?.reviewTokenExpiresAt,
-},
+      decision:
+        challenge.witness?.decision,
 
-     progress: {
-  totalReports:
-    progressReports.length,
-    
- latestReportDate:
-  progressReports.length > 0
-    ? progressReports[
-  progressReports.length - 1
-].createdAt
-    : null
-},
+      reviewToken:
+        challenge.witness?.reviewToken,
 
-     checkpoints: {
-  total:
-    checkpoints.length,
+      reviewTokenExpiresAt:
+        challenge.witness
+          ?.reviewTokenExpiresAt,
+    },
 
-  completed:
-    checkpoints.filter(
-      (checkpoint) =>
-        checkpoint.status ===
-        "COMPLETED"
-    ).length,
+    progress: {
+      totalReports:
+        progressReports.length,
 
-  pending:
-    checkpoints.filter(
-      (checkpoint) =>
-        checkpoint.status ===
-        "PENDING"
-    ).length,
+      latestReportDate:
+        progressReports.length > 0
+          ? progressReports[
+              progressReports.length -
+                1
+            ].createdAt
+          : null,
+    },
 
-  missed:
-    checkpoints.filter(
-      (checkpoint) =>
-        checkpoint.status ===
-        "MISSED"
-    ).length,
-},
+    checkpoints: {
+      total:
+        checkpoints.length,
+
+      completed:
+        checkpoints.filter(
+          (checkpoint) =>
+            checkpoint.status ===
+            "COMPLETED"
+        ).length,
+
+      pending:
+        checkpoints.filter(
+          (checkpoint) =>
+            checkpoint.status ===
+            "PENDING"
+        ).length,
+
+      missed:
+        checkpoints.filter(
+          (checkpoint) =>
+            checkpoint.status ===
+            "MISSED"
+        ).length,
+    },
 
     reminders: {
-  total:
-    reminders.length,
+      total:
+        reminders.length,
 
-  pending:
-    reminders.filter(
-      (reminder) =>
-        reminder.status ===
-        "PENDING"
-    ).length,
+      pending:
+        reminders.filter(
+          (reminder) =>
+            reminder.status ===
+            "PENDING"
+        ).length,
 
-  triggered:
-    reminders.filter(
-      (reminder) =>
-        reminder.status ===
-        "TRIGGERED"
-    ).length,
-},
-   consequence: {
-  isLocked:
-    consequence
-      ?.isLocked ?? false,
+      triggered:
+        reminders.filter(
+          (reminder) =>
+            reminder.status ===
+            "TRIGGERED"
+        ).length,
+    },
 
-  isReleased:
-    consequence
-      ?.isReleased ?? false,
-},
-    };
+    consequence: {
+      isLocked:
+        consequence?.isLocked ??
+        false,
+
+      isReleased:
+        consequence?.isReleased ??
+        false,
+    },
   };
+};
 
 export default {
   getChallengeDashboard,

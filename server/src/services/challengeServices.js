@@ -6,9 +6,10 @@ import notificationService from "./notificationService.js";
 import userNotificationService from "./userNotificationService.js";
 import { NOTIFICATION_EVENTS } from "../constants/notificationEvents.js";
 import generateReviewLink from "./reviewLinkService.js";
-
-
-
+import challengeClasssifier from "./challengeClasssifier.js";
+import accountabilityPlanService
+  from "./accountabilityPlanService.js";
+ 
 import {
   NOTIFICATION_TYPES,
 } from "../constants/notificationConstants.js";
@@ -56,14 +57,43 @@ if (
     "Deadline must be in the future"
   );
 }
+ 
 
-  const challengePayload = {
-    userId,
-    title,
-    deadlineAt: deadlineDate,
-    witness,
-    successCriteria,
-  };
+
+    const durationDays =
+  Math.floor(
+    (
+      deadlineDate.getTime() -
+      Date.now()
+    ) /
+    (1000 * 60 * 60 * 24)
+  ) + 1;
+
+const accountabilityPlan =
+  accountabilityPlanService
+    .generateAccountabilityPlan({
+      title,
+      successCriteria,
+      durationDays,
+    });
+
+const {
+  category,
+} = accountabilityPlan;
+
+console.log(
+  "ACCOUNTABILITY PLAN",
+  accountabilityPlan
+);
+
+ const challengePayload = {
+  userId,
+  title,
+  category,
+  deadlineAt: deadlineDate,
+  witness,
+  successCriteria,
+};
 
  
 
@@ -83,11 +113,13 @@ if (
     privateMessage,
   });
 
-  await checkpointService.createCheckpoints({
-    challengeId: challenge._id,
-    startDate: challenge.createdAt,
-    endDate: challenge.deadlineAt,
-  });
+ await checkpointService.createCheckpoints({
+  challengeId: challenge._id,
+  startDate: challenge.createdAt,
+  endDate: challenge.deadlineAt,
+
+  accountabilityPlan,
+});
 
   await witnessService.notifyWitness(
     challenge

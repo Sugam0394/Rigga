@@ -106,10 +106,11 @@ const generateScheduledDates = (
 };
 
 
- const createCheckpoints = async ({
+  const createCheckpoints = async ({
   challengeId,
   startDate,
   endDate,
+  accountabilityPlan,
 }) => {
 
   const durationDays =
@@ -117,25 +118,16 @@ const generateScheduledDates = (
       startDate,
       endDate
     );
-
-  const checkpointCount =
-    getCheckpointCount(
-      durationDays
-    );
-
-
-if (checkpointCount < 1) {
-  throw new Error(
-    "Challenge must have at least one checkpoint"
-  );
-}
+ const checkpointDays =
+  accountabilityPlan
+    .checkpointStrategy
+    .checkpointDays;
 
 
-    const checkpointDays =
-  generateCheckpointDays(
-    durationDays,
-    checkpointCount
-  );
+ 
+
+
+   
 
  const scheduledDates =
   generateScheduledDates(
@@ -160,23 +152,54 @@ if (checkpointCount < 1) {
       checkpoints
     );
  
-    const reminders =
-  savedCheckpoints.map(
-    (checkpoint) => ({
-      challengeId:
-        checkpoint.challengeId,
+ const reminderOffsets =
+  accountabilityPlan
+    .reminderStrategy
+    ?.reminderOffsets || [0];
 
-      checkpointId:
-        checkpoint._id,
+ const reminders =
+  savedCheckpoints.flatMap(
+    (checkpoint) => {
 
-      type:
-        "CHECKPOINT_REMINDER",
+      return reminderOffsets
+        .map((offset) => {
 
-      scheduledAt:
-        checkpoint.scheduledDate,
+          const reminderDate =
+            new Date(
+              checkpoint.scheduledDate
+            );
 
-      status: "PENDING",
-    })
+          reminderDate.setHours(
+            reminderDate.getHours() +
+              offset
+          );
+
+          if (
+            reminderDate <
+            new Date(startDate)
+          ) {
+            return null;
+          }
+
+          return {
+            challengeId:
+              checkpoint.challengeId,
+
+            checkpointId:
+              checkpoint._id,
+
+            type:
+              "CHECKPOINT_REMINDER",
+
+            scheduledAt:
+              reminderDate,
+
+            status:
+              "PENDING",
+          };
+        })
+        .filter(Boolean);
+    }
   );
 
 await reminderService

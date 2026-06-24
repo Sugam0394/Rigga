@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import { CHALLENGE_STATUS } from "../constants/challengeStatus.js";
+import { CHALLENGE_CATEGORIES } from "../constants/challengeCategories.js";
+
+
 
 const challengeSchema = new mongoose.Schema(
   {
@@ -13,6 +16,17 @@ const challengeSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+
+    category: {
+  type: String,
+
+  enum: Object.values(
+    CHALLENGE_CATEGORIES
+  ),
+
+  default:
+    CHALLENGE_CATEGORIES.CUSTOM,
+},
 
     deadlineAt: {
       type: Date,

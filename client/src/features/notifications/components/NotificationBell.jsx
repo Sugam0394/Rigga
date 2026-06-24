@@ -6,7 +6,11 @@ import useUnreadCount
 import NotificationBadge
   from "./NotificationBadge";
 
-const NotificationBell = () => {
+ const NotificationBell = () => {
+  console.log(
+    "NOTIFICATION BELL RENDERED"
+  );
+
   const {
     unreadCount,
   } = useUnreadCount();
@@ -15,6 +19,7 @@ const NotificationBell = () => {
     <Link
       to="/notifications"
       aria-label="Notifications"
+      
     >
       <span
         role="img"

@@ -2,6 +2,8 @@
  
 import BottomNavigation from "../components/BottomNavigation";
 
+import NotificationBell from "../features/notifications/components/NotificationBell";
+
 const AppLayout = () => {
   return (
     <div
@@ -11,7 +13,15 @@ const AppLayout = () => {
         paddingBottom: "90px",
       }}
     >
-    
+    <header
+  style={{
+    display: "flex",
+    justifyContent: "flex-end",
+    padding: "16px",
+  }}
+>
+  <NotificationBell />
+</header>
 
       <main>
         <Outlet />

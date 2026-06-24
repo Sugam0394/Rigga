@@ -14,7 +14,7 @@ import WitnessAccountabilityCard from "./components/WitnessAccountabilityCard";
 import ConsequenceStatusCard from "./components/ConsequencesStatusCard";
 import ProgressReportList from "../progressReports/components/ProgressReportList";
 import NextActionCard from "./components/NextActionCard";
-
+import AccountabilityPlanCard from "../../components/AccountabilityPlanCard";
 
 // Hooks
 import useProgressReports from "../progressReports/hooks/useProgressReports";
@@ -331,6 +331,16 @@ console.log(
           </p>
         )}
       </NextActionCard>
+
+
+    <AccountabilityPlanCard
+  accountabilityPlan={
+    dashboard.accountabilityPlan
+  }
+/>
+
+
+
 
       {analyticsLoading && (
         <p>

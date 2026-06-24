@@ -58,19 +58,20 @@ const validateReviewToken = async (
   }
 
   if (
-    challenge.witness
-      ?.decision
-  ) {
+  challenge.witness?.decision &&
+  challenge.status !==
+    CHALLENGE_STATUS.APPEALED
+) {
 
-    console.log(
-      "[REVIEW ALREADY SUBMITTED]",
-      token
-    );
+  console.log(
+    "[REVIEW ALREADY SUBMITTED]",
+    token
+  );
 
-    throw new Error(
-      "Review already submitted"
-    );
-  }
+  throw new Error(
+    "Review already submitted"
+  );
+}
 
   if (
     challenge.status !==

@@ -1,4 +1,4 @@
-const NotificationBadge = ({
+ const NotificationBadge = ({
   count,
 }) => {
   if (!count) {
