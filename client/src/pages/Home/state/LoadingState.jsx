@@ -4,13 +4,12 @@ const LoadingState = () => {
   return (
     <div className="loading-state">
       <h2>
-        Loading Commitments
-      </h2>
+  Loading Your Commitments
+</h2>
 
-      <p>
-        Preparing your
-        accountability dashboard...
-      </p>
+<p>
+  Preparing your Accountability Command Center...
+</p>
     </div>
   );
 };

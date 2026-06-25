@@ -1,48 +1,40 @@
  import "./TodayFocusSection.css";
 
 const TodayFocusSection = ({
-  focusItems,
+  immediateAction,
 }) => {
-  if (
-    !focusItems ||
-    focusItems.length === 0
-  ) {
+
+  if (!immediateAction) {
     return null;
   }
 
   return (
     <section className="today-focus-section">
+
       <h2 className="today-focus-section__title">
-        Today's Focus
+        Immediate Action
       </h2>
 
-      <div className="today-focus-section__list">
-        {focusItems.map(
-          (
-            item,
-            index
-          ) => (
-            <div
-              key={index}
-              className="today-focus-section__item"
-            >
-              <div className="today-focus-section__indicator">
-                !
-              </div>
+      <div className="today-focus-section__item">
 
-              <div>
-                <p className="today-focus-section__action">
-                  {item.action}
-                </p>
+        <div className="today-focus-section__indicator">
+          !
+        </div>
 
-                <p className="today-focus-section__challenge">
-                  {item.title}
-                </p>
-              </div>
-            </div>
-          )
-        )}
+        <div className="today-focus-section__content">
+
+          <p className="today-focus-section__action">
+            {immediateAction.action}
+          </p>
+
+          <p className="today-focus-section__challenge">
+            {immediateAction.title}
+          </p>
+
+        </div>
+
       </div>
+
     </section>
   );
 };

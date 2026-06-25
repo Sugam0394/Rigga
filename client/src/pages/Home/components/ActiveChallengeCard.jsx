@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./ActiveChallengeCard.css";
 
-import { getNextAction , getUrgencyContext } from "../utils/homePriority";
+import {   getWitnessState } from "../utils/homePriority";
 
 const ActiveChallengeCard = ({
   challenge,
@@ -79,22 +79,25 @@ const ActiveChallengeCard = ({
       " active-challenge-card__remaining--urgent";
   }
 
-  const nextAction =
-    getNextAction(
-      challenge
-    );
+ 
 
-  const urgencyContext =
-    getUrgencyContext(
-      challenge.deadlineAt
-    );
+  
 
-  const handleClick =
-    () => {
-      navigate(
-        `/challenges/${challenge._id}`
-      );
-    };
+    const witnessState =
+  getWitnessState(
+    challenge
+  );
+
+  const handleClick = () => {
+
+  if (!challenge?._id) {
+    return;
+  }
+
+  navigate(
+    `/challenges/${challenge._id}`
+  );
+};
 
   return (
     <div
@@ -116,32 +119,23 @@ const ActiveChallengeCard = ({
 
       {/* TITLE */}
       <h2 className="active-challenge-card__title">
-        {challenge.title}
-      </h2>
-
-      {/* NEXT ACTION */}
-      <div className="active-challenge-card__next-action">
-        <p className="active-challenge-card__next-action-label">
-          Next Action
-        </p>
-
-        <p className="active-challenge-card__next-action-value">
-          {nextAction}
-        </p>
-      </div>
+  {challenge.title || "Untitled Commitment"}
+</h2>
+ 
 
       {/* DEADLINE */}
       <p className="active-challenge-card__deadline">
         Deadline:
         {" "}
-        {deadlineDate.toLocaleDateString(
-          "en-US",
-          {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          }
-        )}
+        {
+  challenge.deadlineAt
+    ? deadlineDate.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : "No deadline"
+}
       </p>
 
       <p
@@ -153,22 +147,12 @@ const ActiveChallengeCard = ({
       </p>
 
       {/* WITNESS */}
-      <div className="active-challenge-card__footer">
-        <p className="active-challenge-card__witness">
-          Witness:
-          {" "}
-          {challenge
-            .witness?.name ||
-            "Not Assigned"}
-        </p>
-      </div>
-
-      {/* CONTEXT */}
-      <p className="active-challenge-card__context">
-        {
-          urgencyContext
-        }
-      </p>
+     <div className="active-challenge-card__footer">
+  <p className="active-challenge-card__witness">
+    {witnessState}
+  </p>
+</div>
+ 
     </div>
   );
 };

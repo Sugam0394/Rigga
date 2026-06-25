@@ -6,20 +6,20 @@ const ErrorState = ({
 }) => {
   return (
     <div className="error-state">
-      <h2>
-        Something Went Wrong
-      </h2>
+     <h2>
+  Unable To Load Your Commitments
+</h2>
 
-      <p>
-        {message}
-      </p>
+<p>
+  {message}
+</p>
 
-      <button
-        onClick={onRetry}
-        className="error-state__button"
-      >
-        Try Again
-      </button>
+<button
+  onClick={onRetry}
+  className="error-state__button"
+>
+  Retry
+</button>
     </div>
   );
 };

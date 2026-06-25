@@ -1,60 +1,159 @@
-.today-focus-section {
-  background: white;
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
-  padding: 20px;
+ .today-focus-section {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
 }
 
 .today-focus-section__title {
-  margin: 0 0 16px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #111827;
-}
 
-.today-focus-section__list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  margin: 0;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  color: var(--color-text-secondary);
 }
 
 .today-focus-section__item {
+
   display: flex;
   align-items: center;
-  gap: 12px;
+
+  gap: 18px;
+
+  padding: 22px;
+
+  background: var(--color-surface);
+
+  border: 2px solid var(--color-primary);
+
+  border-radius: 18px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
- .today-focus-section__indicator {
-  width: 36px;
-  height: 36px;
+.today-focus-section__indicator {
+
+  width: 56px;
+  height: 56px;
 
   flex-shrink: 0;
 
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
-  border-radius: 999px;
+  border-radius: 50%;
 
-  background: #FFF7ED;
-  color: #F97316;
+  background: var(--color-primary);
 
+  color: #ffffff;
+
+  font-size: 1.5rem;
   font-weight: 700;
+}
+
+.today-focus-section__content {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  min-width: 0;
 }
 
 .today-focus-section__action {
+
   margin: 0;
 
-  color: #111827;
-
-  font-size: 14px;
+  font-size: 1.15rem;
   font-weight: 700;
+
+  line-height: 1.4;
+
+  color: var(--color-text-primary);
 }
 
 .today-focus-section__challenge {
-  margin: 4px 0 0;
 
-  color: #6B7280;
+  margin: 0;
 
-  font-size: 13px;
+  font-size: 0.95rem;
+
+  line-height: 1.6;
+
+  color: var(--color-text-secondary);
+
+  word-break: break-word;
 }
+
+@media (max-width: 768px) {
+
+  .today-focus-section__item {
+
+    padding: 18px;
+
+    gap: 16px;
+  }
+
+  .today-focus-section__indicator {
+
+    width: 50px;
+    height: 50px;
+
+    font-size: 1.3rem;
+  }
+
+  .today-focus-section__action {
+
+    font-size: 1.05rem;
+  }
+
+}
+
+ @media (max-width:390px){
+
+  .today-focus-section__item{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+  .today-focus-section__indicator{
+
+    margin-bottom:4px;
+  }
+
+  .today-focus-section__content{
+
+    width:100%;
+  }
+
+}
+
+  .today-focus-section__indicator {
+
+    width: 44px;
+    height: 44px;
+
+    font-size: 1.1rem;
+  }
+
+  .today-focus-section__action {
+
+    font-size: 1rem;
+  }
+
+  .today-focus-section__challenge {
+
+    font-size: 0.9rem;
+  }
+
+ 

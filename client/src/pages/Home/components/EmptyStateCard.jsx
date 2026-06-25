@@ -8,12 +8,10 @@ const EmptyStateCard = () => {
         Every commitment starts with a promise.
       </h2>
 
-      <p className="empty-state-card__description">
-        Turn your promise into a commitment,
-        invite a witness,
-        prove your progress,
-        and build credibility through action.
-      </p>
+     <p className="empty-state-card__description">
+  Rigga turns personal promises into verified commitments.
+  Choose a witness, track your progress, and know that your witness will verify the outcome.
+</p>
 
       <div className="empty-state-card__journey">
         <div className="empty-state-card__step">

@@ -72,32 +72,7 @@ export const getDeadlinePriority = (
   };
 };
 
-export const getNextAction = (challenge) => {
-    switch (
-      challenge.status
-    ) {
-      case "ACTIVE":
-        return "Submit Progress Report";
-
-      case "UNDER_REVIEW":
-        return "Await Witness Decision";
-
-      case "REJECTED":
-        return "Review Rejection";
-
-      case "APPEALED":
-        return "Await Appeal Outcome";
-
-      case "FAILED":
-        return "Challenge Closed";
-
-      case "COMPLETED":
-        return "Challenge Completed";
-
-      default:
-        return "Review Status";
-    }
-  };
+ 
 
   export const sortChallenges =  (challenges) => {
     return [
@@ -127,97 +102,117 @@ export const getNextAction = (challenge) => {
       }
     );
   };
-export const generateFocusItems =  (challenges) => {
-    const items = [];
 
-    challenges.forEach(
-      (
-        challenge
-      ) => {
-        const deadline =
-          getDeadlinePriority(
-            challenge.deadlineAt
-          );
 
-        if (
-          challenge.status ===
-          "REJECTED"
-        ) {
-          items.push({
-            title:
-              challenge.title,
-            action:
-              "Review Rejection",
-          });
-        }
-
-        else if (
-          challenge.status ===
-          "UNDER_REVIEW"
-        ) {
-          items.push({
-            title:
-              challenge.title,
-            action:
-              "Witness Review Pending",
-          });
-        }
-
-        else if (
-          deadline.label ===
-          "Due Today"
-        ) {
-          items.push({
-            title:
-              challenge.title,
-            action:
-              "Deadline Today",
-          });
-        }
-
-        else if (
-          deadline.label ===
-          "Due This Week"
-        ) {
-          items.push({
-            title:
-              challenge.title,
-            action:
-              "Deadline This Week",
-          });
-        }
-      }
-    );
-
-    return items.slice(
-      0,
-      3
-    );
-  };
-
-  export const getUrgencyContext = (
-  deadlineAt
+ export const determineImmediateAction = (
+  challenges
 ) => {
-  const deadline =
-    new Date(deadlineAt);
 
-  const today =
-    new Date();
-
-  const days =
-    Math.ceil(
-      (deadline - today) /
-      (1000 * 60 * 60 * 24)
+  const rejected =
+    challenges.find(
+      challenge =>
+        challenge.status ===
+        "REJECTED"
     );
 
-  if (days <= 0)
-    return "Requires attention today";
+  if (rejected) {
+    return {
+      title:
+        rejected.title,
+      action:
+        "Review Rejection",
+    };
+  }
 
-  if (days <= 2)
-    return "Deadline approaching";
+  const active =
+    challenges.find(
+      challenge =>
+        challenge.status ===
+        "ACTIVE"
+    );
 
-  if (days <= 7)
-    return "Due this week";
+  if (active) {
+    return {
+      title:
+        active.title,
+      action:
+        "Submit Progress Report",
+    };
+  }
 
-  return "On track";
+  const dueToday =
+    challenges.find(
+      challenge =>
+        getDeadlinePriority(
+          challenge.deadlineAt
+        ).label ===
+        "Due Today"
+    );
+
+  if (dueToday) {
+    return {
+      title:
+        dueToday.title,
+      action:
+        "Deadline Today",
+    };
+  }
+
+  return {
+    title:
+      "Everything On Track",
+    action:
+      "No immediate action required",
+  };
+};
+
+ 
+
+ export const getWitnessState = (
+  challenge
+) => {
+
+  if (
+    challenge.status ===
+    "UNDER_REVIEW"
+  ) {
+    return "Witness Reviewing";
+  }
+
+  if (
+    challenge.status ===
+    "REJECTED"
+  ) {
+    return "Witness Rejected";
+  }
+
+  if (
+    challenge.status ===
+    "COMPLETED"
+  ) {
+    return "Verification Complete";
+  }
+
+  if (
+    challenge.status ===
+    "ACTIVE"
+  ) {
+    return "Verification Scheduled";
+  }
+
+  if (
+    challenge.status ===
+    "APPEALED"
+  ) {
+    return "Appeal Under Review";
+  }
+
+  if (
+    challenge.status ===
+    "FAILED"
+  ) {
+    return "Verification Failed";
+  }
+
+  return "Verification Pending";
 };

@@ -1,11 +1,60 @@
-.loading-state {
-  background: white;
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
-  padding: 24px;
+ .loading-state {
+
+  min-height: 60vh;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
   text-align: center;
+
+  gap: 16px;
+
+  padding: 32px;
+}
+
+.loading-state h2 {
+
+  margin: 0;
+
+  font-size: 1.6rem;
+
+  font-weight: 700;
+
+  color: var(--color-text-primary);
 }
 
 .loading-state p {
-  color: #6B7280;
+
+  margin: 0;
+
+  max-width: 420px;
+
+  font-size: 1rem;
+
+  line-height: 1.7;
+
+  color: var(--color-text-secondary);
+}
+
+@media (max-width:390px){
+
+  .loading-state h2{
+
+    font-size:1.3rem;
+  }
+
+  .loading-state p{
+
+    font-size:.95rem;
+  }
+
+}
+
+.loading-state{
+
+padding-inline:20px;
+
 }

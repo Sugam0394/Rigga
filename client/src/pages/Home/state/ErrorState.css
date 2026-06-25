@@ -1,22 +1,95 @@
-.error-state {
-  background: white;
-  border: 1px solid #FECACA;
-  border-radius: 16px;
-  padding: 24px;
+ .error-state {
+
+  min-height: 60vh;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
   text-align: center;
+
+  gap: 18px;
+
+  padding: 32px;
+}
+
+.error-state h2 {
+
+  margin: 0;
+
+  font-size: 1.6rem;
+
+  font-weight: 700;
+
+  color: var(--color-text-primary);
 }
 
 .error-state p {
-  color: #991B1B;
+
+  margin: 0;
+
+  max-width: 420px;
+
+  font-size: 1rem;
+
+  line-height: 1.7;
+
+  color: var(--color-text-secondary);
 }
 
 .error-state__button {
-  margin-top: 12px;
-  padding: 10px 16px;
+
   border: none;
+
   border-radius: 12px;
+
+  padding: 14px 24px;
+
+  background: var(--color-primary);
+
+  color: #fff;
+
   cursor: pointer;
-  background: #DC2626;
-  color: white;
-  font-weight: 600;
+
+  font-size: .95rem;
+
+  font-weight: 700;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.error-state__button:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+}
+
+@media (max-width:390px){
+
+  .error-state h2{
+
+    font-size:1.3rem;
+  }
+
+  .error-state p{
+
+    font-size:.95rem;
+  }
+
+  .error-state__button{
+
+    width:100%;
+  }
+
+}
+
+.error-state{
+
+padding-inline:20px;
+
 }
