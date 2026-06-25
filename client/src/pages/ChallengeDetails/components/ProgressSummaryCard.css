@@ -1,24 +1,102 @@
-.progress-summary-card {
-  padding: 24px;
-  border-radius: 16px;
+ .progress-summary-card {
   background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  padding: 24px;
+
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.04);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  text-align: center;
 }
 
 .progress-summary-card__title {
-  margin: 0 0 20px;
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  color: #111827;
 }
 
 .progress-summary-card__count {
   margin: 0;
-  font-size: 2rem;
+
+  font-size: 48px;
   font-weight: 700;
+
+  line-height: 1;
+
+  color: #dc2626;
 }
 
 .progress-summary-card__label {
   margin: 0;
-  color: #6b7280;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #4b5563;
 }
 
 .progress-summary-card__latest {
-  margin-top: 16px;
+  margin-top: 8px;
+
+  padding: 16px;
+
+  border-radius: 12px;
+
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress-summary-card__latest p {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.6;
+
+  color: #6b7280;
+}
+
+.progress-summary-card__latest p:last-child {
+  font-weight: 600;
+  color: #111827;
+}
+
+@media (max-width: 768px) {
+
+  .progress-summary-card {
+    padding: 20px;
+  }
+
+  .progress-summary-card__title {
+    font-size: 20px;
+  }
+
+  .progress-summary-card__count {
+    font-size: 40px;
+  }
+
+  .progress-summary-card__label {
+    font-size: 14px;
+  }
+
+  .progress-summary-card__latest {
+    padding: 14px;
+  }
+
+  .progress-summary-card__latest p {
+    font-size: 13px;
+  }
 }

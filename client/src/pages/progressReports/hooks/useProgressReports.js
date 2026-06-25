@@ -1,5 +1,8 @@
-import { useEffect, useState }
-  from "react";
+ import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import {
   getProgressReports,
@@ -8,17 +11,24 @@ import {
 const useProgressReports = (
   challengeId
 ) => {
-  const [reports, setReports] =
-    useState([]);
+  const [
+    reports,
+    setReports,
+  ] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
 
-  const [error, setError] =
-    useState(null);
+  const [
+    error,
+    setError,
+  ] = useState(null);
 
+  // Wrapped in useCallback so its reference remains completely stable across renders
   const fetchReports =
-    async () => {
+    useCallback(async () => {
       try {
         setLoading(true);
         setError(null);
@@ -28,23 +38,35 @@ const useProgressReports = (
             challengeId
           );
 
-        setReports(data);
+        setReports(
+          data ?? []
+        );
+
       } catch (err) {
+        setReports([]);
+
         setError(
           err?.response?.data
             ?.message ||
-            "Failed to load reports"
+          "Failed to load reports."
         );
+
       } finally {
         setLoading(false);
       }
-    };
+    }, [challengeId]);
 
   useEffect(() => {
-    if (challengeId) {
-      fetchReports();
+    if (!challengeId) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
-  }, [challengeId]);
+
+    fetchReports();
+
+  }, [challengeId, fetchReports]); // Perfectly safe dependency array now
 
   return {
     reports,

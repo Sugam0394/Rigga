@@ -115,26 +115,27 @@ const handleSubmitProgress =
     );
   };
 
- const handleShareWithWitness =  async () => {
+ const handleShareWithWitness = async () => {
+  const witness = dashboard.witness;
 
-    const witness =
-      dashboard.witness;
-
-    const message =
-      `Hey ${witness.name},
+  const message = `Hey ${witness.name},
 
 Please review my Rigga commitment.`;
 
-    await trackWitnessShare(
-      id
+  try {
+    await trackWitnessShare(id);
+  } catch (error) {
+    console.error(
+      "Unable to track witness share.",
+      error
     );
+  }
 
-    openWhatsAppShare({
-      phone:
-        witness.phone,
-      message,
-    });
-  };
+  openWhatsAppShare({
+    phone: witness.phone,
+    message,
+  });
+};
 
   const {
   insights,
@@ -272,14 +273,16 @@ const nextAction =
       </button>
   )}
 
-  {dashboard.witness?.phone && (
+ {dashboard.challenge.status ===
+  "ACTIVE" &&
+  dashboard.witness?.phone && (
     <button
       className="challenge-details-button"
       onClick={handleShareWithWitness}
     >
       Share With Witness
     </button>
-  )}
+)}
 
   {dashboard.challenge.status ===
     "ACTIVE" &&

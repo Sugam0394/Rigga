@@ -29,9 +29,9 @@ const CheckpointSummaryCard = ({
         </div>
 
         <div className="checkpoint-card__stat">
-          <p className="checkpoint-card__label">
-           Upcoming Checkpoints
-          </p>
+           <p className="checkpoint-card__label">
+  Pending Checkpoints
+</p>
           <p className="checkpoint-card__value">
             {checkpoints.pending}
           </p>

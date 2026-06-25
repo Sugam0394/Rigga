@@ -1,4 +1,4 @@
-const getNextAction = (status) => {
+ const getNextAction = (status) => {
   switch (status) {
     case "ACTIVE":
       return {
@@ -35,11 +35,18 @@ const getNextAction = (status) => {
           "No further action required.",
       };
 
+    case "FAILED":
+      return {
+        title: "Commitment Failed",
+        description:
+          "This commitment was not successfully completed. No further actions are available.",
+      };
+
     default:
       return {
-        title: "Commitment Closed",
+        title: "Unknown Challenge State",
         description:
-          "This commitment is no longer active.",
+          "Rigga could not determine the current accountability state.",
       };
   }
 };

@@ -1,3 +1,9 @@
+import "./AccountabilityPlanCard.css"
+ 
+ 
+ 
+ 
+ 
  const AccountabilityPlanCard = ({
 accountabilityPlan,
 }) => {

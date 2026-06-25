@@ -25,15 +25,9 @@ const ProgressReportList = ({
   if (reports.length === 0) {
     return (
       <div className="progress-timeline__empty">
-       Evidence Timeline
-
-       <p>
-  No evidence has been submitted yet.
-</p>
-
-<p>
-   Every evidence submission becomes part of your accountability record.
-</p>
+        <h2>Evidence Timeline</h2>
+        <p>No evidence has been submitted yet.</p>
+        <p>Every evidence submission becomes part of your accountability record.</p>
       </div>
     );
   }
