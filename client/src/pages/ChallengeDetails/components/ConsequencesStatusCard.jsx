@@ -12,15 +12,16 @@ const ConsequenceStatusCard = ({
       : "Locked";
 
   const message =
-  isReleased
-    ? "This commitment failed and the protected consequence has been released."
-    : "Your consequence remains protected while you continue honoring this commitment.";
+    isReleased
+      ? "Your commitment was not successfully verified. The protected consequence has now been released."
+      : "Your consequence remains protected while this commitment is still in progress.";
 
   return (
     <section className="consequence-card">
+
       <h2 className="consequence-card__title">
-  Accountability Stakes
-</h2>
+        Consequence Status
+      </h2>
 
       <span
         className={`consequence-card__badge consequence-card__badge--${
@@ -35,10 +36,11 @@ const ConsequenceStatusCard = ({
       <p className="consequence-card__message">
         {message}
       </p>
+
       <p className="consequence-card__context">
-  Consequences exist to create accountability,
-  not punishment.
-</p>
+        Consequences reinforce accountability—not punishment.
+      </p>
+
     </section>
   );
 };

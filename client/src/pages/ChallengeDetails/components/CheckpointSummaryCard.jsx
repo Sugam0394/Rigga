@@ -5,14 +5,14 @@ const CheckpointSummaryCard = ({
 }) => {
   return (
     <section className="checkpoint-card">
-       <h2 className="checkpoint-card__title">
-  Accountability Milestones
+     <h2 className="checkpoint-card__title">
+  Checkpoint Journey
 </h2>
 
       <div className="checkpoint-card__stats">
         <div className="checkpoint-card__stat">
           <p className="checkpoint-card__label">
-            Total
+            Total Checkpoints
           </p>
           <p className="checkpoint-card__value">
             {checkpoints.total}
@@ -21,7 +21,7 @@ const CheckpointSummaryCard = ({
 
         <div className="checkpoint-card__stat">
           <p className="checkpoint-card__label">
-            Completed
+            Completed Checkpoints
           </p>
           <p className="checkpoint-card__value">
             {checkpoints.completed}
@@ -30,7 +30,7 @@ const CheckpointSummaryCard = ({
 
         <div className="checkpoint-card__stat">
           <p className="checkpoint-card__label">
-            Pending
+           Upcoming Checkpoints
           </p>
           <p className="checkpoint-card__value">
             {checkpoints.pending}
@@ -39,7 +39,7 @@ const CheckpointSummaryCard = ({
 
         <div className="checkpoint-card__stat">
           <p className="checkpoint-card__label">
-            Missed
+           Missed Checkpoints
           </p>
           <p className="checkpoint-card__value">
             {checkpoints.missed}

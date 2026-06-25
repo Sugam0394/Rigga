@@ -2,24 +2,24 @@
 import "./ChallengeStatusCard.css";
 
 
-const STATUS_CONTEXT = {
+ const STATUS_CONTEXT = {
   ACTIVE:
-    "You are currently working toward this commitment.",
+    "Your commitment is active. Continue submitting evidence to stay accountable.",
 
   UNDER_REVIEW:
-    "Your witness is reviewing submitted evidence.",
+    "Your evidence has been submitted and is currently being reviewed by your witness.",
 
   REJECTED:
-    "Your witness rejected this commitment.",
+    "Your witness rejected this commitment. Review the decision and appeal if appropriate.",
 
   APPEALED:
-    "This commitment is under appeal review.",
+    "Your appeal is under review. Await the final accountability outcome.",
 
   FAILED:
-    "This commitment was not successfully completed.",
+    "This commitment ended without successful verification.",
 
   COMPLETED:
-    "This commitment has been successfully verified.",
+    "Your commitment has been successfully verified by your witness.",
 };
 const STATUS_VARIANTS = {
   ACTIVE: "success",
@@ -44,16 +44,17 @@ const ChallengeStatusCard = ({
   return (
     <section className="challenge-status">
       <h2 className="challenge-status__title">
-        Current Status
-      </h2>
+  Current Accountability State
+</h2>
 
       <span
         className={`challenge-status__badge challenge-status__badge--${variant}`}
       >
         {label}
       </span>
-      <p className="challenge-status__context">
-  {STATUS_CONTEXT[status]}
+     <p className="challenge-status__context">
+  {STATUS_CONTEXT[status] ??
+    "Current accountability state unavailable."}
 </p>
     </section>
   );

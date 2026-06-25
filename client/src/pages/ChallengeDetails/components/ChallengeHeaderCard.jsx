@@ -56,9 +56,7 @@ const ChallengeHeaderCard = ({
           Deadline: {formattedDeadline}
         </p>
 
-        <p className="challenge-header__status">
-          Status: {status}
-        </p>
+       
 
         {remainingText && (
           <p className="challenge-header__remaining">

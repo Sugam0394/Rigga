@@ -8,7 +8,7 @@ const NextActionCard = ({
   return (
     <section className="next-action-card">
       <p className="next-action-card__eyebrow">
-        Next Action
+        Immediate Next Step
       </p>
 
       <h2 className="next-action-card__title">
@@ -19,11 +19,11 @@ const NextActionCard = ({
         {description}
       </p>
 
-      {children && (
+    {children ? (
   <div className="next-action-card__actions">
     {children}
   </div>
-)}
+) : null}
     </section>
   );
 };

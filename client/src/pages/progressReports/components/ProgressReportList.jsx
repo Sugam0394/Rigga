@@ -5,11 +5,11 @@ const ProgressReportList = ({
   reports,
   loading,
   error,
-}) => {ProgressReportList
+}) => {
   if (loading) {
     return (
       <div className="progress-timeline__loading">
-        Loading challenge history...
+         Loading evidence timeline...
       </div>
     );
   }
@@ -25,15 +25,14 @@ const ProgressReportList = ({
   if (reports.length === 0) {
     return (
       <div className="progress-timeline__empty">
-        <h2>Challenge History</h2>
+       Evidence Timeline
 
        <p>
   No evidence has been submitted yet.
 </p>
 
 <p>
-  Every progress report becomes part of
-  your accountability record.
+   Every evidence submission becomes part of your accountability record.
 </p>
       </div>
     );
@@ -47,7 +46,7 @@ const ProgressReportList = ({
 </h2>
 
 <p className="progress-timeline__subtitle">
-  Evidence submitted throughout the life of this commitment.
+  Review every piece of evidence submitted throughout this commitment.
 </p>
 
       {reports.map((report) => (

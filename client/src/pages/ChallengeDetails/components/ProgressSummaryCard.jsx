@@ -6,7 +6,7 @@ const ProgressSummaryCard = ({
   return (
     <section className="progress-summary-card">
      <h2 className="progress-summary-card__title">
-  Evidence Summary
+   Progress & Evidence
 </h2>
 
       <p className="progress-summary-card__count">
@@ -14,14 +14,14 @@ const ProgressSummaryCard = ({
       </p>
 
       <p className="progress-summary-card__label">
-        Reports Submitted
+         Evidence Submitted
       </p>
 
        <div className="progress-summary-card__latest">
   {progress.latestReportDate ? (
     <>
       <p>
-        Latest Evidence Submitted
+         Latest Submission
       </p>
 
       <p>
@@ -32,7 +32,7 @@ const ProgressSummaryCard = ({
     </>
   ) : (
     <p>
-      No evidence submitted yet.
+      No evidence has been submitted for this commitment yet.
     </p>
   )}
 </div>

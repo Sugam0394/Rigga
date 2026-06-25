@@ -4,17 +4,16 @@ const AppealStatusCard = () => {
   return (
     <section className="appeal-status">
   <h3 className="appeal-status__title">
-    Appeal Under Review
+     Appeal Status
   </h3>
 
   <p className="appeal-status__message">
-    Your challenge was rejected and is currently
-    undergoing a fairness review.
+  Your appeal has been submitted and is currently under review.
   </p>
 
   <p className="appeal-status__context">
-    No action is required right now.
-    Await the final outcome.
+   No further action is required at this stage.
+Rigga will notify you once a final decision has been reached.
   </p>
 </section>
   );

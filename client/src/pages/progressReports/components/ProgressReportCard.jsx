@@ -29,7 +29,7 @@ const ProgressReportCard = ({
       {report.imageUrl && (
         <>
           <p className="progress-report__label">
-            Evidence
+           Submitted Evidence
           </p>
 
           <img
