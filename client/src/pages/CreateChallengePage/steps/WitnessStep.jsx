@@ -1,4 +1,5 @@
-import GlobalPhoneInput from "../../../features/auth/components/GlobalPhoneInput"
+ import GlobalPhoneInput from "../../../features/auth/components/GlobalPhoneInput";
+import ChallengeFormNavigation from "../components/ChallengeFormNavigation";
 
 const WitnessStep = ({
   formData,
@@ -8,10 +9,15 @@ const WitnessStep = ({
   handleBack,
 }) => {
   return (
-    <div>
-      <h1>
-        Who will verify your success?
+    <div className="challenge-step">
+      <h1 className="challenge-step__title">
+        Who will verify this commitment?
       </h1>
+
+      <p className="challenge-step__description">
+        Choose someone who can honestly verify
+        whether you fulfilled this commitment.
+      </p>
 
       <input
         type="text"
@@ -26,68 +32,33 @@ const WitnessStep = ({
       />
 
       {errors.witnessName && (
-        <p>{errors.witnessName}</p>
-      )}
-
-    <GlobalPhoneInput
-  value={formData.witnessPhone}
-  onChange={(value) =>
-    handleChange(
-      "witnessPhone",
-      value || ""
-    )
-  }
-  placeholder="Enter witness phone number"
-/>
-
-  
-
-      {errors.witnessPhone && (
-        <p>{errors.witnessPhone}</p>
-      )}
-
-      <h2>
-        How will your witness verify you succeeded?
-      </h2>
-
-      <textarea
-        rows={5}
-        placeholder="Complete at least 25 gym visits before the deadline."
-        value={
-          formData.successCriteria
-        }
-        onChange={(e) =>
-          handleChange(
-            "successCriteria",
-            e.target.value
-          )
-        }
-      />
-
-      <small>
-        Be specific. Your witness
-        uses this to decide.
-      </small>
-
-      {errors.successCriteria && (
-        <p>
-          {errors.successCriteria}
+        <p className="challenge-step__error">
+          {errors.witnessName}
         </p>
       )}
 
-      <div>
-        <button
-          onClick={handleBack}
-        >
-          Back
-        </button>
+      <GlobalPhoneInput
+        value={formData.witnessPhone}
+        onChange={(value) =>
+          handleChange(
+            "witnessPhone",
+            value || ""
+          )
+        }
+        placeholder="Enter witness phone number"
+      />
 
-        <button
-          onClick={handleNext}
-        >
-          Next
-        </button>
-      </div>
+      {errors.witnessPhone && (
+        <p className="challenge-step__error">
+          {errors.witnessPhone}
+        </p>
+      )}
+
+      <ChallengeFormNavigation
+        currentStep={4}
+        handleBack={handleBack}
+        handleNext={handleNext}
+      />
     </div>
   );
 };

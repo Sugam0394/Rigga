@@ -49,18 +49,12 @@ export const useCreateChallenge = () => {
 };
 
  const handleNext = () => {
-  console.log(
-    "CURRENT STEP:",
-    currentStep
-  );
+   
 
   const valid =
     isStepValid();
 
-  console.log(
-    "VALID:",
-    valid
-  );
+  
 
   if (!valid) return;
 
@@ -79,12 +73,13 @@ const getWordCount = (text) => {
 };
 
 const handleSubmit = async () => {
-    console.log(
-    "HANDLE SUBMIT CALLED"
-  );
-  const valid = isStepValid();
+   
+ const valid =
+  isStepValid();
 
-  if (!valid) return;
+if (!valid) {
+  return;
+}
 
   try {
     setSubmitError("");
@@ -158,46 +153,48 @@ if (
     }
   }
 
-  if (currentStep === 3) {
-    if (!formData.witnessName.trim()) {
-      newErrors.witnessName =
-        "Witness name is required";
-    }
+ if (currentStep === 3) {
+  const criteria =
+    formData.successCriteria.trim();
 
- if (
-  !formData.witnessPhone
-) {
-  newErrors.witnessPhone =
-    "Witness phone is required";
-} else if (
-  !validatePhone(
-    formData.witnessPhone
-  )
-) {
-  newErrors.witnessPhone =
-    "Enter a valid phone number";
+  if (!criteria) {
+    newErrors.successCriteria =
+      "Success criteria is required";
+  } else if (
+    criteria.length < 20
+  ) {
+    newErrors.successCriteria =
+      "Minimum 20 characters required";
+  } else if (
+    criteria.length > 500
+  ) {
+    newErrors.successCriteria =
+      "Maximum 500 characters allowed";
+  }
 }
- 
-    const criteria =
-      formData.successCriteria.trim();
 
-    if (!criteria) {
-      newErrors.successCriteria =
-        "Success criteria is required";
-    } else if (
-      criteria.length < 20
-    ) {
-      newErrors.successCriteria =
-        "Minimum 20 characters required";
-    } else if (
-      criteria.length > 500
-    ) {
-      newErrors.successCriteria =
-        "Maximum 500 characters allowed";
-    }
+if (currentStep === 4) {
+  if (!formData.witnessName.trim()) {
+    newErrors.witnessName =
+      "Witness name is required";
   }
 
-  if (currentStep === 4) {
+  if (
+    !formData.witnessPhone
+  ) {
+    newErrors.witnessPhone =
+      "Witness phone is required";
+  } else if (
+    !validatePhone(
+      formData.witnessPhone
+    )
+  ) {
+    newErrors.witnessPhone =
+      "Enter a valid phone number";
+  }
+}
+
+  if (currentStep === 5) {
     const wordCount =
       getWordCount(
         formData.privateMessage
@@ -207,7 +204,7 @@ if (
       !formData.privateMessage.trim()
     ) {
       newErrors.privateMessage =
-        "Stakes message is required";
+        "Private message is required";
     } else if (
       wordCount < 25
     ) {

@@ -1,31 +1,28 @@
+ import "./ChallengeProgressBar.css";
+
 const ChallengeProgressBar = ({
   currentStep,
 }) => {
   const progress =
-    (currentStep / 4) * 100;
+    (currentStep / 6) * 100;
 
   return (
-    <div>
-      <p>
-        Step {currentStep} of 4
-      </p>
+    <div className="challenge-progress">
+      <div className="challenge-progress__header">
+        <span>
+          Step {currentStep} of 6
+        </span>
 
-      <div
-        style={{
-          width: "100%",
-          height: "8px",
-          background: "#E5E7EB",
-          borderRadius: "999px",
-        }}
-      >
+        <span>
+          {Math.round(progress)}%
+        </span>
+      </div>
+
+      <div className="challenge-progress__track">
         <div
+          className="challenge-progress__fill"
           style={{
             width: `${progress}%`,
-            height: "100%",
-            background:
-              "#4F46E5",
-            borderRadius:
-              "999px",
           }}
         />
       </div>

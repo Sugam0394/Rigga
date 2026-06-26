@@ -1,3 +1,5 @@
+ import "./ChallengeFormNavigation.css";
+
 const ChallengeFormNavigation = ({
   currentStep,
   handleBack,
@@ -6,18 +8,24 @@ const ChallengeFormNavigation = ({
   isSubmitting,
 }) => {
   return (
-    <div>
-      {currentStep > 1 && (
+    <div className="challenge-form-navigation">
+      {currentStep > 1 ? (
         <button
+          type="button"
+          className="challenge-form-navigation__button challenge-form-navigation__button--secondary"
           onClick={handleBack}
           disabled={isSubmitting}
         >
           Back
         </button>
+      ) : (
+        <div />
       )}
 
-      {currentStep < 4 ? (
+      {currentStep < 6 ? (
         <button
+          type="button"
+          className="challenge-form-navigation__button challenge-form-navigation__button--primary"
           onClick={handleNext}
           disabled={isSubmitting}
         >
@@ -25,12 +33,14 @@ const ChallengeFormNavigation = ({
         </button>
       ) : (
         <button
+          type="button"
+          className="challenge-form-navigation__button challenge-form-navigation__button--primary"
           onClick={handleSubmit}
           disabled={isSubmitting}
         >
           {isSubmitting
-            ? "Creating..."
-            : "Submit"}
+            ? "Creating Commitment..."
+            : "Create Commitment"}
         </button>
       )}
     </div>

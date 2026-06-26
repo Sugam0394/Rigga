@@ -1,3 +1,7 @@
+ import ChallengeFormNavigation from "../components/ChallengeFormNavigation";
+ 
+ 
+ 
  const DeadlineStep = ({
   formData,
   errors,
@@ -18,10 +22,16 @@
       .slice(0, 16);
 
   return (
-    <div>
-      <h1>
-        When must this be completed?
-      </h1>
+     <div className="challenge-step">
+
+  <h1 className="challenge-step__title">
+    When must this be completed?
+  </h1>
+
+  <p className="challenge-step__description">
+    Choose the deadline by which this commitment
+    must be successfully completed.
+  </p>
 
       <input
         type="datetime-local"
@@ -36,27 +46,19 @@
           )
         }
       />
+     {errors.deadlineAt && (
+    <p className="challenge-step__error">
+      {errors.deadlineAt}
+    </p>
+  )}
 
-      {errors.deadlineAt && (
-        <p>
-          {errors.deadlineAt}
-        </p>
-      )}
+  <ChallengeFormNavigation
+    currentStep={2}
+    handleBack={handleBack}
+    handleNext={handleNext}
+  />
 
-      <div>
-        <button
-          onClick={handleBack}
-        >
-          Back
-        </button>
-
-        <button
-          onClick={handleNext}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+</div>
   );
 };
 
