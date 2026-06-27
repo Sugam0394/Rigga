@@ -15,20 +15,7 @@ const getAICoach = async (
 
     const userId =
       req.user.userId;
-
-    console.log(
-      "[AI_COACH_CONTROLLER]"
-    );
-
-    console.log(
-      "challengeId:",
-      challengeId
-    );
-
-    console.log(
-      "userId:",
-      userId
-    );
+ 
 
     const coach =
       await aiCoachService
@@ -37,9 +24,7 @@ const getAICoach = async (
           userId,
         });
 
-    console.log(
-      "[AI_COACH_SUCCESS]"
-    );
+     
 
     return res
       .status(200)
@@ -50,9 +35,7 @@ const getAICoach = async (
 
   } catch (error) {
 
-    console.log(
-      "[AI_COACH_ERROR]"
-    );
+    
 
     console.log(
       error.message

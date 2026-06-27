@@ -55,19 +55,22 @@ if (!hasConsent) {
       setLoading(true);
 
    
+    const result =
+  await requestOtp(
+    phone
+  );
 
-      await requestOtp(
-        phone
-      );
-
-      navigate(
-        "/verify-otp",
-        {
-          state: {
-            phone,
-          },
-        }
-      );
+navigate(
+  "/verify-otp",
+  {
+    state: {
+      phone,
+      developmentOtp:
+        result?.data
+          ?.developmentOtp,
+    },
+  }
+);
     } catch (error) {
   setSubmitError(
     error?.response?.data?.message ||

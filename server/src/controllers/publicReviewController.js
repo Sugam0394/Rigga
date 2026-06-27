@@ -26,10 +26,7 @@ export const getPublicReview = async (
         .REVIEW_LINK_OPENED,
   });
 
-console.log(
-  "[LINK_OPENED]",
-  challenge._id
-);
+ 
 
 const summary =
   await reviewSummaryService.getReviewSummary(
@@ -46,10 +43,7 @@ const summary =
         .REVIEW_STARTED,
   });
 
-console.log(
-  "[REVIEW_STARTED]",
-  challenge._id
-);
+ 
 
 res.status(200).json({
   success: true,

@@ -69,10 +69,7 @@ if (existingVerification) {
     });
 }
 
-console.log(
-  "OTP:",
-  otpCode
-);
+ 
 
 return {
   message:

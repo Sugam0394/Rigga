@@ -35,10 +35,7 @@ const {
             .REVIEW_LINK_SHARED,
       });
 
-    console.log(
-      "[LINK_SHARED]",
-      req.params.challengeId
-    );
+     
 
     res.status(200).json({
       success: true,

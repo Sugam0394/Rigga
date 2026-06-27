@@ -59,8 +59,10 @@ if (!authData) {
   return null;
 }
 
- const { phone } =
-  authData;
+ const {
+  phone,
+  developmentOtp,
+} = authData;
 
 
  const handleVerifyOtp = async () => {
@@ -112,9 +114,20 @@ navigate("/home", {
   try {
     setSubmitError("");
 
-    await requestOtp(phone);
+     const result =
+  await requestOtp(phone);
 
-    setCountdown(30);
+navigate(".", {
+  replace: true,
+  state: {
+    phone,
+    developmentOtp:
+      result?.data
+        ?.developmentOtp,
+  },
+});
+
+setCountdown(30);
   } catch (error) {
     setSubmitError(
       error?.response?.data?.message ||
@@ -131,6 +144,18 @@ navigate("/home", {
         navigate("/login")
       }
     />
+
+    {developmentOtp && (
+  <div className="development-otp-card">
+    <p className="development-otp-label">
+      Development OTP
+    </p>
+
+    <strong>
+      {developmentOtp}
+    </strong>
+  </div>
+)}
 
     <OtpInput
       value={otp}
