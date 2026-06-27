@@ -1,0 +1,100 @@
+/* ========================================
+   Notification Bell
+======================================== */
+
+.notification-bell {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  border-radius: 12px;
+
+  text-decoration: none;
+
+  color: #111827;
+
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.notification-bell:hover {
+  background: #f3f4f6;
+}
+
+.notification-bell:active {
+  transform: scale(0.96);
+}
+
+.notification-bell:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 4px rgba(220, 38, 38, 0.15);
+}
+
+.notification-bell__icon {
+  font-size: 1.35rem;
+
+  line-height: 1;
+}
+
+/* ========================================
+   Notification Badge
+======================================== */
+
+.notification-badge {
+  position: absolute;
+
+  top: 2px;
+  right: 2px;
+
+  min-width: 20px;
+  height: 20px;
+
+  padding: 0 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  background: #dc2626;
+  color: #ffffff;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  border: 2px solid #ffffff;
+
+  box-shadow:
+    0 4px 10px rgba(220, 38, 38, 0.25);
+}
+
+/* ========================================
+   Mobile
+======================================== */
+
+@media (max-width: 480px) {
+  .notification-bell {
+    width: 40px;
+    height: 40px;
+  }
+
+  .notification-bell__icon {
+    font-size: 1.2rem;
+  }
+
+  .notification-badge {
+    min-width: 18px;
+    height: 18px;
+
+    font-size: 0.65rem;
+  }
+}

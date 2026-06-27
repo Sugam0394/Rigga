@@ -1,3 +1,6 @@
+ import "./NotificationBell.css"
+ 
+ 
  const NotificationBadge = ({
   count,
 }) => {
@@ -7,6 +10,7 @@
 
   return (
     <span
+      className="notification-badge"
       aria-label={`${count} unread notifications`}
     >
       {count > 99

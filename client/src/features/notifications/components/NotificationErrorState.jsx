@@ -1,15 +1,24 @@
+ import "./NotificationStates.css"
+ 
+ 
  const NotificationErrorState = ({
   message,
 }) => {
   return (
-    <section>
-      <h2>
-        Unable to load notifications
-      </h2>
+    <section className="notification-state">
+      <div className="notification-state__content">
+        <div className="notification-state__icon">
+          ⚠️
+        </div>
 
-      <p>
-        {message}
-      </p>
+        <h2 className="notification-state__title">
+          Unable to load notifications
+        </h2>
+
+        <p className="notification-state__text">
+          {message}
+        </p>
+      </div>
     </section>
   );
 };

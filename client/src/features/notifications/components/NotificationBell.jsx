@@ -4,6 +4,8 @@ import useUnreadCount from "../hooks/useUnreadCount";
 
 import NotificationBadge from "./NotificationBadge";
 
+
+import "./NotificationBell.css"
 const NotificationBell = () => {
   const {
     unreadCount,
@@ -12,9 +14,11 @@ const NotificationBell = () => {
   return (
     <Link
       to="/notifications"
+      className="notification-bell"
       aria-label="Notifications"
     >
       <span
+        className="notification-bell__icon"
         role="img"
         aria-hidden="true"
       >
