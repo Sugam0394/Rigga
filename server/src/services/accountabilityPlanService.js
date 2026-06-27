@@ -5,7 +5,7 @@ import evidenceRules
   from "./evidenceRules.js";
 
 import checkpointStrategyRules
-  from "./checkpointStrategyRules.js";
+  from "./checkPointStrategyRules.js";
 
 import reminderStrategyRules
   from "./reminderStrategyRules.js";
