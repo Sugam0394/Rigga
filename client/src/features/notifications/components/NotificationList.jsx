@@ -5,6 +5,8 @@ import useMarkNotificationRead from "../hooks/useNotificationRead";
 import getNotificationDestination from "../utils/getNotificationDestination";
 import formatNotificationTime from "../utils/formatNotificationTime";
 
+import "./NotificationList.css";
+
 const NotificationItem = ({
   notification,
   onNotificationRead,
@@ -13,9 +15,14 @@ const NotificationItem = ({
 
   const {
     markAsRead,
+    loading,
   } = useMarkNotificationRead();
 
   const handleClick = async () => {
+    if (loading) {
+      return;
+    }
+
     try {
       if (!notification.isRead) {
         await markAsRead(
@@ -37,13 +44,15 @@ const NotificationItem = ({
       }
     } catch (error) {
       console.error(
-        "Failed to open notification:",
+        "Failed to open notification.",
         error
       );
     }
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (
+    event
+  ) => {
     if (
       event.key === "Enter" ||
       event.key === " "
@@ -55,26 +64,33 @@ const NotificationItem = ({
 
   return (
     <article
+      className={`notification-card ${
+        notification.isRead
+          ? "notification-card--read"
+          : "notification-card--unread"
+      }`}
       role="button"
       tabIndex={0}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       aria-label={notification.title}
-      data-read={notification.isRead}
+      aria-disabled={loading}
     >
-      <h3>
-        {notification.title}
-      </h3>
+      <div className="notification-card__content">
+        <h3 className="notification-card__title">
+          {notification.title}
+        </h3>
 
-      <p>
-        {notification.message}
-      </p>
+        <p className="notification-card__message">
+          {notification.message}
+        </p>
 
-      <small>
-        {formatNotificationTime(
-          notification.createdAt
-        )}
-      </small>
+        <small className="notification-card__time">
+          {formatNotificationTime(
+            notification.createdAt
+          )}
+        </small>
+      </div>
     </article>
   );
 };

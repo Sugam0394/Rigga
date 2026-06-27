@@ -1,13 +1,13 @@
-const NotificationEmptyState = () => {
+ const NotificationEmptyState = () => {
   return (
     <section>
       <h2>
-        No notifications yet
+        You're all caught up
       </h2>
 
       <p>
-        Your accountability activity
-        will appear here.
+        There are no new accountability
+        updates right now.
       </p>
     </section>
   );

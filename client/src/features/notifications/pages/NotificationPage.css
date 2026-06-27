@@ -1,0 +1,127 @@
+/* ===================================
+   Notification Page
+=================================== */
+
+.notifications-page {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #f8fafc;
+
+  padding: 40px 20px 80px;
+}
+
+.notifications-page__container {
+  width: 100%;
+  max-width: 760px;
+
+  margin: 0 auto;
+}
+
+/* ===================================
+   Back Button
+=================================== */
+
+.notifications-page__back {
+  display: inline-flex;
+  align-items: center;
+
+  margin-bottom: 28px;
+
+  text-decoration: none;
+
+  color: #6b7280;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  transition: color 180ms ease;
+}
+
+.notifications-page__back:hover {
+  color: #dc2626;
+}
+
+/* ===================================
+   Header
+=================================== */
+
+.notifications-page__header {
+  margin-bottom: 32px;
+}
+
+.notifications-page__title {
+  margin: 0;
+
+  font-size: 2rem;
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  color: #111827;
+}
+
+.notifications-page__subtitle {
+  margin-top: 10px;
+
+  font-size: 1rem;
+
+  line-height: 1.7;
+
+  color: #6b7280;
+
+  max-width: 560px;
+}
+
+/* ===================================
+   Notification List Rhythm
+=================================== */
+
+.notifications-page ul {
+  list-style: none;
+
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+/* ===================================
+   Mobile
+=================================== */
+
+@media (max-width: 768px) {
+  .notifications-page {
+    padding: 24px 16px 48px;
+  }
+
+  .notifications-page__title {
+    font-size: 1.7rem;
+  }
+
+  .notifications-page__subtitle {
+    font-size: 0.95rem;
+  }
+
+  .notifications-page__header {
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notifications-page__title {
+    font-size: 1.45rem;
+  }
+
+  .notifications-page__subtitle {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .notifications-page ul {
+    gap: 14px;
+  }
+}

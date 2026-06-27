@@ -6,7 +6,9 @@
   }
 
   return (
-    <span>
+    <span
+      aria-label={`${count} unread notifications`}
+    >
       {count > 99
         ? "99+"
         : count}

@@ -1,8 +1,8 @@
-const NotificationLoadingState = () => {
+ const NotificationLoadingState = () => {
   return (
     <section>
       <p>
-        Loading your accountability activity...
+        Loading your latest accountability updates...
       </p>
     </section>
   );

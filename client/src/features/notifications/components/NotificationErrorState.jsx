@@ -1,10 +1,10 @@
-const NotificationErrorState = ({
+ const NotificationErrorState = ({
   message,
 }) => {
   return (
     <section>
       <h2>
-        Something went wrong
+        Unable to load notifications
       </h2>
 
       <p>

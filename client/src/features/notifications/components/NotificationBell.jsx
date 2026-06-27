@@ -1,16 +1,10 @@
  import { Link } from "react-router-dom";
 
-import useUnreadCount
-  from "../hooks/useUnreadCount";
+import useUnreadCount from "../hooks/useUnreadCount";
 
-import NotificationBadge
-  from "./NotificationBadge";
+import NotificationBadge from "./NotificationBadge";
 
- const NotificationBell = () => {
-  console.log(
-    "NOTIFICATION BELL RENDERED"
-  );
-
+const NotificationBell = () => {
   const {
     unreadCount,
   } = useUnreadCount();
@@ -19,7 +13,6 @@ import NotificationBadge
     <Link
       to="/notifications"
       aria-label="Notifications"
-      
     >
       <span
         role="img"

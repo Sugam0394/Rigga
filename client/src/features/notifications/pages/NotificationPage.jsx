@@ -7,6 +7,7 @@ import NotificationList from "../components/NotificationList";
 import NotificationLoadingState from "../components/NotificationLoadingState";
 import NotificationErrorState from "../components/NotificationErrorState";
 
+import "./NotificationPage.css"
 const NotificationsPage = () => {
   const {
     notifications,
@@ -38,21 +39,34 @@ const NotificationsPage = () => {
   }
 
   return (
-    <main>
-      <Link to="/home">
-        Back
+  <main className="notifications-page">
+    <div className="notifications-page__container">
+
+      <Link
+        to="/home"
+        className="notifications-page__back"
+      >
+        ← Back
       </Link>
 
-      <h1>
-        Notifications
-      </h1>
+      <header className="notifications-page__header">
+        <h1 className="notifications-page__title">
+          Notifications
+        </h1>
+
+        <p className="notifications-page__subtitle">
+          Stay informed about every
+          accountability update.
+        </p>
+      </header>
 
       <NotificationList
         notifications={notifications}
         onNotificationRead={refetch}
       />
-    </main>
-  );
+    </div>
+  </main>
+);
 };
 
 export default NotificationsPage;

@@ -4,6 +4,8 @@ import useMarkNotificationRead from "../hooks/useNotificationRead";
 
 import getNotificationDestination from "../utils/getNotificationDestination";
 import formatNotificationTime from "../utils/formatNotificationTime";
+import "./NotificationItem.css"
+
 
 const NotificationItem = ({
   notification,
@@ -59,38 +61,37 @@ const NotificationItem = ({
       handleClick();
     }
   };
-
-  return (
-    <article
-      role="button"
-      tabIndex={0}
-      onClick={handleClick}
-      onKeyDown={
-        handleKeyDown
-      }
-      aria-label={
-        notification.title
-      }
-      aria-disabled={loading}
-      data-read={
-        notification.isRead
-      }
-    >
-      <h3>
+ return (
+  <article
+    className={`notification-card ${
+      notification.isRead
+        ? "notification-card--read"
+        : "notification-card--unread"
+    }`}
+    role="button"
+    tabIndex={0}
+    onClick={handleClick}
+    onKeyDown={handleKeyDown}
+    aria-label={notification.title}
+    aria-disabled={loading}
+  >
+    <div className="notification-card__content">
+      <h3 className="notification-card__title">
         {notification.title}
       </h3>
 
-      <p>
+      <p className="notification-card__message">
         {notification.message}
       </p>
 
-      <small>
+      <small className="notification-card__time">
         {formatNotificationTime(
           notification.createdAt
         )}
       </small>
-    </article>
-  );
+    </div>
+  </article>
+);
 };
 
 export default NotificationItem;
