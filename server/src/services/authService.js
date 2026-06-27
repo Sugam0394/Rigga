@@ -68,12 +68,15 @@ if (existingVerification) {
       verified: false,
     });
 }
-
- 
+ if (process.env.NODE_ENV === "development") {
+  return {
+    message: "OTP generated successfully",
+    developmentOtp: otpCode,
+  };
+}
 
 return {
-  message:
-    "OTP generated successfully",
+  message: "OTP generated successfully",
 };
 };
 

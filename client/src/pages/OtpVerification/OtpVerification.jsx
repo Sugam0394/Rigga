@@ -117,13 +117,11 @@ navigate("/home", {
      const result =
   await requestOtp(phone);
 
-navigate(".", {
+ navigate("/verify-otp", {
   replace: true,
   state: {
     phone,
-    developmentOtp:
-      result?.data
-        ?.developmentOtp,
+    developmentOtp: result?.data?.developmentOtp,
   },
 });
 
