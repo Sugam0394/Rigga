@@ -1,0 +1,47 @@
+ .verification-record {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  margin-bottom: 24px;
+  padding: 24px;
+
+  background-color: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+.verification-record h2 {
+  margin: 0;
+
+  font-size: 1.25rem;
+  font-weight: 600;
+
+  color: #111827;
+}
+
+.verification-record p {
+  margin: 0;
+
+  font-size: 0.95rem;
+  line-height: 1.7;
+
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .verification-record {
+    gap: 16px;
+
+    padding: 20px;
+  }
+
+  .verification-record h2 {
+    font-size: 1.15rem;
+  }
+
+  .verification-record p {
+    font-size: 0.95rem;
+  }
+}

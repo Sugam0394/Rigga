@@ -1,18 +1,45 @@
-import "./ProfileHeader.css";
+ import "./ProfileHeader.css";
 
 const ProfileHeader = ({
   name,
+  memberSince,
 }) => {
+  const formattedMemberSince =
+    memberSince &&
+    !Number.isNaN(
+      new Date(
+        memberSince
+      ).getTime()
+    )
+      ? new Date(
+          memberSince
+        ).toLocaleDateString(
+          "en-US",
+          {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          }
+        )
+      : "Unavailable";
+
   return (
     <header className="profile-header">
       <h1>
-        {name}
+        {name || "Unknown User"}
       </h1>
 
       <p>
-        Manage your account
-        and accountability
-        profile.
+        Member since{" "}
+        {formattedMemberSince}
+      </p>
+
+      <p>
+        Your accountability
+        identity is built
+        through the
+        commitments you
+        honor.
       </p>
     </header>
   );

@@ -1,15 +1,18 @@
- import useProfile from "./hooks/useProfile";
-import ProfileInfoCard from "./components/ProfileInfoCard";
-import ProfileHeader from "./components/ProfileHeader";
-import ProfileStatsCard from "./components/ProfileStatsCard";
-
-
-import { useState } from "react";
+ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuth from "../../context/AuthContext";
+
+import useProfile from "./hooks/useProfile";
+
+import ProfileHeader from "./components/ProfileHeader";
+import AccountabilityRecord from "./components/AccountabilityRecord";
+import VerificationRecord from "./components/VerificationRecord";
+import ProfileInfoCard from "./components/ProfileInfoCard";
 import LogoutCard from "./components/LogoutCard";
 
+
+import "./Profile.css"
 
 function Profile() {
   const {
@@ -19,36 +22,50 @@ function Profile() {
   } = useProfile();
 
   const navigate =
-  useNavigate();
+    useNavigate();
 
-const { logout } =
-  useAuth();
+  const { logout } =
+    useAuth();
 
-const [logoutLoading,
-  setLogoutLoading] =
-  useState(false);
+  const [
+    logoutLoading,
+    setLogoutLoading,
+  ] = useState(false);
 
-   
-  const handleLogout =  async () => {
-    try {
-      setLogoutLoading(
-        true
-      );
+  const [
+    logoutError,
+    setLogoutError,
+  ] = useState("");
 
-      await logout();
+  const handleLogout =
+    async () => {
+      try {
+        setLogoutLoading(
+          true
+        );
 
-      navigate(
-        "/login",
-        {
-          replace: true,
-        }
-      );
-    } finally {
-      setLogoutLoading(
-        false
-      );
-    }
-  };
+        setLogoutError(
+          ""
+        );
+
+        await logout();
+
+        navigate(
+          "/login",
+          {
+            replace: true,
+          }
+        );
+      } catch {
+        setLogoutError(
+          "Unable to sign out. Please try again."
+        );
+      } finally {
+        setLogoutLoading(
+          false
+        );
+      }
+    };
 
   if (loading) {
     return (
@@ -65,26 +82,45 @@ const [logoutLoading,
   }
 
   if (!profile) {
-    return null;
+    return (
+      <p>
+        Unable to load
+        profile.
+      </p>
+    );
   }
 
   return (
-    <div>
+  <div className="profile-page">
       <ProfileHeader
-  name={profile.name}
-/>
+        name={profile.name}
+        memberSince={
+          profile.createdAt
+        }
+      />
+
+      <AccountabilityRecord />
+
+      <VerificationRecord />
+
       <ProfileInfoCard
         profile={profile}
       />
-      <ProfileStatsCard />
+
+      {logoutError && (
+  <p className="profile-page__error">
+    {logoutError}
+  </p>
+)}
+
       <LogoutCard
-  onLogout={
-    handleLogout
-  }
-  loading={
-    logoutLoading
-  }
-/>
+        onLogout={
+          handleLogout
+        }
+        loading={
+          logoutLoading
+        }
+      />
     </div>
   );
 }

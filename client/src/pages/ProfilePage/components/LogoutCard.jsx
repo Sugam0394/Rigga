@@ -7,12 +7,13 @@ const LogoutCard = ({
   return (
     <section className="logout-card">
       <h2>
-        Account
+        Sign Out
       </h2>
 
       <p>
-        Sign out of your
-        Rigga account.
+        End your current
+        Rigga session
+        securely.
       </p>
 
       <button

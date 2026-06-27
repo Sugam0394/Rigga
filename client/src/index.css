@@ -4,6 +4,15 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Surface Colors */
+  --color-surface-page: #F5F5F5;
+  --color-surface-card: #FFFFFF;
+
+  /* Text Colors */
+  --color-text-primary: #111827;
+}
+
 html,
 body,
 #root {
@@ -12,8 +21,9 @@ body,
 
 body {
   font-family: Inter, system-ui, sans-serif;
-  background: #ffffff;
-  color: #111827;
+
+  background: var(--color-surface-page);
+  color: var(--color-text-primary);
 }
 
 button,

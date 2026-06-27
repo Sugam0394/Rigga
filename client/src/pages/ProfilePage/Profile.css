@@ -1,0 +1,36 @@
+.profile-page {
+  width: 100%;
+  max-width: 760px;
+
+  margin: 0 auto;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page__error {
+  margin: 0 0 24px;
+
+  padding: 12px 16px;
+
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+
+  background-color: #fef2f2;
+
+  color: #b91c1c;
+
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 20px 16px;
+  }
+
+  .profile-page__error {
+    margin-bottom: 20px;
+  }
+}

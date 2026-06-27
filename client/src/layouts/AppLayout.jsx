@@ -1,29 +1,18 @@
  import { Outlet } from "react-router-dom";
- 
-import BottomNavigation from "../components/BottomNavigation";
 
+import BottomNavigation from "../components/BottomNavigation";
 import NotificationBell from "../features/notifications/components/NotificationBell";
+
+import "./AppLayout.css";
 
 const AppLayout = () => {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#F9FAFB",
-        paddingBottom: "90px",
-      }}
-    >
-    <header
-  style={{
-    display: "flex",
-    justifyContent: "flex-end",
-    padding: "16px",
-  }}
->
-  <NotificationBell />
-</header>
+    <div className="app-layout">
+      <header className="app-layout-header">
+        <NotificationBell />
+      </header>
 
-      <main>
+      <main className="app-layout-main">
         <Outlet />
       </main>
 

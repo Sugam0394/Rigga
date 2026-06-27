@@ -1,22 +1,80 @@
-.logout-card {
-  background: white;
-  border: 1px solid #FECACA;
+ .logout-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  padding: 24px;
+  margin-bottom: 24px;
+
+  background-color: #ffffff;
+
+  border: 1px solid #e5e7eb;
   border-radius: 16px;
-  padding: 20px;
-  margin-top: 16px;
+}
+
+.logout-card h2 {
+  margin: 0;
+
+  font-size: 1.25rem;
+  font-weight: 600;
+
+  color: #111827;
 }
 
 .logout-card p {
-  color: #6B7280;
+  margin: 0;
+
+  font-size: 0.95rem;
+  line-height: 1.7;
+
+  color: #6b7280;
 }
 
 .logout-card__button {
-  margin-top: 12px;
-  padding: 12px 16px;
+  width: 100%;
+
+  padding: 14px 18px;
+
   border: none;
   border-radius: 12px;
-  cursor: pointer;
-  background: #DC2626;
-  color: white;
+
+  background-color: #dc2626;
+
+  color: #ffffff;
+
+  font-size: 1rem;
   font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.logout-card__button:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.logout-card__button:focus-visible {
+  outline: 3px solid rgba(220, 38, 38, 0.2);
+  outline-offset: 2px;
+}
+
+.logout-card__button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .logout-card {
+    gap: 16px;
+
+    padding: 20px;
+  }
+
+  .logout-card__button {
+    padding: 13px 16px;
+  }
 }
