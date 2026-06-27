@@ -1,4 +1,8 @@
- import { useEffect, useState } from "react";
+ import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import {
   getUnreadCount,
@@ -20,41 +24,48 @@ const useUnreadCount = () => {
     setError,
   ] = useState(null);
 
-  
- useEffect(() => {
-  const fetchUnreadCount = async () => {
-    try {
-      const response =
-        await getUnreadCount();
+  const fetchUnreadCount =
+    useCallback(async () => {
+      try {
+        const response =
+          await getUnreadCount();
 
-      setUnreadCount(
-        response.data.count
+        setUnreadCount(
+          response.data.count
+        );
+
+        setError(null);
+      } catch (err) {
+        setError(
+          err.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    }, []);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchUnreadCount();
+
+    const interval =
+      setInterval(
+        fetchUnreadCount,
+        5000
       );
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  fetchUnreadCount();
-
-  const interval =
-    setInterval(
-      fetchUnreadCount,
-      5000
-    );
-
-  return () =>
-    clearInterval(
-      interval
-    );
-}, []);
+    return () =>
+      clearInterval(
+        interval
+      );
+  }, [fetchUnreadCount]);
 
   return {
     unreadCount,
     loading,
     error,
+    refetch:
+      fetchUnreadCount,
   };
 };
 

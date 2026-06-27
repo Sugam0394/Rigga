@@ -45,15 +45,10 @@ const useNotifications = () => {
     },
     []
   );
-
  useEffect(() => {
-  const loadNotifications =
-    async () => {
-      await fetchNotifications();
-    };
-
-  loadNotifications();
-}, [fetchNotifications]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchNotifications();
+  }, [fetchNotifications]);
 
   return {
     notifications,
