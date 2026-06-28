@@ -9,20 +9,22 @@
   justify-content: center;
   align-items: center;
 
-  padding: 24px;
+   padding: 32px 24px;
 }
 
 .auth-layout-container {
   width: 100%;
-  max-width: 480px;
+   max-width: 440px;
 }
 
 .auth-layout-footer {
-  margin-top: 32px;
+ margin-top: 40px;
+padding-top: 24px;
 
   text-align: center;
 
   font-size: 14px;
+  opacity: .82;
 }
 
 .auth-layout-footer a {
@@ -30,9 +32,17 @@
 
   text-decoration: none;
 
-  transition: color 0.2s ease;
+   transition:
+color .2s ease,
+opacity .2s ease;
 }
 
-.auth-layout-footer a:hover {
-  color: #F97316;
+
+ .auth-layout-footer a:hover{
+    color:#F97316;
+    opacity:1;
+}
+
+.auth-layout-footer{
+    line-height:1.6;
 }
