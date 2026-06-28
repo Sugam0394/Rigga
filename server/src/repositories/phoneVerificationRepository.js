@@ -28,8 +28,25 @@ const updateVerification = async (
   );
 };
 
+const incrementAttempts = async (
+  phone
+) => {
+  return PhoneVerification.findOneAndUpdate(
+    { phone },
+    {
+      $inc: {
+        attempts: 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+};
+
 export default {
   findByPhone,
   createVerification,
   updateVerification,
+  incrementAttempts
 };

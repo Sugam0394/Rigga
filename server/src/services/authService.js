@@ -1,10 +1,9 @@
 import authRepository from "../repositories/authRepository.js";
 import jwt from "jsonwebtoken";
 import { OTP_EXPIRY_MINUTES, } from "../constants/authConstants.js";
-import phoneVerificationModel from "../models/phoneVerificationModel.js";
 import phoneVerificationRepository from "../repositories/phoneVerificationRepository.js"
 import userService from "./userService.js";
-
+import smsService from "./smsService.js";
 
 
 
@@ -54,19 +53,23 @@ if (existingVerification) {
     .updateVerification(
       phone,
       {
-        otpCode,
-        otpExpiresAt,
-        verified: false,
-      }
+  otpCode,
+  otpExpiresAt,
+  verified: false,
+  attempts: 0,
+  lastOtpSentAt: new Date(),
+}
     );
 } else {
   await phoneVerificationRepository
     .createVerification({
-      phone,
-      otpCode,
-      otpExpiresAt,
-      verified: false,
-    });
+  phone,
+  otpCode,
+  otpExpiresAt,
+  verified: false,
+  attempts: 0,
+  lastOtpSentAt: new Date(),
+} );
 }
  if (process.env.NODE_ENV === "development") {
   return {
@@ -74,19 +77,40 @@ if (existingVerification) {
     developmentOtp: otpCode,
   };
 }
+try {
+  await smsService.sendOtp(
+    phone,
+    otpCode
+  );
+} catch (error) {
+  await phoneVerificationRepository.updateVerification(
+    phone,
+    {
+      otpCode: null,
+      otpExpiresAt: null,
+      verified: false,
+      attempts: 0,
+    }
+  );
+
+  throw new Error(
+    "Unable to send OTP. Please try again."
+  );
+}
 
 return {
   message: "OTP generated successfully",
 };
 };
 
- const verifyOtp = async (
+  const verifyOtp = async (
   phone,
   otp
 ) => {
   const verification =
-    await phoneVerificationRepository
-      .findByPhone(phone);
+    await phoneVerificationRepository.findByPhone(
+      phone
+    );
 
   if (!verification) {
     throw new Error(
@@ -94,53 +118,81 @@ return {
     );
   }
 
-  if (
-    verification.otpCode !== otp
-  ) {
+  if (verification.verified) {
     throw new Error(
-      "Invalid OTP"
+      "OTP already used"
+    );
+  }
+
+  if (verification.attempts >= 5) {
+    throw new Error(
+      "Maximum verification attempts exceeded"
     );
   }
 
   if (
     !verification.otpExpiresAt ||
-    verification.otpExpiresAt <
-      new Date()
+    verification.otpExpiresAt < new Date()
   ) {
+    await phoneVerificationRepository.updateVerification(
+      phone,
+      {
+        verified: true,
+        otpCode: null,
+        otpExpiresAt: null,
+        attempts: 0,
+      }
+    );
+
     throw new Error(
       "OTP expired"
     );
   }
 
+  if (verification.otpCode !== otp) {
+    await phoneVerificationRepository.incrementAttempts(
+      phone
+    );
+
+    throw new Error(
+      "Invalid OTP"
+    );
+  }
+
+  await phoneVerificationRepository.updateVerification(
+    phone,
+    {
+      verified: true,
+      otpCode: null,
+      otpExpiresAt: null,
+      attempts: 0,
+    }
+  );
+
   const user =
-    await authRepository
-      .findUserByPhone(
-        phone
-      );
+    await authRepository.findUserByPhone(
+      phone
+    );
 
-  
   if (!user) {
-  return {
-    isNewUser: true,
-    verifiedPhone: phone,
-  };
-}
+    return {
+      isNewUser: true,
+      verifiedPhone: phone,
+    };
+  }
 
- await authRepository
-  .updateLastLogin(
+  await authRepository.updateLastLogin(
     user._id
   );
 
-const token =
-  generateToken(
-    user
-  );
+  const token =
+    generateToken(user);
 
-return {
-  isNewUser: false,
-  token,
-  user,
-};
+  return {
+    isNewUser: false,
+    token,
+    user,
+  };
 };
 
 

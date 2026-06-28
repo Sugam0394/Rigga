@@ -23,6 +23,16 @@ const phoneVerificationSchema = new mongoose.Schema(
         type: Boolean,
         default: false,
       },
+    attempts: {
+    type: Number,
+    default: 0,
+},
+
+lastOtpSentAt: {
+    type: Date,
+    default: Date.now,
+},
+
     },
     {
       timestamps: true,
