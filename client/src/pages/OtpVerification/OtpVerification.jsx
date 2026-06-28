@@ -117,12 +117,21 @@ navigate("/home", {
      const result =
   await requestOtp(phone);
 
- navigate("/verify-otp", {
+ const navigationState = {
+  phone,
+};
+
+if (
+  import.meta.env.DEV &&
+  result?.data?.developmentOtp
+) {
+  navigationState.developmentOtp =
+    result.data.developmentOtp;
+}
+
+navigate("/verify-otp", {
   replace: true,
-  state: {
-    phone,
-    developmentOtp: result?.data?.developmentOtp,
-  },
+  state: navigationState,
 });
 
 setCountdown(30);
@@ -143,7 +152,8 @@ setCountdown(30);
       }
     />
 
-    {developmentOtp && (
+    {import.meta.env.DEV &&
+  developmentOtp && (
   <div className="development-otp-card">
     <p className="development-otp-label">
       Development OTP

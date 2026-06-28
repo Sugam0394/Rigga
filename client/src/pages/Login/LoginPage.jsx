@@ -60,15 +60,22 @@ if (!hasConsent) {
     phone
   );
 
+  const navigationState = {
+  phone,
+};
+
+ if (
+  import.meta.env.DEV &&
+  result?.data?.developmentOtp
+) {
+  navigationState.developmentOtp =
+    result.data.developmentOtp;
+}
+
 navigate(
   "/verify-otp",
   {
-    state: {
-      phone,
-      developmentOtp:
-        result?.data
-          ?.developmentOtp,
-    },
+    state: navigationState,
   }
 );
     } catch (error) {
