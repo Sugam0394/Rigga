@@ -1,14 +1,22 @@
  import axios from "axios";
 
 const sendOtp = async (phone, otp) => {
+
+  console.log("Original phone:", phone);
+
+  const mobile = phone.replace(/\D/g, "");
+
+  console.log("Normalized phone:", mobile);
+
   const url =
-    `${process.env.MSG91_BASE_URL}?template_id=${process.env.MSG91_TEMPLATE_ID}&mobile=91${phone}&authkey=${process.env.MSG91_API_KEY}`;
+    `${process.env.MSG91_BASE_URL}?template_id=${process.env.MSG91_TEMPLATE_ID}&mobile=${mobile}&authkey=${process.env.MSG91_API_KEY}`;
 
   const payload = {
     OTP: otp,
   };
 
   try {
+
     const response = await axios.post(
       url,
       payload,
