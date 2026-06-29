@@ -1,50 +1,53 @@
  .legal-page {
   max-width: 760px;
-
   margin: 0 auto;
-
   padding: 40px 24px 64px;
-
-  color: #FFFFFF;
 }
 
 .legal-title {
   font-size: 40px;
-
   font-weight: 700;
-
   line-height: 1.1;
-
   margin-bottom: 16px;
+  color: #221A15;
 }
 
 .legal-description {
   font-size: 16px;
-
   line-height: 1.8;
-
   max-width: 60ch;
-
   margin-bottom: 40px;
+  color: #52525B;
 }
 
 .legal-section {
   margin-bottom: 40px;
+  background: #221A15;
+  border: 1px solid #2A211C;
+  border-radius: 20px;
+  padding: 24px;
 }
 
 .legal-section h2 {
   font-size: 22px;
-
   font-weight: 700;
-
   margin-bottom: 14px;
+  color: #FFFFFF;
+}
+
+.legal-section h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #F4F4F5;
 }
 
 .legal-section p,
 .legal-section li {
   font-size: 15px;
-
   line-height: 1.8;
+  color: #D4D4D8;
 }
 
 .legal-section ul {
@@ -55,27 +58,28 @@
   margin-top: 8px;
 }
 
-.legal-section {
-  margin-bottom: 40px;
-
-  background: #221A15;
-
-  border: 1px solid #2A211C;
-
-  border-radius: 20px;
-
-  padding: 24px;
+.legal-section p + p {
+  margin-top: 12px;
 }
 
-.legal-description {
-  color: #A1A1AA;
+.legal-section h3 + p {
+  margin-top: 0;
 }
 
-.legal-section p,
-.legal-section li {
-  color: #D4D4D8;
+.legal-section h2 + p,
+.legal-section h2 + ul {
+  margin-top: 12px;
 }
 
-.legal-section h2 {
+.legal-section strong {
   color: #FFFFFF;
+}
+
+.legal-section a {
+  color: #F97316;
+  text-decoration: none;
+}
+
+.legal-section a:hover {
+  text-decoration: underline;
 }

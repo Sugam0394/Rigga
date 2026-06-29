@@ -2,7 +2,7 @@
 import CookieDisclosure from "./CookieDisclosure";
 import "./legal.css";
 
-const SUPPORT_EMAIL = "singhsugam348@gmail.com";
+import { LEGAL_CONTACT } from "./legalContact";
 
 const PrivacyPolicyPage = () => {
   return (
@@ -205,7 +205,7 @@ const PrivacyPolicyPage = () => {
         </p>
 
         <p>
-          <strong>{SUPPORT_EMAIL}</strong>
+          <strong>{LEGAL_CONTACT.email}</strong>
         </p>
       </section>
     </main>

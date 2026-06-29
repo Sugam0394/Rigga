@@ -26,7 +26,7 @@ import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
 import NotificationsPage from "../features/notifications/pages/NotificationPage"
 import TermsOfServicePage from "../pages/legal/TermsOfServicePage";
 import PrivacyPolicyPage from "../pages/legal/PrivacyPolicyPage";
-
+import CookiePolicyPage from "../pages/legal/CookiePolicyPage";
 
  const AppRouter = () => {
   return (
@@ -56,12 +56,14 @@ import PrivacyPolicyPage from "../pages/legal/PrivacyPolicyPage";
       
       
         {/* Public Routes */}
-
        <Route element={<PublicLayout />}>
-       <Route  path="/review/:token" element={<WitnessReview />}/>
-       <Route path="/legal/terms"element={<TermsOfServicePage />}/>
-       <Route path="/legal/privacy" element={<PrivacyPolicyPage />} />
-      </Route> 
+  <Route path="/review/:token" element={<WitnessReview />} />
+  <Route path="/legal/privacy" element={<PrivacyPolicyPage />} />
+  <Route path="/legal/terms" element={<TermsOfServicePage />} />
+  <Route path="/legal/cookies" element={<CookiePolicyPage />} />
+</Route>
+
+
        {/* Fallback */}
         <Route path="*" element={<Navigate to="/login" replace />}/>
         </Routes>

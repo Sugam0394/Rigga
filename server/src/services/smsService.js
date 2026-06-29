@@ -1,49 +1,44 @@
-import axios from "axios";
+ import axios from "axios";
 
-const sendOtp = async (
-  phone,
-  otp
-) => {
+const sendOtp = async (phone, otp) => {
   const url =
-    process.env.MSG91_BASE_URL;
+    `${process.env.MSG91_BASE_URL}?template_id=${process.env.MSG91_TEMPLATE_ID}&mobile=91${phone}&authkey=${process.env.MSG91_API_KEY}`;
 
   const payload = {
-    template_id:
-      process.env.MSG91_TEMPLATE_ID,
-
-    sender:
-      process.env.MSG91_SENDER_ID,
-
-    mobile: `91${phone}`,
-
-    otp,
-  };
-
-  const headers = {
-    authkey:
-      process.env.MSG91_API_KEY,
-
-    "Content-Type":
-      "application/json",
+    OTP: otp,
   };
 
   try {
-    await axios.post(
+    const response = await axios.post(
       url,
       payload,
       {
-        headers,
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
-  } catch (error) {
-    console.error(
-      "SMS Provider Error:",
-      error.response?.data || error.message
-    );
 
-    throw new Error(
-      "SMS delivery failed"
-    );
+    console.log("========== MSG91 SUCCESS ==========");
+    console.log(response.data);
+    console.log("===================================");
+
+    return response.data;
+
+  } catch (error) {
+
+    console.log("========== MSG91 ERROR ==========");
+
+    if (error.response) {
+      console.log(error.response.status);
+      console.log(error.response.data);
+    } else {
+      console.log(error.message);
+    }
+
+    console.log("=================================");
+
+    throw new Error("SMS delivery failed");
   }
 };
 

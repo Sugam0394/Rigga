@@ -1,6 +1,6 @@
  import "./legal.css";
 
-const SUPPORT_EMAIL = "singhsugam348@gmail.com";
+import { LEGAL_CONTACT } from "./legalContact";
 
 const TermsOfServicePage = () => {
   return (
@@ -248,7 +248,7 @@ const TermsOfServicePage = () => {
         </p>
 
         <p>
-          <strong>{SUPPORT_EMAIL}</strong>
+           <strong>{LEGAL_CONTACT.email}</strong>
         </p>
       </section>
     </main>
