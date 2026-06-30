@@ -9,17 +9,15 @@
   handleNext,
   handleBack,
 }) => {
-  const tomorrow =
-    new Date();
+ const now = new Date();
 
-  tomorrow.setDate(
-    tomorrow.getDate() + 1
-  );
-
-  const minDateTime =
-    tomorrow
-      .toISOString()
-      .slice(0, 16);
+const minDateTime =
+  new Date(
+    now.getTime() -
+      now.getTimezoneOffset() * 60000
+  )
+    .toISOString()
+    .slice(0, 16);
 
   return (
      <div className="challenge-step">
