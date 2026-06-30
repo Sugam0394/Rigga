@@ -139,13 +139,21 @@ const isStepValid = () => {
       newErrors.deadlineAt =
         "Deadline is required";
     } else {
-   const today =
-  new Date()
-    .toISOString()
-    .split("T")[0];
+    const selectedDeadline =
+  new Date(formData.deadlineAt);
+
+const now =
+  new Date();
 
 if (
-  formData.deadlineAt <= today
+  Number.isNaN(
+    selectedDeadline.getTime()
+  )
+) {
+  newErrors.deadlineAt =
+    "Invalid deadline";
+} else if (
+  selectedDeadline <= now
 ) {
   newErrors.deadlineAt =
     "Choose a future date";
