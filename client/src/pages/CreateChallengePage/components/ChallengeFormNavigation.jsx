@@ -22,7 +22,7 @@ const ChallengeFormNavigation = ({
         <div />
       )}
 
-      {currentStep < 6 ? (
+      {currentStep < 5 ? (
         <button
           type="button"
           className="challenge-form-navigation__button challenge-form-navigation__button--primary"

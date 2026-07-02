@@ -119,49 +119,48 @@ if (!valid) {
 const isStepValid = () => {
   const newErrors = {};
 
-  if (currentStep === 1) {
-    const title = formData.title.trim();
+ if (currentStep === 1) {
+  const title = formData.title.trim();
 
-    if (!title) {
-      newErrors.title =
-        "Commitment is required";
-    } else if (title.length < 10) {
-      newErrors.title =
-        "Minimum 10 characters required";
-    } else if (title.length > 200) {
-      newErrors.title =
-        "Maximum 200 characters allowed";
-    }
+  if (!title) {
+    newErrors.title =
+      "Commitment is required";
+  } else if (title.length < 10) {
+    newErrors.title =
+      "Minimum 10 characters required";
+  } else if (title.length > 200) {
+    newErrors.title =
+      "Maximum 200 characters allowed";
   }
 
-  if (currentStep === 2) {
-    if (!formData.deadlineAt) {
-      newErrors.deadlineAt =
-        "Deadline is required";
-    } else {
+  if (!formData.deadlineAt) {
+    newErrors.deadlineAt =
+      "Deadline is required";
+  } else {
     const selectedDeadline =
-  new Date(formData.deadlineAt);
+      new Date(formData.deadlineAt);
 
-const now =
-  new Date();
+    const now =
+      new Date();
 
-if (
-  Number.isNaN(
-    selectedDeadline.getTime()
-  )
-) {
-  newErrors.deadlineAt =
-    "Invalid deadline";
-} else if (
-  selectedDeadline <= now
-) {
-  newErrors.deadlineAt =
-    "Choose a future date";
-}
+    if (
+      Number.isNaN(
+        selectedDeadline.getTime()
+      )
+    ) {
+      newErrors.deadlineAt =
+        "Invalid deadline";
+    } else if (
+      selectedDeadline <= now
+    ) {
+      newErrors.deadlineAt =
+        "Choose a future date";
     }
   }
+}
+ 
 
- if (currentStep === 3) {
+ if (currentStep === 2) {
   const criteria =
     formData.successCriteria.trim();
 
@@ -181,7 +180,7 @@ if (
   }
 }
 
-if (currentStep === 4) {
+if (currentStep === 3) {
   if (!formData.witnessName.trim()) {
     newErrors.witnessName =
       "Witness name is required";
@@ -202,7 +201,7 @@ if (currentStep === 4) {
   }
 }
 
-  if (currentStep === 5) {
+  if (currentStep === 4) {
     const wordCount =
       getWordCount(
         formData.privateMessage

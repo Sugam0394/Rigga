@@ -1,41 +1,37 @@
  import ChallengeFormNavigation from "../components/ChallengeFormNavigation";
- 
- 
- 
- const DeadlineStep = ({
+
+const DeadlineStep = ({
   formData,
   errors,
   handleChange,
   handleNext,
   handleBack,
+  currentStep,
 }) => {
- const now = new Date();
+  const now = new Date();
 
-const minDateTime =
-  new Date(
-    now.getTime() -
-      now.getTimezoneOffset() * 60000
-  )
-    .toISOString()
-    .slice(0, 16);
+  const minDateTime =
+    new Date(
+      now.getTime() -
+        now.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, 16);
 
   return (
-     <div className="challenge-step">
+    <div className="challenge-step">
+      <h1 className="challenge-step__title">
+        When must this be completed?
+      </h1>
 
-  <h1 className="challenge-step__title">
-    When must this be completed?
-  </h1>
-
-  <p className="challenge-step__description">
-    Choose the deadline by which this commitment
-    must be successfully completed.
-  </p>
+      <p className="challenge-step__description">
+        Choose the deadline by which this commitment
+        must be successfully completed.
+      </p>
 
       <input
         type="datetime-local"
-        value={
-          formData.deadlineAt
-        }
+        value={formData.deadlineAt}
         min={minDateTime}
         onChange={(e) =>
           handleChange(
@@ -44,19 +40,19 @@ const minDateTime =
           )
         }
       />
-     {errors.deadlineAt && (
-    <p className="challenge-step__error">
-      {errors.deadlineAt}
-    </p>
-  )}
 
-  <ChallengeFormNavigation
-    currentStep={2}
-    handleBack={handleBack}
-    handleNext={handleNext}
-  />
+      {errors.deadlineAt && (
+        <p className="challenge-step__error">
+          {errors.deadlineAt}
+        </p>
+      )}
 
-</div>
+      <ChallengeFormNavigation
+        currentStep={currentStep}
+        handleBack={handleBack}
+        handleNext={handleNext}
+      />
+    </div>
   );
 };
 

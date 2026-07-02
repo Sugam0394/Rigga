@@ -1,4 +1,4 @@
-import "./CreateChallengePage.css";
+ import "./CreateChallengePage.css";
 
 import { useCreateChallenge } from "./hooks/useCreateChallenge";
 
@@ -23,40 +23,41 @@ const CreateChallengePage = () => {
     ) {
       case 1:
         return (
-          <CommitmentStep
-            {...challenge}
-          />
+          <>
+            <CommitmentStep
+              {...challenge}
+              showNavigation={false}
+            />
+
+            <DeadlineStep
+              {...challenge}
+              currentStep={1}
+            />
+          </>
         );
 
       case 2:
-        return (
-          <DeadlineStep
-            {...challenge}
-          />
-        );
-
-      case 3:
         return (
           <SuccessCriteriaStep
             {...challenge}
           />
         );
 
-      case 4:
+      case 3:
         return (
           <WitnessStep
             {...challenge}
           />
         );
 
-      case 5:
+      case 4:
         return (
           <PrivateConsequenceStep
             {...challenge}
           />
         );
 
-      case 6:
+      case 5:
         return (
           <ReviewStep
             {...challenge}

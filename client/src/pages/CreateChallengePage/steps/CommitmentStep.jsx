@@ -1,25 +1,23 @@
- 
-
-const CommitmentStep = ({
+ const CommitmentStep = ({
   formData,
   errors,
   handleChange,
   handleNext,
+  showNavigation = true,
 }) => {
   const characterCount =
     formData.title.length;
 
   return (
     <div className="challenge-step">
+      <h1 className="challenge-step__title">
+        What commitment are you making?
+      </h1>
 
-  <h1 className="challenge-step__title">
-    What commitment are you making?
-  </h1>
-
-  <p className="challenge-step__description">
-    Describe the commitment you are making.
-    This is the promise Rigga will help you keep.
-  </p>
+      <p className="challenge-step__description">
+        Describe the commitment you are making.
+        This is the promise Rigga will help you keep.
+      </p>
 
       <textarea
         value={formData.title}
@@ -43,11 +41,13 @@ const CommitmentStep = ({
         </p>
       )}
 
-      <button
-        onClick={handleNext}
-      >
-        Next
-      </button>
+      {showNavigation && (
+        <button
+          onClick={handleNext}
+        >
+          Next
+        </button>
+      )}
     </div>
   );
 };
