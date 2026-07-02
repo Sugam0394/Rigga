@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+ import { useEffect, useState } from "react";
 
 import {
-  getReviewSummary,
+  getInvitation,
 } from "../api/reviewApi";
 
 const useReviewSummary = (
-  challengeId
+  token
 ) => {
-
   const [data, setData] =
     useState(null);
 
@@ -18,40 +17,31 @@ const useReviewSummary = (
     useState("");
 
   useEffect(() => {
-
-    const loadSummary =
+    const loadInvitation =
       async () => {
-
         try {
-
           setLoading(true);
 
-          const summary =
-            await getReviewSummary(
-              challengeId
+          const invitation =
+            await getInvitation(
+              token
             );
 
-          setData(summary);
-
+          setData(invitation);
         } catch (error) {
-
           setError(
             error.response?.data?.message ||
-            "Failed to load review"
+              "Failed to load invitation."
           );
-
         } finally {
-
           setLoading(false);
-
         }
       };
 
-    if (challengeId) {
-      loadSummary();
+    if (token) {
+      loadInvitation();
     }
-
-  }, [challengeId]);
+  }, [token]);
 
   return {
     data,

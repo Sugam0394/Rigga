@@ -16,4 +16,4 @@ export const openWhatsAppShare =
       whatsappUrl,
       "_blank"
     );
-  };
+  }; 

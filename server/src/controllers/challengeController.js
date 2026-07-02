@@ -1,17 +1,19 @@
 import challengeService from "../services/challengeServices.js";
 import invitationService from "../services/invitationServices.js";
-const createChallenge = async (req, res) => {
+
+
+
+ const createChallenge = async (req, res) => {
   try {
-   const challenge =
-  await challengeService.createChallenge({
-    ...req.body,
-    userId:
-      req.user.userId,
-  });
+    const result =
+      await challengeService.createChallenge({
+        ...req.body,
+        userId: req.user.userId,
+      });
 
     res.status(201).json({
       success: true,
-      data: challenge,
+      data: result,
     });
   } catch (error) {
     res.status(400).json({

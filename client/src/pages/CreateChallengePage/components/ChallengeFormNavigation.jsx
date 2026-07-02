@@ -7,6 +7,8 @@ const ChallengeFormNavigation = ({
   handleSubmit,
   isSubmitting,
 }) => {
+  const TOTAL_STEPS = 4;
+
   return (
     <div className="challenge-form-navigation">
       {currentStep > 1 ? (
@@ -22,7 +24,7 @@ const ChallengeFormNavigation = ({
         <div />
       )}
 
-      {currentStep < 5 ? (
+      {currentStep < TOTAL_STEPS ? (
         <button
           type="button"
           className="challenge-form-navigation__button challenge-form-navigation__button--primary"

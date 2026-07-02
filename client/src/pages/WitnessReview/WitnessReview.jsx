@@ -1,195 +1,172 @@
-import { useState } from "react";
+ import { useState } from "react";
 import { useParams } from "react-router-dom";
-// Components
-import ReviewCompletedState from "./components/ReviewCompletedState";
-import ReviewHeader from "./components/ReviewHeader";
-import CommitmentSummaryCard from "./components/CommitmentSummaryCard";
-import ProgressEvidenceTimeline from "./components/ProgressEvidenceTimeline";
-import WitnessDecisionCard from "./components/WitnessDecisionCard";
-import RejectionReasonForm from "./components/RejectReasonForm";
 
 // Hooks
-import useSubmitReview from "./hooks/useSubmitReview";
 import useReviewSummary from "./hooks/useReviewSummary";
+import useSubmitReview from "./hooks/useSubmitReview";
 
 // State Components
 import LoadingState from "./components/State/LoadingState";
 import ErrorState from "./components/State/ErrorState";
+import ReviewCompletedState from "./components/ReviewCompletedState";
 
 function WitnessReview() {
-const [decision, setDecision] = useState("");
-const [reason, setReason] = useState("");
+  const { token } = useParams();
 
- const { id } = useParams();
+  const [name, setName] =
+    useState("");
 
-const challengeId = id;
+  const [phone, setPhone] =
+    useState("");
 
-const {
-data,
-loading: summaryLoading,
-error: summaryError,
-} = useReviewSummary(challengeId);
+  const {
+    data,
+    loading: summaryLoading,
+    error: summaryError,
+  } = useReviewSummary(token);
 
-const {
- 
-loading,
-error,
-success,
-} = useSubmitReview();
+  const {
+    handleAccept,
+    handleDecline,
+    loading,
+    error,
+    success,
+    decision,
+  } = useSubmitReview();
 
-const validateRejectionReason = (reason) => {
-
- const trimmed = reason.trim();
-
-if (!trimmed) {
-  return "Rejection reason is required";
-}
-
-```
-if (!trimmed) {
-  return "Rejection reason is required";
-}
-
-const wordCount =
-  trimmed.split(/\s+/).length;
-
-if (wordCount < 30) {
-  return "Minimum 30 words required";
-}
-
-if (wordCount > 200) {
-  return "Maximum 200 words allowed";
-}
-
-return "";
-```
-
-};
-
-const onSubmit = async () => {
-if (!decision) {
-return;
-}
-
-```
-if (decision === "REJECTED") {
-  const validationError =
-    validateRejectionReason(reason);
-
-  if (validationError) {
-    return;
+  if (summaryLoading) {
+    return <LoadingState />;
   }
-}
 
-await handleSubmit({
-  challengeId: data._id,
-  decision,
-  rejectionReason:
-    decision === "REJECTED"
-      ? reason
-      : undefined,
-});
-```
+  if (summaryError) {
+    return (
+      <ErrorState
+        message={summaryError}
+      />
+    );
+  }
 
-};
+  if (!data) {
+    return null;
+  }
 
-if (summaryLoading) {
-return <LoadingState />;
-}
+  if (success) {
+    return (
+      <ReviewCompletedState
+        decision={decision}
+      />
+    );
+  }
 
-if (summaryError) {
-return ( <ErrorState
-     message={summaryError}
-   />
-);
-}
+  return (
+    <main className="witness-review-page">
+      <div className="witness-review-page__container">
 
-if (!data) {
-return null;
-}
+        <h1>
+          Become a Witness
+        </h1>
 
-if (success) {
-return ( <ReviewCompletedState
-     decision={decision}
-   />
-);
-}
+        <p>
+          Review this invitation and
+          decide whether you'd like to
+          become the witness.
+        </p>
 
-return ( <div> <ReviewHeader
-     title={data.title}
-     status={data.status}
-   />
+        <div className="witness-review-card">
 
-   <section className="witness-review-info">
-  <p>
-    You were selected as an accountability witness.
-    Review the evidence below and decide whether
-    this commitment was completed successfully.
-  </p>
-</section>
+          <h3>Creator</h3>
+          <p>
+            {data.creatorName}
+          </p>
 
+          <h3>Commitment</h3>
+          <p>
+            {data.title}
+          </p>
 
+          <h3>Deadline</h3>
+          <p>
+            {data.deadlineAt}
+          </p>
 
-```
-  <CommitmentSummaryCard
-    title={data.title}
-    successCriteria={
-      data.successCriteria
-    }
-    deadlineAt={data.deadlineAt}
-    witnessName={
-      data.witness?.name
-    }
-    consequenceStatus={
-      data.consequenceStatus
-    }
-  />
+          <h3>
+            Success Criteria
+          </h3>
+          <p>
+            {data.successCriteria}
+          </p>
 
-  <ProgressEvidenceTimeline
-    reports={
-      data.progressReports || []
-    }
-  />
+        </div>
 
-  <WitnessDecisionCard
-    decision={decision}
-    onDecisionChange={
-      setDecision
-    }
-  />
+        <input
+          type="text"
+          placeholder="Your name"
+          value={name}
+          onChange={(e) =>
+            setName(
+              e.target.value
+            )
+          }
+        />
 
-  {decision === "REJECTED" && (
-    <RejectionReasonForm
-      reason={reason}
-      onReasonChange={
-        setReason
-      }
-      error={validateRejectionReason(
-        reason
-      )}
-    />
-  )}
+        <input
+          type="tel"
+          placeholder="Phone number"
+          value={phone}
+          onChange={(e) =>
+            setPhone(
+              e.target.value
+            )
+          }
+        />
 
-  <button
-    type="button"
-    disabled={
-      loading || !decision
-    }
-    onClick={onSubmit}
-  >
-    {loading
-      ? "Submitting..."
-      : "Submit Review"}
-  </button>
- {error && (
-  <p className="review-error">
-    {error}
-  </p>
-)}
-</div>
- 
+        {error && (
+          <p className="review-error">
+            {error}
+          </p>
+        )}
 
-);
+        <div className="witness-review-actions">
+
+          <button
+            type="button"
+            disabled={
+              loading ||
+              !name ||
+              !phone
+            }
+            onClick={() =>
+              handleAccept({
+                token,
+                name,
+                phone,
+              })
+            }
+          >
+            {loading
+              ? "Accepting..."
+              : "Accept"}
+          </button>
+
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() =>
+              handleDecline(
+                token
+              )
+            }
+          >
+            {loading
+              ? "Declining..."
+              : "Decline"}
+          </button>
+
+        </div>
+
+      </div>
+    </main>
+  );
 }
 
 export default WitnessReview;

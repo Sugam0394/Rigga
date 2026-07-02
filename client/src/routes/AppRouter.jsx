@@ -20,13 +20,24 @@ import HomePage from "../pages/Home/HomePage";
 import CreateChallengePage from "../pages/CreateChallengePage/CreateChallengePage";
 import ChallengeDetailsPage from "../pages/ChallengeDetails/ChallengeDetailsPage";
 import Profile from "../pages/ProfilePage/Profile";
-import WitnessReview from "../pages/WitnessReview/WitnessReview";
 import SubmitProgressReportPage from "../pages/progressReports/SubmitProgressReportPage";
 import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
 import NotificationsPage from "../features/notifications/pages/NotificationPage"
+
+
+// Legal Pages
 import TermsOfServicePage from "../pages/legal/TermsOfServicePage";
 import PrivacyPolicyPage from "../pages/legal/PrivacyPolicyPage";
 import CookiePolicyPage from "../pages/legal/CookiePolicyPage";
+
+// Witness Review Pages
+import ShareWithWitnessPage from "../pages/WitnessReview/ShareWitnessPage";
+import WitnessInvitationPage from "../pages/WitnessReview/WitnessInvitationPage";
+import WitnessReview from "../pages/WitnessReview/WitnessReview";
+
+
+
+
 
  const AppRouter = () => {
   return (
@@ -48,6 +59,7 @@ import CookiePolicyPage from "../pages/legal/CookiePolicyPage";
         <Route path="/home" element={<HomePage />}/>
         <Route path="/notifications" element={ <NotificationsPage />}/>
         <Route path="/challenges/create" element={<CreateChallengePage />}/>
+        <Route path="/share-with-witness"element={<ShareWithWitnessPage />}/>
         <Route path="/challenges/:id" element={<ChallengeDetailsPage />}/>
         <Route path="/challenges/:id/progress-report"element={<SubmitProgressReportPage/>}/>
         <Route path="/challenges/:id/appeal" element={<SubmitAppealPage />}/>
@@ -56,12 +68,13 @@ import CookiePolicyPage from "../pages/legal/CookiePolicyPage";
       
       
         {/* Public Routes */}
-       <Route element={<PublicLayout />}>
-  <Route path="/review/:token" element={<WitnessReview />} />
-  <Route path="/legal/privacy" element={<PrivacyPolicyPage />} />
-  <Route path="/legal/terms" element={<TermsOfServicePage />} />
-  <Route path="/legal/cookies" element={<CookiePolicyPage />} />
-</Route>
+        <Route element={<PublicLayout />}>
+  <Route path="/witness/:token"element={<WitnessInvitationPage />}/>
+  <Route path="/review/:token"element={<WitnessReview />}/>
+  <Route path="/legal/privacy"element={<PrivacyPolicyPage />}/>
+  <Route path="/legal/terms"element={<TermsOfServicePage />}/>
+  <Route path="/legal/cookies" element={<CookiePolicyPage />}/>
+  </Route>
 
 
        {/* Fallback */}

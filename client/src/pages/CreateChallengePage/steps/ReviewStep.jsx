@@ -1,91 +1,42 @@
- import ChallengeFormNavigation from "../components/ChallengeFormNavigation";
+ import ChallengeReviewSummary from "../components/ChallengeReviewSummary";
+import ChallengeFormNavigation from "../components/ChallengeFormNavigation";
 
-const SuccessCriteriaStep = ({
+const ReviewStep = ({
   formData,
-  errors,
-  handleChange,
-  handleNext,
   handleBack,
+  handleSubmit,
+  isSubmitting,
+  submitError,
 }) => {
-  const characterCount =
-    formData.successCriteria.length;
-
   return (
     <div className="challenge-step">
       <h1 className="challenge-step__title">
-        How will success be verified?
+        Review Your Commitment
       </h1>
 
       <p className="challenge-step__description">
-        Describe what your witness should look for
-        to know you've successfully completed this
-        commitment.
+        Review your commitment carefully before creating
+        your challenge.
       </p>
 
-      <p className="challenge-step__helper">
-        Write something clear and measurable that
-        your witness can easily verify.
-      </p>
-
-      <div className="challenge-step__examples">
-        <strong>Examples</strong>
-
-        <ul>
-          <li>
-            Room is fully cleaned and all clothes
-            are put away.
-          </li>
-
-          <li>
-            Complete a 5 km run without stopping.
-          </li>
-
-          <li>
-            Read all 20 pages and explain the main
-            ideas.
-          </li>
-
-          <li>
-            Finish today's workout with all planned
-            exercises completed.
-          </li>
-
-          <li>
-            Wake up before 6:00 AM every day for 30
-            days.
-          </li>
-        </ul>
-      </div>
-
-      <textarea
-        rows={6}
-        value={formData.successCriteria}
-        onChange={(e) =>
-          handleChange(
-            "successCriteria",
-            e.target.value
-          )
-        }
-        placeholder="Example: Complete a 5 km run without stopping."
+      <ChallengeReviewSummary
+        formData={formData}
       />
 
-      <p className="challenge-step__counter">
-        {characterCount}/500
-      </p>
-
-      {errors.successCriteria && (
+      {submitError && (
         <p className="challenge-step__error">
-          {errors.successCriteria}
+          {submitError}
         </p>
       )}
 
       <ChallengeFormNavigation
-        currentStep={2}
+        currentStep={4}
         handleBack={handleBack}
-        handleNext={handleNext}
+        handleSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
       />
     </div>
   );
 };
 
-export default SuccessCriteriaStep;
+export default ReviewStep;

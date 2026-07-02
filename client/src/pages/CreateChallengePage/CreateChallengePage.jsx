@@ -6,7 +6,6 @@ import { useCreateChallenge } from "./hooks/useCreateChallenge";
 import CommitmentStep from "./steps/CommitmentStep";
 import DeadlineStep from "./steps/DeadlineStep";
 import SuccessCriteriaStep from "./steps/SucessCriteriaStep";
-import WitnessStep from "./steps/WitnessStep";
 import PrivateConsequenceStep from "./steps/PrivateConsequenceStep.jsx";
 import ReviewStep from "./steps/ReviewStep";
 
@@ -45,19 +44,12 @@ const CreateChallengePage = () => {
 
       case 3:
         return (
-          <WitnessStep
-            {...challenge}
-          />
-        );
-
-      case 4:
-        return (
           <PrivateConsequenceStep
             {...challenge}
           />
         );
 
-      case 5:
+      case 4:
         return (
           <ReviewStep
             {...challenge}

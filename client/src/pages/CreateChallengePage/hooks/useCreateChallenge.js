@@ -2,15 +2,14 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { createChallengeApi } from "../api/createChallengeApi";
-import { validatePhone }from "../../../features/auth/components/phoneValidation"
+ 
 
 
  const initialFormData = {
   title: "",
   deadlineAt: "",
 
-  witnessName: "",
-  witnessPhone: "",
+ 
 
   successCriteria: "",
   privateMessage: "",
@@ -72,49 +71,50 @@ const getWordCount = (text) => {
     .filter(Boolean).length;
 };
 
-const handleSubmit = async () => {
-   
- const valid =
-  isStepValid();
+ 
 
-if (!valid) {
-  return;
-}
+ 
+const handleSubmit = async () => {
+  const valid = isStepValid();
+
+  if (!valid) {
+    return;
+  }
 
   try {
     setSubmitError("");
     setIsSubmitting(true);
 
+    const payload = {
+      title: formData.title,
+      deadlineAt: formData.deadlineAt,
+      privateMessage: formData.privateMessage,
+      successCriteria: formData.successCriteria,
+    };
 
- 
+    const response =
+      await createChallengeApi(payload);
 
-  const payload = {
-  title: formData.title,
-  deadlineAt: formData.deadlineAt,
-  privateMessage: formData.privateMessage,
-  successCriteria: formData.successCriteria,
-  witness: {
-  name: formData.witnessName,
-  phone:
-    formData.witnessPhone,
-}
-};
-
-    await createChallengeApi(
-      payload
+    navigate(
+      "/share-with-witness",
+      {
+         
+          state:
+            response.data,
+        
+      }
     );
-
-    navigate("/home");
   } catch (error) {
     setSubmitError(
-      error?.response?.data
-        ?.message ||
+      error?.response?.data?.message ||
         "Unable to create challenge. Please try again."
     );
   } finally {
     setIsSubmitting(false);
   }
 };
+ 
+ 
 
 const isStepValid = () => {
   const newErrors = {};
@@ -180,28 +180,9 @@ const isStepValid = () => {
   }
 }
 
-if (currentStep === 3) {
-  if (!formData.witnessName.trim()) {
-    newErrors.witnessName =
-      "Witness name is required";
-  }
+ 
 
-  if (
-    !formData.witnessPhone
-  ) {
-    newErrors.witnessPhone =
-      "Witness phone is required";
-  } else if (
-    !validatePhone(
-      formData.witnessPhone
-    )
-  ) {
-    newErrors.witnessPhone =
-      "Enter a valid phone number";
-  }
-}
-
-  if (currentStep === 4) {
+  if (currentStep === 3) {
     const wordCount =
       getWordCount(
         formData.privateMessage

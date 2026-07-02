@@ -38,16 +38,7 @@ const ChallengeReviewSummary = ({
           {formData.successCriteria}
         </p>
       </div>
-
-      <div className="challenge-review-summary__item">
-        <span className="challenge-review-summary__label">
-          Witness
-        </span>
-
-        <p className="challenge-review-summary__value">
-          {formData.witnessName}
-        </p>
-      </div>
+         
 
       <div className="challenge-review-summary__item">
         <span className="challenge-review-summary__label">

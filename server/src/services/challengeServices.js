@@ -95,9 +95,10 @@ const {
       challengePayload
     );
 
+  const invitation =
   await invitationService.createInvitation({
     challengeId: challenge._id,
-});
+  });
 
 
   await consequenceService.createConsequence({
@@ -131,7 +132,10 @@ const {
       challenge._id,
   });
 
-  return challenge;
+  return {
+    challenge,
+    invitation,
+  }
 };
 
 const getUserChallenges = async (userId) => {

@@ -1,11 +1,11 @@
-import { useState } from "react";
+ import { useState } from "react";
 
 import {
-  submitReview,
+  acceptInvitation,
+  declineInvitation,
 } from "../api/reviewApi";
 
 const useSubmitReview = () => {
-
   const [loading, setLoading] =
     useState(false);
 
@@ -15,40 +15,66 @@ const useSubmitReview = () => {
   const [success, setSuccess] =
     useState(false);
 
-  const handleSubmit =
-    async (payload) => {
+  const [decision, setDecision] =
+    useState("");
 
-      try {
+  const handleAccept = async ({
+    token,
+    name,
+    phone,
+  }) => {
+    try {
+      setLoading(true);
+      setError("");
 
-        setLoading(true);
+      await acceptInvitation({
+        token,
+        name,
+        phone,
+      });
 
-        setError("");
+      setDecision("ACCEPTED");
+      setSuccess(true);
+    } catch (error) {
+      setError(
+        error.response?.data?.message ||
+          "Unable to accept invitation."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        await submitReview(
-          payload
-        );
+  const handleDecline = async (
+    token
+  ) => {
+    try {
+      setLoading(true);
+      setError("");
 
-        setSuccess(true);
+      await declineInvitation(
+        token
+      );
 
-      } catch (error) {
-
-        setError(
-          error.response?.data?.message ||
-          "Review submission failed"
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-    };
+      setDecision("DECLINED");
+      setSuccess(true);
+    } catch (error) {
+      setError(
+        error.response?.data?.message ||
+          "Unable to decline invitation."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-    handleSubmit,
+    handleAccept,
+    handleDecline,
     loading,
     error,
     success,
+    decision,
   };
 };
 

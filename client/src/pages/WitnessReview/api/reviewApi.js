@@ -1,57 +1,50 @@
-import api from "../../../api/apiClient"
+ import api from "../../../api/apiClient";
 
+// -----------------------------
+// Public Invitation
+// -----------------------------
 
-
-
-
-
-
-export const getReviewSummary = async (challengeId  ) => {
-
-    const response =
-      await api.get(
-        `/challenges/${challengeId}/review-summary`
-      );
-
-    return response.data.data;
-};
-
-export const submitReview = async ({
-    challengeId,
-    decision,
-    rejectionReason,
-  }) => {
-
-    const response =
-      await api.patch(
-        `/challenge/${challengeId}/witness-review`,
-        {
-          decision,
-          rejectionReason,
-        }
-      );
-
-    return response.data.data;
-};
-
- 
-
-export const trackWitnessShare = async (
-    challengeId
-  ) => {
-
-    await api.post(
-      `/analytics/${challengeId}/share`
+export const getInvitation = async (token) => {
+  const response =
+    await api.get(
+      `/witness/${token}`
     );
-  };
 
-  export const getWitnessAnalytics =
-  async (challengeId) => {
+  return response.data.invitation;
+};
 
-    const response =
-      await api.get(
-        `/analytics/${challengeId}`
-      );
+// -----------------------------
+// Accept Invitation
+// -----------------------------
 
-    return response.data.data;
-  };
+export const acceptInvitation = async ({
+  token,
+  name,
+  phone,
+}) => {
+  const response =
+    await api.post(
+      `/witness/${token}/accept`,
+      {
+        name,
+        phone,
+      }
+    );
+
+  return response.data.data;
+};
+
+// -----------------------------
+// Decline Invitation
+// -----------------------------
+
+export const declineInvitation = async (
+  token
+) => {
+  const response =
+    await api.post(
+      `/witness/${token}/decline`
+    );
+
+  return response.data.data;
+};

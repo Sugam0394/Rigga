@@ -3,14 +3,16 @@
 const ChallengeProgressBar = ({
   currentStep,
 }) => {
+  const TOTAL_STEPS = 4;
+
   const progress =
-     (currentStep / 5) * 100;
+    (currentStep / TOTAL_STEPS) * 100;
 
   return (
     <div className="challenge-progress">
       <div className="challenge-progress__header">
         <span>
-           Step {currentStep} of 5
+          Step {currentStep} of {TOTAL_STEPS}
         </span>
 
         <span>
