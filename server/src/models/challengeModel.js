@@ -38,13 +38,11 @@ const challengeSchema = new mongoose.Schema(
   witness: {
   name: {
     type: String,
-    required: true,
     trim: true,
   },
 
   phone: {
     type: String,
-    required: true,
     trim: true,
   },
 
@@ -86,10 +84,10 @@ reviewTokenExpiresAt: {
     },
 
     status: {
-      type: String,
-      enum: Object.values(CHALLENGE_STATUS),
-      default: CHALLENGE_STATUS.ACTIVE,
-    },
+  type: String,
+  enum: Object.values(CHALLENGE_STATUS),
+  default: CHALLENGE_STATUS.PENDING_WITNESS,
+},
   },
   {
     timestamps: true,

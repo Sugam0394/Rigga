@@ -118,6 +118,43 @@ const getActiveChallenges = async () => {
     });
   };
 
+ const attachWitness = async ({
+  challengeId,
+  witness,
+  session = null,
+}) => {
+  return Challenge.findByIdAndUpdate(
+    challengeId,
+    {
+      $set: {
+        witness,
+      },
+    },
+    {
+      new: true,
+      session,
+    }
+  );
+};
+
+ const activateChallenge = async (
+  challengeId,
+  session = null
+) => {
+  return Challenge.findByIdAndUpdate(
+    challengeId,
+    {
+      $set: {
+        status: CHALLENGE_STATUS.ACTIVE,
+      },
+    },
+    {
+      new: true,
+      session,
+    }
+  );
+};
+
 export default {
   createChallenge,
   updateWitnessNotifiedAt,
@@ -128,6 +165,8 @@ export default {
   getByReviewToken,
   getChallengesByUserId,
   getActiveChallenges,
-  getExpiredActiveChallenges
+  getExpiredActiveChallenges,
+  attachWitness,
+activateChallenge,
  
 };

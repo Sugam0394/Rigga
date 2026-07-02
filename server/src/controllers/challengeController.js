@@ -1,5 +1,5 @@
 import challengeService from "../services/challengeServices.js";
-
+import invitationService from "../services/invitationServices.js";
 const createChallenge = async (req, res) => {
   try {
    const challenge =
@@ -44,7 +44,32 @@ const getUserChallenges = async (
   }
 };
 
+const shareAgain = async (req, res) => {
+  try {
+    const { challengeId } = req.params;
+
+    const invitation =
+      await invitationService.regenerateInvitation({
+        challengeId,
+        userId: req.user.userId,
+      });
+
+    res.status(200).json({
+      success: true,
+      message:
+        "New invitation generated successfully.",
+      data: invitation,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   createChallenge,
-  getUserChallenges
+  getUserChallenges,
+  shareAgain,
 };

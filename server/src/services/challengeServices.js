@@ -9,7 +9,7 @@ import generateReviewLink from "./reviewLinkService.js";
 import challengeClasssifier from "./challengeClasssifier.js";
 import accountabilityPlanService
   from "./accountabilityPlanService.js";
- 
+import invitationService from "./invitationService.js";
 import {
   NOTIFICATION_TYPES,
 } from "../constants/notificationConstants.js";
@@ -29,9 +29,6 @@ import {
     !title ||
     !deadlineAt ||
     !privateMessage ||
-    !witness ||
-    !witness.name ||
-    !witness.phone ||
     !successCriteria
   ) {
     throw new Error("All fields are required");
@@ -88,7 +85,6 @@ const {
   title,
   category,
   deadlineAt: deadlineDate,
-  witness,
   successCriteria,
 };
 
@@ -99,10 +95,9 @@ const {
       challengePayload
     );
 
-    await generateReviewLink
-  .generateReviewLink(
-    challenge._id
-  );
+  await invitationService.createInvitation({
+    challengeId: challenge._id,
+});
 
 
   await consequenceService.createConsequence({
@@ -118,18 +113,8 @@ const {
   accountabilityPlan,
 });
 
-  await witnessService.notifyWitness(
-    challenge
-  );
-
-   await notificationService.createNotification({
-    challengeId: challenge._id,
-    recipientType: "WITNESS",
-    recipientPhone: challenge.witness.phone,
-    type: NOTIFICATION_TYPES.CHALLENGE_CREATED,
-    challengeTitle: challenge.title,
-    userName: witness.name,
-  });
+ 
+ 
 
 
   await userNotificationService

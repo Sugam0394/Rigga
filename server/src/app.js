@@ -55,7 +55,7 @@ import userNotificationRoutes from "./routes/userNotificationRoutes.js"
 import aiInsight from './routes/aiInsightRoutes.js';
 import aiNarrative from './routes/aiNarrativeRoutes.js';
 import aiCouch from './routes/aiCouchRoutes.js';
-
+import invitationRoutes from './routes/invitationRoutes.js';
 
 
 
@@ -95,6 +95,8 @@ import aiCouch from './routes/aiCouchRoutes.js';
    app.use("/api" , aiNarrative)
 
    app.use("/api" , aiCouch )
+
+   app.use("/api" , invitationRoutes)
 
 
 

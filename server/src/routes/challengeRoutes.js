@@ -13,6 +13,7 @@ router.post("/challenge/:id/appeal", authMiddleware, appealController.submitAppe
 
 router.get("/challenges" , authMiddleware ,challengeController.getUserChallenges )
 
+router.post( "/challenges/:challengeId/share-again",authMiddleware,challengeController.shareAgain);
 
 
 export default router;
