@@ -1,5 +1,5 @@
 import challengeService from "../services/challengeServices.js";
-import invitationService from "../services/invitationServices.js";
+import invitationService from "../services/invitationService.js";
 
 
 

@@ -30,11 +30,10 @@ import AppealStatusCard from "../appeals/components/AppealStatusCard";
 
 
 
-// utils
-import { openWhatsAppShare } from "../../utils/whatsappShare";
-import WitnessAnalyticsCard from "../WitnessReview/WitnessAnalyticsCard";
-import { trackWitnessShare } from "../WitnessReview/api/reviewApi";
-import useWitnessAnalytics from "../WitnessReview/hooks/useWitnessAnalytics";
+ 
+ 
+ 
+ 
 
 // AiInsight 
 import useAIInsights from "../../features/ai-insights/hooks/useAIInsights";
@@ -115,27 +114,7 @@ const handleSubmitProgress =
     );
   };
 
- const handleShareWithWitness = async () => {
-  const witness = dashboard.witness;
-
-  const message = `Hey ${witness.name},
-
-Please review my Rigga commitment.`;
-
-  try {
-    await trackWitnessShare(id);
-  } catch (error) {
-    console.error(
-      "Unable to track witness share.",
-      error
-    );
-  }
-
-  openWhatsAppShare({
-    phone: witness.phone,
-    message,
-  });
-};
+ 
 
   const {
   insights,
@@ -155,13 +134,7 @@ const {
 } =
 useAINarrative(id);
 
-   const {
-  analytics,
-  loading:
-    analyticsLoading,
-  error:
-    analyticsError,
-} = useWitnessAnalytics(id);
+ 
 
 const {
   coach,
@@ -272,17 +245,7 @@ const nextAction =
         Submit Appeal
       </button>
   )}
-
- {dashboard.challenge.status ===
-  "ACTIVE" &&
-  dashboard.witness?.phone && (
-    <button
-      className="challenge-details-button"
-      onClick={handleShareWithWitness}
-    >
-      Share With Witness
-    </button>
-)}
+ 
 
   {dashboard.challenge.status ===
     "ACTIVE" &&
@@ -335,23 +298,8 @@ const nextAction =
         witness={dashboard.witness}
       />
 
-      {analyticsLoading && (
-        <p>
-          Loading witness analytics...
-        </p>
-      )}
-
-      {analyticsError && (
-        <p>
-          Unable to load witness analytics.
-        </p>
-      )}
-
-      {analytics && (
-        <WitnessAnalyticsCard
-          analytics={analytics}
-        />
-      )}
+     
+  
 
       {/* Appeal */}
       {dashboard.challenge.status ===
