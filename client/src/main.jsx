@@ -10,15 +10,12 @@ ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
   <React.StrictMode>
-    <GoogleOAuthProvider
-      clientId={
-        import.meta.env
-          .VITE_GOOGLE_CLIENT_ID
-      }
-    >
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </GoogleOAuthProvider>
+   <GoogleOAuthProvider
+  clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+>
+  <AuthProvider>
+    <App />
+  </AuthProvider>
+</GoogleOAuthProvider>
   </React.StrictMode>
 );

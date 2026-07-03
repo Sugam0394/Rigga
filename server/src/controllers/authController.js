@@ -2,7 +2,7 @@ import authService
   from "../services/authService.js";
   import cookieOptions from "../config/cookieConfig.js";
 import googleAuthService from "../services/googleAuthService.js";
-
+import userService from "../services/userService.js";
 
 
 
@@ -111,7 +111,28 @@ return res.status(200).json({
   }
 };
 
+const updateProfile = async (
+  req,
+  res
+) => {
+  try {
+    const user =
+      await userService.updateProfile(
+        req.user.userId,
+        req.body
+      );
 
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 
 
@@ -216,6 +237,7 @@ export default {
   getCurrentUser,
   googleSignIn,
   logout,
-  completeProfile
+  completeProfile,
+  updateProfile,
 };
  

@@ -1,5 +1,5 @@
  import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { completeProfile } from "../../services/authService";
 import useAuth from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import "./CreateProfilePage.css"
 import CreateProfileHero from "./CreateProfileHero";
 import AuthError from "../../features/auth/components/AuthError"
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton"
-
+import {  updateProfile } from "../../services/authService";
 
 
 
@@ -21,15 +21,37 @@ import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton"
   const navigate =
     useNavigate();
 
-  const verifiedPhone =
-    location.state
-      ?.verifiedPhone;
+  const provider =
+  location.state?.provider;
+
+const verifiedPhone =
+  location.state?.verifiedPhone;
+
+const verifiedEmail =
+  location.state?.verifiedEmail;
+
+ useEffect(() => {
+  if (
+    !verifiedPhone &&
+    !verifiedEmail
+  ) {
+    navigate("/login", {
+      replace: true,
+    });
+  }
+}, [
+  verifiedPhone,
+  verifiedEmail,
+  navigate,
+]);
 
   const [name, setName] =
     useState("");
 
   const [email, setEmail] =
-    useState("");
+  useState(
+    verifiedEmail || ""
+  );
 
   const [error, setError] =
     useState("");
@@ -37,45 +59,66 @@ import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton"
   const [loading, setLoading] =
     useState(false);
 
-  const isFormValid =
-    name.trim() &&
-    email.trim();
+if (
+  !verifiedPhone &&
+  !verifiedEmail
+) {
+  return null;
+}
+
+ 
+
+   const isFormValid =
+  provider === "google"
+    ? name.trim()
+    : name.trim() &&
+      email.trim();
 
   const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
+    if (provider === "google") {
+      await updateProfile({
+        name,
+      });
+    } else {
       await completeProfile({
         name,
         email,
         phone:
           verifiedPhone,
       });
-
-      await restoreSession();
-
-      navigate("/home", {
-        replace: true,
-      });
-    } catch (error) {
-      setError(
-        error?.response?.data
-          ?.message ||
-          "Unable to complete profile"
-      );
-    } finally {
-      setLoading(false);
     }
-  };
+
+    await restoreSession();
+
+    navigate("/home", {
+      replace: true,
+    });
+  } catch (error) {
+    setError(
+      error?.response?.data
+        ?.message ||
+        "Unable to complete profile"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="profile-page">
       <CreateProfileHero
-        verifiedPhone={
-          verifiedPhone
-        }
-      />
+  provider={provider}
+  verifiedPhone={
+    verifiedPhone
+  }
+  verifiedEmail={
+    verifiedEmail
+  }
+/>
 
       <label className="profile-label">
         Full Name
@@ -103,17 +146,22 @@ import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton"
         Email Address
       </label>
 
-      <input
-        type="email"
-        placeholder="Email Address"
-        value={email}
-        onChange={(e) =>
-          setEmail(
-            e.target.value
-          )
-        }
-        className="profile-input"
-      />
+         
+
+<input
+  type="email"
+  placeholder="Email Address"
+  value={email}
+  onChange={(e) =>
+    setEmail(
+      e.target.value
+    )
+  }
+  className="profile-input"
+  readOnly={
+    provider === "google"
+  }
+/>
 
       <p className="profile-helper">
         Used for account security and

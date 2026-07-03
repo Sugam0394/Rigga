@@ -66,6 +66,18 @@ export const getCurrentUser = async () => {
   return response.data;
 };
 
+export const updateProfile = async (
+  profileData
+) => {
+  const response =
+    await apiClient.post(
+      "/auth/update-profile",
+      profileData
+    );
+
+  return response.data;
+};
+
   export const logoutUser =  async () => {
     const response =
       await apiClient.post(

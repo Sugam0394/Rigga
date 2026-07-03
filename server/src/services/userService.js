@@ -1,5 +1,6 @@
  import userRepository
   from "../repositories/userRepository.js";
+  
 
  const createUser = async (
   userData
@@ -105,8 +106,41 @@ const createGoogleUser = async ({
   );
 };
 
+const updateProfile = async (
+  userId,
+  profileData
+) => {
+  const user =
+    await userRepository.getUserById(
+      userId
+    );
+
+  if (!user) {
+    throw new Error(
+      "User not found"
+    );
+  }
+
+  const updatedUser =
+    await userRepository.updateProfile(
+      userId,
+      {
+        name: profileData.name,
+      }
+    );
+
+  return {
+    id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    phone: updatedUser.phone,
+    role: updatedUser.role,
+  };
+};
+
 export default {
   createUser,
   getUserById,
-  createGoogleUser
+  createGoogleUser,
+  updateProfile,
 };

@@ -33,9 +33,23 @@ const getUserByPhone = async (
   });
 };
 
+const updateProfile = async (
+  userId,
+  updateData
+) => {
+  return User.findByIdAndUpdate(
+    userId,
+    updateData,
+    {
+      new: true,
+    }
+  );
+};
+
 export default {
   createUser,
   getUserById,
   getUserByEmail,
   getUserByPhone,
+  updateProfile,
 };

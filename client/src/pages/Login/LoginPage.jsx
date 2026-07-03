@@ -12,7 +12,9 @@ import "./LoginPage.css"
  
 import LegalConsent from "../../features/auth/components/LegalConsent";
  
-
+import { GoogleLogin } from "@react-oauth/google";
+import { useAuth } from "../../context/AuthContext";
+import { googleSignIn } from "../../services/authService";
 
 
 
@@ -34,6 +36,8 @@ const [hasConsent, setHasConsent] =
 
    const isPhoneValid =
   validatePhone(phone);
+
+  const { restoreSession } = useAuth();
 
   const error =
   phone && !isPhoneValid
@@ -91,9 +95,55 @@ navigate(
     }
   };
 
-  const handleGoogleContinue = () => {
-  // Google Sign-In implementation
-  // will be added in F4.
+ const handleGoogleSuccess = async (
+  credentialResponse
+) => {
+  try {
+    setLoading(true);
+    setSubmitError("");
+
+    const result =
+      await googleSignIn(
+        credentialResponse.credential
+      );
+
+    if (
+      result.data.isNewUser
+    ) {
+      navigate(
+        "/create-profile",
+        {
+          state: {
+            provider: "google",
+            verifiedEmail:
+              result.data.user.email,
+          },
+          replace: true,
+        }
+      );
+
+      return;
+    }
+
+    await restoreSession();
+
+    navigate("/home", {
+      replace: true,
+    });
+  } catch (error) {
+    setSubmitError(
+      error?.response?.data?.message ||
+        "Google Sign-In failed."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleGoogleError = () => {
+  setSubmitError(
+    "Google Sign-In failed."
+  );
 };
 
   return (
@@ -107,15 +157,30 @@ navigate(
       setSubmitError("");
     }}
   />
-
-  <button
-    type="button"
-    className="google-signin-button"
-    disabled={!hasConsent}
-    onClick={handleGoogleContinue}
-  >
-    Continue with Google
-  </button>
+ <div
+  style={{
+    pointerEvents: hasConsent
+      ? "auto"
+      : "none",
+    opacity: hasConsent
+      ? 1
+      : 0.6,
+  }}
+>
+  <GoogleLogin
+    onSuccess={
+      handleGoogleSuccess
+    }
+    onError={
+      handleGoogleError
+    }
+    useOneTap={false}
+    theme="outline"
+    text="continue_with"
+    shape="pill"
+    width="100%"
+  />
+</div>
 
   <div className="login-divider">
     <span>OR</span>
