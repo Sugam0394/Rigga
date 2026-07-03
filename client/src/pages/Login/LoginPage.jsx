@@ -13,7 +13,7 @@ import "./LoginPage.css"
 import LegalConsent from "../../features/auth/components/LegalConsent";
  
 import { GoogleLogin } from "@react-oauth/google";
-import { useAuth } from "../../context/AuthContext";
+import useAuth from "../../context/AuthContext";
 import { googleSignIn } from "../../services/authService";
 
 
