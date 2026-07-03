@@ -242,5 +242,6 @@ export default {
   requestOtp,
   verifyOtp,
   getCurrentUser,
-  completeProfile
+  completeProfile,
+  generateToken,
 };

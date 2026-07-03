@@ -75,7 +75,38 @@ return userRepository
   };
 };
 
+const createGoogleUser = async ({
+  googleId,
+  email,
+  name,
+  authProvider,
+}) => {
+  const existingUser =
+    await userRepository.getUserByEmail(
+      email
+    );
+
+  if (existingUser) {
+    throw new Error(
+      "Email already exists"
+    );
+  }
+
+  const safeUserData = {
+    googleId,
+    email,
+    name,
+    authProvider,
+    lastLoginAt: new Date(),
+  };
+
+  return userRepository.createUser(
+    safeUserData
+  );
+};
+
 export default {
   createUser,
   getUserById,
+  createGoogleUser
 };

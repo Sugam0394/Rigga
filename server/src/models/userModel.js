@@ -19,11 +19,26 @@ const userSchema = new mongoose.Schema(
         unique: true
       },
 
-      phone: {
+    phone: {
   type: String,
-  required: true,
+  required: false,
   unique: true,
+  sparse: true,
   trim: true,
+},
+
+googleId: {
+  type: String,
+  default: null,
+  unique: true,
+  sparse: true,
+  trim: true,
+},
+authProvider: {
+  type: String,
+  enum: ["phone", "google"],
+  required: true,
+  default: "phone",
 },
 
       role: {

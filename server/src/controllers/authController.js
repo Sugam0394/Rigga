@@ -1,6 +1,10 @@
 import authService
   from "../services/authService.js";
   import cookieOptions from "../config/cookieConfig.js";
+import googleAuthService from "../services/googleAuthService.js";
+
+
+
 
 const requestOtp = async (
   req,
@@ -161,10 +165,56 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+const googleSignIn = async (
+  req,
+  res
+) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Google ID token is required",
+      });
+    }
+
+    const result =
+      await googleAuthService.authenticate(
+        idToken
+      );
+
+    res.cookie(
+      "token",
+      result.token,
+      cookieOptions
+    );
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        isNewUser: result.isNewUser,
+        user: result.user,
+      },
+    });
+  } catch (error) {
+    const status =
+      error.message === "Invalid Google token"
+        ? 401
+        : 500;
+
+    return res.status(status).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   requestOtp,
   verifyOtp,
   getCurrentUser,
+  googleSignIn,
   logout,
   completeProfile
 };

@@ -58,10 +58,17 @@ const updateLastLogin = async (userId) => {
   return User.findById(userId);
 };
 
+const findUserByGoogleId = async (googleId) => {
+  return User.findOne({
+    googleId,
+  });
+};
+
 export default {
   findUserByPhone,
   saveOtp,
   clearOtp,
   updateLastLogin,
   findUserById,
+  findUserByGoogleId
 };

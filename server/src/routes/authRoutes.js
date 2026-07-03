@@ -26,4 +26,7 @@ router.get( "/auth/me", authMiddleware, authController.getCurrentUser);
 
 router.post( "/auth/logout",authMiddleware, authController.logout);
 
+router.post("/auth/google",authController.googleSignIn);
+
+
 export default router;
