@@ -1,6 +1,81 @@
- .login-page{
-    display:flex;
-    flex-direction:column;
+ .login-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.google-signin-button {
+  width: 100%;
+  padding: 14px 18px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.google-signin-button:hover:not(:disabled) {
+  border-color: #9ca3af;
+}
+
+.google-signin-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+
+  margin: 24px 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.login-divider span {
+  margin: 0 12px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #6b7280;
+
+  letter-spacing: 0.08em;
+}
+
+.phone-toggle-button {
+  width: 100%;
+
+  padding: 14px 18px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: opacity 0.2s ease;
+}
+
+.phone-toggle-button:hover {
+  opacity: 0.9;
 }
 
 .login-submit-wrapper {

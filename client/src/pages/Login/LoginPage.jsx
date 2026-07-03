@@ -24,6 +24,9 @@ const [hasConsent, setHasConsent] =
  const [phone, setPhone] =
   useState("");
 
+  const [showPhoneLogin, setShowPhoneLogin] =
+  useState(false);
+
   const [submitError, setSubmitError] =
   useState("");
 
@@ -88,54 +91,82 @@ navigate(
     }
   };
 
+  const handleGoogleContinue = () => {
+  // Google Sign-In implementation
+  // will be added in F4.
+};
+
   return (
+ <div className="login-page">
+  <LoginHero />
 
-    <div className="login-page">  
- <LoginHero />
+  <LegalConsent
+    checked={hasConsent}
+    onChange={(e) => {
+      setHasConsent(e.target.checked);
+      setSubmitError("");
+    }}
+  />
 
- 
+  <button
+    type="button"
+    className="google-signin-button"
+    disabled={!hasConsent}
+    onClick={handleGoogleContinue}
+  >
+    Continue with Google
+  </button>
 
-     <LoginPhoneSection
-  phone={phone}
-  setPhone={setPhone}
-/>
-
- <LegalConsent
-  checked={hasConsent}
-  onChange={(e) => {
-    setHasConsent(
-      e.target.checked
-    );
-
-    setSubmitError("");
-  }}
-/>
-
-    <AuthError
-      id="phone-error"
-      message={error}
-    />
-
-    <AuthError
-      id="otp-request-error"
-      message={submitError}
-    />
-
-    <div className="login-submit-wrapper">
-      <AuthSubmitButton
-      disabled={
-  !isPhoneValid ||
-  !hasConsent ||
-  loading
-}
-        onClick={handleContinue}
-      >
-        {loading
-          ? "Sending OTP..."
-          : "Continue"}
-      </AuthSubmitButton>
-    </div>
+  <div className="login-divider">
+    <span>OR</span>
   </div>
+
+  <button
+    type="button"
+    className="phone-toggle-button"
+    onClick={() =>
+      setShowPhoneLogin((prev) => !prev)
+    }
+  >
+    {showPhoneLogin
+      ? "Hide Phone Login"
+      : "Continue with Phone"}
+  </button>
+
+  {showPhoneLogin && (
+    <>
+      <LoginPhoneSection
+        phone={phone}
+        setPhone={setPhone}
+      />
+
+      <AuthError
+        id="phone-error"
+        message={error}
+      />
+
+      <AuthError
+        id="otp-request-error"
+        message={submitError}
+      />
+
+      <div className="login-submit-wrapper">
+        <AuthSubmitButton
+          disabled={
+            !isPhoneValid ||
+            !hasConsent ||
+            loading
+          }
+          onClick={handleContinue}
+        >
+          {loading
+            ? "Sending OTP..."
+            : "Continue"}
+        </AuthSubmitButton>
+      </div>
+    </>
+  )}
+</div>
 );
 };
 

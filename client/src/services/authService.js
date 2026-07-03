@@ -52,6 +52,20 @@ export const getCurrentUser = async () => {
     return response.data;
   };
 
+  export const googleSignIn = async (
+  idToken
+) => {
+  const response =
+    await apiClient.post(
+      "/auth/google",
+      {
+        idToken,
+      }
+    );
+
+  return response.data;
+};
+
   export const logoutUser =  async () => {
     const response =
       await apiClient.post(
