@@ -57,7 +57,7 @@ const PrivateConsequenceStep = ({
       )}
 
       <ChallengeFormNavigation
-        currentStep={5}
+        currentStep={3}
         handleBack={handleBack}
         handleNext={handleNext}
       />
