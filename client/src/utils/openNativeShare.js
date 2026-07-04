@@ -1,13 +1,19 @@
  export const openNativeShare = async ({
   message,
 }) => {
-  if (!navigator.share) {
-    throw new Error(
-      "Native sharing is not supported."
-    );
+  if (navigator.share) {
+    await navigator.share({
+      text: message,
+    });
+    return;
   }
 
-  await navigator.share({
-    text: message,
-  });
+  const whatsappUrl =
+    `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+  window.open(
+    whatsappUrl,
+    "_blank",
+    "noopener,noreferrer"
+  );
 };

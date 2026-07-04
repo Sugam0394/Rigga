@@ -47,7 +47,7 @@ const PrivateConsequenceStep = ({
       />
 
       <p className="challenge-step__counter">
-        {wordCount} / 25 words minimum
+        {wordCount} / 10 words minimum
       </p>
 
       {errors.privateMessage && (

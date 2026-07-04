@@ -1,5 +1,5 @@
  import { useLocation, useNavigate } from "react-router-dom";
-
+import { useEffect } from "react";
 import { openNativeShare } from "../../utils/openNativeShare";
 
 import "./ShareWithWitnessPage.css";
@@ -11,8 +11,17 @@ const ShareWithWitnessPage = () => {
   const { challenge, invitation } =
     location.state || {};
 
-    if (!challenge || !invitation) {
-  navigate("/home");
+ 
+
+useEffect(() => {
+  if (!challenge || !invitation) {
+    navigate("/home", {
+      replace: true,
+    });
+  }
+}, [challenge, invitation, navigate]);
+
+if (!challenge || !invitation) {
   return null;
 }
 
@@ -42,14 +51,15 @@ ${invitationLink}`;
         message,
       });
     } catch (error) {
-      console.error(
-        "Error sharing with witness:",
-        error
-      );
-      alert(
-        "Unable to open sharing options. Please try again."
-      );
-    }
+  console.error(
+    "Unable to share invitation.",
+    error
+  );
+
+  alert(
+    "Unable to share the invitation. Please try again."
+  );
+}
   };
 
   const handleSkip = () => {

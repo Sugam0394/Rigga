@@ -48,14 +48,18 @@ export const useCreateChallenge = () => {
 };
 
  const handleNext = () => {
-   
+  console.log("Current Step:", currentStep);
 
-  const valid =
-    isStepValid();
+  const valid = isStepValid();
 
-  
+  console.log("Valid:", valid);
 
-  if (!valid) return;
+  if (!valid) {
+    console.log("Errors:", errors);
+    return;
+  }
+
+  console.log("Going to:", currentStep + 1);
 
   setCurrentStep((prev) => prev + 1);
 };
@@ -86,11 +90,13 @@ const handleSubmit = async () => {
     setIsSubmitting(true);
 
     const payload = {
-      title: formData.title,
-      deadlineAt: formData.deadlineAt,
-      privateMessage: formData.privateMessage,
-      successCriteria: formData.successCriteria,
-    };
+  title: formData.title,
+  deadlineAt: new Date(
+    formData.deadlineAt
+  ).toISOString(),
+  privateMessage: formData.privateMessage,
+  successCriteria: formData.successCriteria,
+};
 
     const response =
       await createChallengeApi(payload);
@@ -194,10 +200,10 @@ const isStepValid = () => {
       newErrors.privateMessage =
         "Private message is required";
     } else if (
-      wordCount < 25
+      wordCount < 10
     ) {
       newErrors.privateMessage =
-        "Minimum 25 words required";
+        "Minimum 10 words required";
     }
   }
 
