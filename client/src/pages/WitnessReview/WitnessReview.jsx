@@ -50,13 +50,25 @@ function WitnessReview() {
     return null;
   }
 
+  if (
+  data.invitationStatus === "ACCEPTED" ||
+  data.invitationStatus === "DECLINED" ||
+  data.invitationStatus === "SUPERSEDED"
+) {
+  return (
+    <ReviewCompletedState
+      decision={data.invitationStatus}
+    />
+  );
+}
+
   if (success) {
-    return (
-      <ReviewCompletedState
-        decision={decision}
-      />
-    );
-  }
+  return (
+    <ReviewCompletedState
+      decision={decision}
+    />
+  );
+}
 
   return (
     <main className="witness-review-page">
