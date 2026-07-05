@@ -19,13 +19,32 @@ import challengeRepository from "../repositories/challengeRepositories.js";
       "Challenge not found"
     );
   }
- const token =
+ // If a valid review token already exists,
+// reuse it instead of generating a new one.
+
+if (
+  challenge.witness.reviewToken &&
+  challenge.witness.reviewTokenExpiresAt &&
+  challenge.witness.reviewTokenExpiresAt > new Date()
+) {
+
+  return {
+    expiresAt:
+      challenge.witness.reviewTokenExpiresAt,
+
+    reviewUrl:
+      reviewTokenService.buildReviewUrl(
+        challenge.witness.reviewToken
+      ),
+  };
+}
+
+const token =
   reviewTokenService.generateReviewToken();
 
 const expiresAt =
   reviewTokenService.generateReviewTokenExpiry();
 
-// Validate URL BEFORE any database write
 const reviewUrl =
   reviewTokenService.buildReviewUrl(
     token

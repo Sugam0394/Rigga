@@ -80,17 +80,21 @@ const getChallengesByUserId = async (userId) => {
 
  const updateStatus = async (
   challengeId,
-  status
+  currentStatus,
+  nextStatus
 ) => {
-  return Challenge.findByIdAndUpdate(
-    challengeId,
+  return Challenge.findOneAndUpdate(
+    {
+      _id: challengeId,
+      status: currentStatus,
+    },
     {
       $set: {
-        status,
+        status: nextStatus,
       },
     },
     {
-       new: true
+      new: true,
     }
   );
 };

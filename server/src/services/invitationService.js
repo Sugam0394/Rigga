@@ -5,7 +5,7 @@ import invitationRepository from "../repositories/invitationRepository.js";
 import reviewTokenService from "./reviewTokenService.js";
 import challengeRepository from "../repositories/challengeRepositories.js";
 import userRepository from "../repositories/userRepository.js";
-
+import lifecycleCoordinator from "./lifecycleCoordinator.js";
 
 
 
@@ -177,17 +177,29 @@ const createInvitation = async ({ challengeId }) => {
       session,
     });
 
-    await challengeRepository.activateChallenge(
-      challenge._id,
-      session
-    );
 
-    await session.commitTransaction();
 
-    return {
-      success: true,
-      challengeId: challenge._id,
-    };
+  const activeChallenge =
+  await challengeRepository.activateChallenge(
+    challenge._id,
+    session
+  );
+
+await session.commitTransaction();
+
+await lifecycleCoordinator
+  .onChallengeActive(
+    activeChallenge
+  );
+
+return {
+  success: true,
+  challengeId: challenge._id,
+};
+
+
+
+
   } catch (error) {
     await session.abortTransaction();
     throw error;

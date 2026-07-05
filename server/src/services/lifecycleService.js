@@ -22,11 +22,16 @@ const evaluateChallengeLifecycle = async (challenge) => {
     challenge._id
   );
 
-const updatedChallenge =
+ const updatedChallenge =
   await challengeRepository.updateStatus(
     challenge._id,
+    CHALLENGE_STATUS.ACTIVE,
     CHALLENGE_STATUS.UNDER_REVIEW
   );
+
+if (!updatedChallenge) {
+  return challenge;
+}
 
  await lifecycleCoordinator
   .onChallengeUnderReview(
