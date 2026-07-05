@@ -19,35 +19,30 @@ import challengeRepository from "../repositories/challengeRepositories.js";
       "Challenge not found"
     );
   }
+ const token =
+  reviewTokenService.generateReviewToken();
 
-  const token =
-    reviewTokenService.generateReviewToken();
+const expiresAt =
+  reviewTokenService.generateReviewTokenExpiry();
 
-  const expiresAt =
-    reviewTokenService.generateReviewTokenExpiry();
-
-  challenge.witness.reviewToken =
-    token;
-
-  challenge.witness.reviewTokenExpiresAt =
-    expiresAt;
-
-  await challenge.save();
-
-  console.log(
-    "[TOKEN SAVED]",
-    challenge.witness.reviewToken
+// Validate URL BEFORE any database write
+const reviewUrl =
+  reviewTokenService.buildReviewUrl(
+    token
   );
 
-  const reviewUrl =
-    reviewTokenService.buildReviewUrl(
-      token
-    );
+challenge.witness.reviewToken =
+  token;
 
-  return {
-    expiresAt,
-    reviewUrl,
-  };
+challenge.witness.reviewTokenExpiresAt =
+  expiresAt;
+
+await challenge.save();
+
+return {
+  expiresAt,
+  reviewUrl,
+};
 };
 
 export default {
