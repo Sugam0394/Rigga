@@ -1,13 +1,8 @@
  import challengeRepository from "../repositories/challengeRepositories.js";
-import userNotificationService
-  from "./userNotificationService.js";
 import reviewLinkGeneratorService from "./reviewLinkService.js"
-import {
-  NOTIFICATION_EVENTS,
-} from "../constants/notificationEvents.js";
-import {
-  CHALLENGE_STATUS,
-} from "../constants/challengeStatus.js";
+import {CHALLENGE_STATUS} from "../constants/challengeStatus.js";
+import lifecycleCoordinator from "./lifecycleCoordinator.js";
+
 
 const evaluateChallengeLifecycle = async (challenge) => {
     if (!challenge) {
@@ -33,12 +28,10 @@ const updatedChallenge =
     CHALLENGE_STATUS.UNDER_REVIEW
   );
 
-await userNotificationService.createEventNotification({
-  userId: updatedChallenge.userId,
-  type: NOTIFICATION_EVENTS.CHALLENGE_UNDER_REVIEW,
-  entityType: "CHALLENGE",
-  entityId: updatedChallenge._id,
-});
+ await lifecycleCoordinator
+  .onChallengeUnderReview(
+    updatedChallenge
+  );
 
 return updatedChallenge;
     }
