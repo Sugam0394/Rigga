@@ -1,16 +1,32 @@
- const generateObservationStrategy = ({
-  title = "",
-  successCriteria = "",
-  durationDays = 1,
+ import observationResolverRules
+  from "../constants/observationResolverRules.js";
+
+const generateObservationStrategy = ({
+  title,
+  successCriteria,
+  durationDays,
 }) => {
+  if (
+    !title ||
+    !successCriteria ||
+    !Number.isFinite(durationDays) ||
+    durationDays <= 0
+  ) {
+    throw new Error(
+      "Invalid observation strategy inputs"
+    );
+  }
+
+  const observationMode =
+    observationResolverRules
+      .getObservationMode({
+        durationDays,
+      });
+
   return {
     version: 1,
 
-    observationMode:
-      "STANDARD",
-
-    cadence:
-      "FLEXIBLE",
+    observationMode,
 
     generatedFrom: {
       title,

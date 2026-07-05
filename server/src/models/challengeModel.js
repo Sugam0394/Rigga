@@ -101,11 +101,7 @@ observationStrategy: {
     immutable: true,
   },
 
-  cadence: {
-    type: String,
-    required: true,
-    immutable: true,
-  },
+ 
 
   generatedFrom: {
     title: {

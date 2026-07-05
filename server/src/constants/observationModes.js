@@ -1,0 +1,7 @@
+export const OBSERVATION_MODES = {
+  END_ONLY: "END_ONLY",
+
+  DAILY: "DAILY",
+
+  CHECKPOINT: "CHECKPOINT",
+};
