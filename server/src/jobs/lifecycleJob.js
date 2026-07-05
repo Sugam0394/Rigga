@@ -10,8 +10,8 @@ import {
 
 const registerLifecycleJob = () => {
   cron.schedule(
-    "0 * * * *",
-    async () => {
+  "*/5 * * * *",
+  async () => {
       try {
         console.log(
           "[LIFECYCLE JOB START]"
