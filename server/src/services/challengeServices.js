@@ -14,6 +14,15 @@ import {
   NOTIFICATION_TYPES,
 } from "../constants/notificationConstants.js";
 
+import observationStrategyService from "./observationStrategyService.js";
+
+
+
+
+
+
+
+
  const createChallenge = async (challengeData) => {
   const {
     userId,
@@ -78,7 +87,13 @@ const {
   category,
 } = accountabilityPlan;
 
- 
+ const observationStrategy =
+  observationStrategyService
+    .generateObservationStrategy({
+      title,
+      successCriteria,
+      durationDays,
+    });
 
  const challengePayload = {
   userId,
@@ -86,6 +101,7 @@ const {
   category,
   deadlineAt: deadlineDate,
   successCriteria,
+  observationStrategy,
 };
 
  

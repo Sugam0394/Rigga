@@ -88,6 +88,46 @@ reviewTokenExpiresAt: {
   enum: Object.values(CHALLENGE_STATUS),
   default: CHALLENGE_STATUS.PENDING_WITNESS,
 },
+observationStrategy: {
+  version: {
+    type: Number,
+    required: true,
+    immutable: true,
+  },
+
+  observationMode: {
+    type: String,
+    required: true,
+    immutable: true,
+  },
+
+  cadence: {
+    type: String,
+    required: true,
+    immutable: true,
+  },
+
+  generatedFrom: {
+    title: {
+      type: String,
+      required: true,
+      immutable: true,
+    },
+
+    successCriteria: {
+      type: String,
+      required: true,
+      immutable: true,
+    },
+
+    durationDays: {
+      type: Number,
+      required: true,
+      immutable: true,
+    },
+  },
+},
+
   },
   {
     timestamps: true,
