@@ -1,21 +1,29 @@
-import mongoose from "mongoose";
-import { ACCOUNTABILITY_RULES } from "../constants/accountabilityRules.js";
-import progressReportRepository from "../repositories/progressReportRepository.js";
-import challengeRepository from "../repositories/challengeRepositories.js"
-import userNotificationService from "./userNotificationService.js";
-import { NOTIFICATION_EVENTS, } from "../constants/notificationEvents.js";
-import { getTodayRange } from "../utils/dateUtils.js";
+ import mongoose from "mongoose";
 
+import progressReportRepository
+  from "../repositories/progressReportRepository.js";
 
- const submitProgressReport = async (
-  reportData
-) => {
-  const {
-    challengeId,
-    notes,
-    userId,
-  } = reportData;
+import challengeRepository
+  from "../repositories/challengeRepositories.js";
 
+import userNotificationService
+  from "./userNotificationService.js";
+
+import {
+  NOTIFICATION_EVENTS,
+} from "../constants/notificationEvents.js";
+
+import progressEligibilityService
+  from "./progressEligibilityService.js";
+
+import { getTodayRange }
+  from "../utils/dateUtils.js";
+
+const validateProgressPayload = ({
+  challengeId,
+  userId,
+  notes,
+}) => {
   if (!challengeId) {
     throw new Error(
       "Challenge ID is required"
@@ -32,16 +40,15 @@ import { getTodayRange } from "../utils/dateUtils.js";
     );
   }
 
-
   if (
-  !mongoose.Types.ObjectId.isValid(
-    userId
-  )
-) {
-  throw new Error(
-    "Invalid user session"
-  );
-}
+    !mongoose.Types.ObjectId.isValid(
+      userId
+    )
+  ) {
+    throw new Error(
+      "Invalid user session"
+    );
+  }
 
   if (!notes) {
     throw new Error(
@@ -64,10 +71,48 @@ import { getTodayRange } from "../utils/dateUtils.js";
       "Progress notes cannot exceed 1000 characters"
     );
   }
+};
 
-  if (!reportData.imageUrl) {
+const validateEvidence = ({
+  imageUrl,
+}) => {
+  if (!imageUrl) {
     throw new Error(
       "Evidence image is required"
+    );
+  }
+};
+
+const submitProgressReport = async (
+  reportData
+) => {
+  const {
+    challengeId,
+    notes,
+    userId,
+    imageUrl,
+  } = reportData;
+
+  validateProgressPayload({
+    challengeId,
+    userId,
+    notes,
+  });
+
+  validateEvidence({
+    imageUrl,
+  });
+
+  const eligibility =
+    await progressEligibilityService
+      .canSubmit({
+        challengeId,
+        userId,
+      });
+
+  if (!eligibility.canSubmit) {
+    throw new Error(
+      eligibility.reason
     );
   }
 
@@ -77,119 +122,54 @@ import { getTodayRange } from "../utils/dateUtils.js";
         challengeId
       );
 
-  if (!challenge) {
+  const {
+    startOfDay,
+    endOfDay,
+  } = getTodayRange();
+
+  const duplicateReport =
+    await progressReportRepository
+      .findDuplicateReportToday({
+        challengeId,
+        userId,
+        notes,
+        imageUrl,
+        startOfDay,
+        endOfDay,
+      });
+
+  if (duplicateReport) {
     throw new Error(
-      "Challenge not found"
+      "Duplicate evidence detected."
     );
   }
 
-  if (
-    challenge.status !==
-    "ACTIVE"
-  ) {
-    throw new Error(
-      "Progress reports can only be submitted for active challenges"
-    );
-  }
+  const progressReport =
+    await progressReportRepository
+      .createProgressReport({
+        challengeId,
+        userId,
+        notes,
+        imageUrl,
+      });
 
-  if (
-  !challenge.userId.equals(
-    userId
-  )
-) {
-  throw new Error(
-    "Forbidden"
-  );
-}
+  await userNotificationService
+    .createEventNotification({
+      userId:
+        challenge.userId,
 
- const {
-  startOfDay,
-  endOfDay,
-} = getTodayRange();
- 
+      type:
+        NOTIFICATION_EVENTS
+          .PROGRESS_REPORT_SUBMITTED,
 
- const [
-  reportsToday,
-  duplicateReport,
-] = await Promise.all([
-  progressReportRepository
-    .getReportsSubmittedToday({
-      challengeId,
-      userId,
-      startOfDay,
-      endOfDay,
-    }),
+      entityType:
+        "CHALLENGE",
 
-  progressReportRepository
-    .findDuplicateReportToday({
-      challengeId,
-      userId,
-      notes,
-      imageUrl:
-        reportData.imageUrl,
-      startOfDay,
-      endOfDay,
-    }),
-]);
- console.log(
-  "REPORTS TODAY:",
-  reportsToday.length
-);
-
-console.log(
-  "DUPLICATE REPORT:",
-  !!duplicateReport
-);
-
-console.log(
-  "MAX REPORTS:",
-  ACCOUNTABILITY_RULES.MAX_REPORTS_PER_DAY
-);
-
-if (duplicateReport) {
-  throw new Error(
-    "Duplicate evidence detected."
-  );
-}
-
-if (
-  reportsToday.length >=
-  ACCOUNTABILITY_RULES.MAX_REPORTS_PER_DAY
-) {
-  throw new Error(
-    "You have already submitted a progress report today."
-  );
-}
-
-
- const progressReport =
-  await progressReportRepository
-    .createProgressReport({
-      challengeId,
-      userId,
-      notes,
-      imageUrl:
-        reportData.imageUrl,
-         
+      entityId:
+        challenge._id,
     });
 
-await userNotificationService
-  .createEventNotification({
-    userId:
-      challenge.userId,
-
-    type:
-      NOTIFICATION_EVENTS
-        .PROGRESS_REPORT_SUBMITTED,
-
-    entityType:
-      "CHALLENGE",
-
-    entityId:
-      challenge._id,
-  });
-
-return progressReport;
+  return progressReport;
 };
 
 const getChallengeReports = async (
@@ -217,7 +197,7 @@ const getChallengeReports = async (
     );
   }
 
-  return await progressReportRepository
+  return progressReportRepository
     .getByChallengeId(
       challengeId
     );
@@ -225,5 +205,5 @@ const getChallengeReports = async (
 
 export default {
   submitProgressReport,
-  getChallengeReports
+  getChallengeReports,
 };

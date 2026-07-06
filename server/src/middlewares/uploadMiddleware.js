@@ -56,24 +56,45 @@ cb(
   },
 });
 
+ const allowedExtensions = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".webp",
+];
+
 const fileFilter = (
   req,
   file,
   cb
 ) => {
-  if (
+  const extension =
+    path.extname(
+      file.originalname
+    ).toLowerCase();
+
+  const isImage =
     file.mimetype.startsWith(
       "image/"
+    );
+
+  if (
+    isImage &&
+    allowedExtensions.includes(
+      extension
     )
   ) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error(
-        "Only image files are allowed"
-      )
+    return cb(
+      null,
+      true
     );
   }
+
+  cb(
+    new Error(
+      "Only JPG, JPEG, PNG and WEBP images are allowed"
+    )
+  );
 };
 
 const upload = multer({

@@ -102,7 +102,7 @@ const getChallengeReports = async (req, res) => {
 }
   };
 
-  const getProgressEligibility = async (
+ const getProgressEligibility = async (
   req,
   res
 ) => {
@@ -110,7 +110,7 @@ const getChallengeReports = async (req, res) => {
 
     const eligibility =
       await progressEligibilityService
-        .getProgressEligibility({
+        .canSubmit({
           challengeId:
             req.params.id,
 
@@ -123,33 +123,33 @@ const getChallengeReports = async (req, res) => {
       data: eligibility,
     });
 
-   } catch (error) {
+  } catch (error) {
 
-  if (
-    error.message ===
-    "Forbidden"
-  ) {
-    return res.status(403).json({
+    if (
+      error.message ===
+      "Forbidden"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    if (
+      error.message ===
+      "Challenge not found"
+    ) {
+      return res.status(404).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    res.status(400).json({
       success: false,
       message: error.message,
     });
   }
-
-  if (
-    error.message ===
-    "Challenge not found"
-  ) {
-    return res.status(404).json({
-      success: false,
-      message: error.message,
-    });
-  }
-
-  res.status(400).json({
-    success: false,
-    message: error.message,
-  });
-}
 };
 
 export default {

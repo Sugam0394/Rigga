@@ -1,6 +1,9 @@
  import observationResolverRules
   from "../constants/observationResolverRules.js";
 
+import observationRuntimeRules
+  from "../constants/observationRuntimeRules.js";
+
 const generateObservationStrategy = ({
   title,
   successCriteria,
@@ -36,6 +39,26 @@ const generateObservationStrategy = ({
   };
 };
 
+const getObservationRuntime = ({
+  observationStrategy,
+}) => {
+  if (
+    !observationStrategy ||
+    !observationStrategy.observationMode
+  ) {
+    throw new Error(
+      "Observation Strategy is required"
+    );
+  }
+
+  return observationRuntimeRules
+    .getObservationRuntime({
+      observationMode:
+        observationStrategy.observationMode,
+    });
+};
+
 export default {
   generateObservationStrategy,
+  getObservationRuntime,
 };

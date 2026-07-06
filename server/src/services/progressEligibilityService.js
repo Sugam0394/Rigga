@@ -1,19 +1,20 @@
 import progressReportRepository from "../repositories/progressReportRepository.js";
 import mongoose from "mongoose";
-import {
-  ACCOUNTABILITY_RULES,
-} from "../constants/accountabilityRules.js";
+ 
 import { getTodayRange } from "../utils/dateUtils.js";
 
+import challengeRepository
+  from "../repositories/challengeRepositories.js";
+
+import observationStrategyService
+  from "./observationStrategyService.js";
 
 
 
-
- const getProgressEligibility = async ({
+ const canSubmit = async ({
   challengeId,
   userId,
 }) => {
-
   if (
     !mongoose.Types.ObjectId.isValid(
       challengeId
@@ -34,6 +35,61 @@ import { getTodayRange } from "../utils/dateUtils.js";
     );
   }
 
+  const challenge =
+    await challengeRepository
+      .getChallengeById(
+        challengeId
+      );
+
+  if (!challenge) {
+    throw new Error(
+      "Challenge not found"
+    );
+  }
+
+  if (
+    !challenge.userId.equals(
+      userId
+    )
+  ) {
+    return {
+      canSubmit: false,
+      reason: "Forbidden",
+      observationMode: null,
+      nextEligibleAt: null,
+    };
+  }
+
+  if (
+    challenge.status !==
+    "ACTIVE"
+  ) {
+    return {
+      canSubmit: false,
+      reason:
+        "Challenge not ACTIVE",
+      observationMode: null,
+      nextEligibleAt: null,
+    };
+  }
+
+  if (!challenge.observationStrategy) {
+    return {
+      canSubmit: false,
+      reason:
+        "Observation Strategy is missing",
+      observationMode: null,
+      nextEligibleAt: null,
+    };
+  }
+
+  const observationRuntime =
+    observationStrategyService
+      .getObservationRuntime({
+        observationStrategy:
+          challenge.observationStrategy,
+      });
+
   const {
     startOfDay,
     endOfDay,
@@ -50,21 +106,31 @@ import { getTodayRange } from "../utils/dateUtils.js";
 
   if (
     reportsToday.length >=
-    ACCOUNTABILITY_RULES.MAX_REPORTS_PER_DAY
+    observationRuntime.maxReportsPerWindow
   ) {
     return {
       canSubmit: false,
       reason:
         "Already submitted today",
+      observationMode:
+        challenge
+          .observationStrategy
+          .observationMode,
+      nextEligibleAt: null,
     };
   }
 
   return {
     canSubmit: true,
-    reason: null,
+    reason: "Eligible",
+    observationMode:
+      challenge
+        .observationStrategy
+        .observationMode,
+    nextEligibleAt: null,
   };
 };
 
 export default {
-  getProgressEligibility,
+  canSubmit,
 };
