@@ -1,7 +1,7 @@
 import reminderRepository from "../repositories/reminderRepository.js";
 
 import notificationDispatcher from "./notificationDispatcher.js";
-
+import reminderDecisionServices from "./reminderDecisionServices.js";
  
 import challengeRepository
   from "../repositories/challengeRepositories.js";
@@ -13,78 +13,71 @@ import {
   NOTIFICATION_EVENTS,
 } from "../constants/notificationEvents.js";
 
-
-
-
-
-
-
-
 import {
   REMINDER_STATUS,
 } from "../constants/reminderConstants.js";
 
-const executePendingReminders = async () => {
-    console.log(
-      "[REMINDER JOB START]"
+ const executePendingReminders = async () => {
+  console.log("[REMINDER JOB START]");
+
+  const reminders =
+    await reminderRepository.getDuePendingReminders(
+      new Date()
     );
 
-    const reminders =
-      await reminderRepository
-        .getDuePendingReminders(
-          new Date()
-        );
-
-    for (const reminder of reminders) {
-  try {
-    console.log(
-      `[REMINDER FOUND] ${reminder._id}`
-    );
-
-    await notificationDispatcher
-      .dispatchReminder(
-        reminder
+  for (const reminder of reminders) {
+    try {
+      console.log(
+        `[REMINDER FOUND] ${reminder._id}`
       );
 
       const challenge =
-  await challengeRepository
-    .getChallengeById(
-      reminder.challengeId
-    );
+        await challengeRepository.getChallengeById(
+          reminder.challengeId
+        );
 
-if (challenge) {
-  await userNotificationService
-    .createEventNotification({
-      userId:
-        challenge.userId,
+      const decision =
+  await reminderDecisionServices.shouldSendReminder({
+    challenge,
+    userId: challenge.userId,
+  });
 
-      type:
-        NOTIFICATION_EVENTS
-          .REMINDER_TRIGGERED,
+      if (!decision.shouldSend) {
+        continue;
+      }
 
-      entityType:
-        "CHALLENGE",
+      await notificationDispatcher.dispatchReminder(
+        reminder
+      );
 
-      entityId:
-        challenge._id,
-    });
-}
+      if (challenge) {
+        await userNotificationService.createEventNotification(
+          {
+            userId: challenge.userId,
 
-    await reminderRepository
-      .updateReminderStatus(
+            type:
+              NOTIFICATION_EVENTS.REMINDER_TRIGGERED,
+
+            entityType: "CHALLENGE",
+
+            entityId: challenge._id,
+          }
+        );
+      }
+
+      await reminderRepository.updateReminderStatus(
         reminder._id,
         REMINDER_STATUS.TRIGGERED,
         new Date()
       );
-
-  } catch (error) {
-    console.error(
-      `[REMINDER ERROR] ${reminder._id}`,
-      error
-    );
+    } catch (error) {
+      console.error(
+        `[REMINDER ERROR] ${reminder._id}`,
+        error
+      );
+    }
   }
-}
-  };
+};
 
 export default {
   executePendingReminders,
