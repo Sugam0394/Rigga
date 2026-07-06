@@ -32,6 +32,38 @@ const reminderSchema = new mongoose.Schema(
       required: true,
     },
 
+    history: {
+  outcome: {
+    type: String,
+    default: null,
+  },
+
+  reason: {
+    type: String,
+    default: null,
+  },
+
+  urgency: {
+    type: String,
+    default: null,
+  },
+
+  tone: {
+    type: String,
+    default: null,
+  },
+
+  observationMode: {
+    type: String,
+    default: null,
+  },
+
+  processedAt: {
+    type: Date,
+    default: null,
+  },
+},
+
     status: {
       type: String,
       enum: Object.values(REMINDER_STATUS),

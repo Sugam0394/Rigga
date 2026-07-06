@@ -47,10 +47,81 @@ const getDuePendingReminders =  async (currentTime) => {
     });
   };
 
+  const updateReminderHistory = async (
+  reminderId,
+  {
+    outcome,
+    reason,
+    urgency,
+    tone,
+    observationMode,
+    processedAt = new Date(),
+  }
+) => {
+  return Reminder.findByIdAndUpdate(
+    reminderId,
+    {
+      $set: {
+        history: {
+          outcome,
+          reason,
+          urgency,
+          tone,
+          observationMode,
+          processedAt,
+        },
+      },
+    },
+    {
+      new: true,
+    }
+  );
+};
+
+
+const updateReminderOutcome = async (
+  reminderId,
+  {
+    status,
+    triggeredAt = null,
+    outcome,
+    reason,
+    urgency,
+    tone,
+    observationMode,
+    processedAt = new Date(),
+  }
+) => {
+  return Reminder.findByIdAndUpdate(
+    reminderId,
+    {
+      $set: {
+        status,
+        triggeredAt,
+
+        history: {
+          outcome,
+          reason,
+          urgency,
+          tone,
+          observationMode,
+          processedAt,
+        },
+      },
+    },
+    {
+      new: true,
+    }
+  );
+};
+
+
 export default {
   createReminder,
   createManyReminders,
   getRemindersByChallenge,
+  updateReminderHistory,
   updateReminderStatus,
-  getDuePendingReminders
+  getDuePendingReminders,
+  updateReminderOutcome,
 };

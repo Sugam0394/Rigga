@@ -22,4 +22,10 @@ router.get(
   reminderController.getReminderDecision
 );
 
+router.get(
+  "/challenges/:id/reminder-history",
+  authMiddleware,
+  reminderController.getReminderHistory
+);
+
 export default router;

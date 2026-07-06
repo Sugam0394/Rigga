@@ -118,8 +118,49 @@ const getReminderDecision = async (
   }
 };
 
+const getReminderHistory = async (
+  req,
+  res
+) => {
+  try {
+    const history =
+      await reminderService.getReminderHistory(
+        req.params.id,
+        req.user.userId
+      );
+
+    res.status(200).json({
+      success: true,
+      data: history,
+    });
+  } catch (error) {
+    let statusCode = 500;
+
+    if (
+      error.message ===
+      "Challenge not found"
+    ) {
+      statusCode = 404;
+    }
+
+    if (
+      error.message ===
+      "Forbidden"
+    ) {
+      statusCode = 403;
+    }
+
+    res.status(statusCode).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   getChallengeReminders,
   getReminderStatus,
   getReminderDecision,
+  getReminderHistory,
 };
+ 
