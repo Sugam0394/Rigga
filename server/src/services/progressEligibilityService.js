@@ -95,30 +95,34 @@ import observationStrategyService
     endOfDay,
   } = getTodayRange();
 
-  const reportsToday =
-    await progressReportRepository
-      .getReportsSubmittedToday({
-        challengeId,
-        userId,
-        startOfDay,
-        endOfDay,
-      });
+ const reports =
+  await progressReportRepository
+    .getReportsForObservationWindow({
+      challengeId,
+      userId,
+      observationWindow:
+        observationRuntime.observationWindow,
+      startOfDay,
+      endOfDay,
+    });
 
-  if (
-    reportsToday.length >=
-    observationRuntime.maxReportsPerWindow
-  ) {
-    return {
-      canSubmit: false,
-      reason:
-        "Already submitted today",
-      observationMode:
-        challenge
-          .observationStrategy
-          .observationMode,
-      nextEligibleAt: null,
-    };
-  }
+ 
+
+ if (
+  reports.length >=
+  observationRuntime.maxReportsPerWindow
+) {
+  return {
+    canSubmit: false,
+    reason:
+      "Already submitted in current observation window",
+    observationMode:
+      challenge
+        .observationStrategy
+        .observationMode,
+    nextEligibleAt: null,
+  };
+}
 
   return {
     canSubmit: true,

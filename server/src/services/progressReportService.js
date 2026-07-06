@@ -83,6 +83,18 @@ const validateEvidence = ({
   }
 };
 
+/*
+ * Production Hardening Note:
+ *
+ * canSubmit() and createProgressReport()
+ * are currently executed sequentially.
+ *
+ * In a future production hardening package,
+ * these operations should be protected by
+ * a database transaction or optimistic locking
+ * to prevent concurrent duplicate submissions.
+ */
+
 const submitProgressReport = async (
   reportData
 ) => {
@@ -153,6 +165,7 @@ const submitProgressReport = async (
         imageUrl,
       });
 
+  try {
   await userNotificationService
     .createEventNotification({
       userId:
@@ -168,6 +181,12 @@ const submitProgressReport = async (
       entityId:
         challenge._id,
     });
+} catch (error) {
+  console.error(
+    "[PROGRESS NOTIFICATION FAILED]",
+    error
+  );
+}
 
   return progressReport;
 };
@@ -203,7 +222,42 @@ const getChallengeReports = async (
     );
 };
 
+
+const getChallengeTimeline = async (
+  challengeId,
+  userId
+) => {
+  const challenge =
+    await challengeRepository
+      .getChallengeById(
+        challengeId
+      );
+
+  if (!challenge) {
+    throw new Error(
+      "Challenge not found"
+    );
+  }
+
+  if (
+    challenge.userId.toString() !==
+    userId
+  ) {
+    throw new Error(
+      "Forbidden"
+    );
+  }
+
+  return progressReportRepository
+    .getChallengeTimeline(
+      challengeId
+    );
+};
+
+
 export default {
   submitProgressReport,
   getChallengeReports,
+  getChallengeTimeline,
+  
 };

@@ -23,6 +23,6 @@ const getObservationMode = ({
   return OBSERVATION_MODES.CHECKPOINT;
 };
 
-export default {
+  export default {
   getObservationMode,
 };
