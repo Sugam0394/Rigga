@@ -4,6 +4,11 @@ import {
   REMINDER_TYPES,
   REMINDER_STATUS,
 } from "../constants/reminderConstants.js";
+import reminderDecisionService from "./reminderDecisionServices.js";
+
+
+
+
 
 const createReminderSchedule = async (reminderData) => {
   return reminderRepository.createReminder(reminderData);
@@ -70,10 +75,117 @@ return reminderRepository
   );
 };
 
-export default {
+const getReminderStatus = async (
+  challengeId,
+  userId
+) => {
+  const challenge =
+    await challengeRepository.getChallengeById(
+      challengeId
+    );
+
+  if (!challenge) {
+    throw new Error(
+      "Challenge not found"
+    );
+  }
+
+  if (
+    challenge.userId.toString() !==
+    userId
+  ) {
+    throw new Error(
+      "Forbidden"
+    );
+  }
+
+  const reminders =
+    await reminderRepository.getRemindersByChallenge(
+      challengeId
+    );
+
+  const pendingCount =
+    reminders.filter(
+      (reminder) =>
+        reminder.status ===
+        REMINDER_STATUS.PENDING
+    ).length;
+
+  const triggeredCount =
+    reminders.filter(
+      (reminder) =>
+        reminder.status ===
+        REMINDER_STATUS.TRIGGERED
+    ).length;
+
+  const expiredCount =
+    reminders.filter(
+      (reminder) =>
+        reminder.status ===
+        REMINDER_STATUS.EXPIRED
+    ).length;
+
+  const nextReminder =
+    reminders.find(
+      (reminder) =>
+        reminder.status ===
+        REMINDER_STATUS.PENDING
+    ) || null;
+
+  const lastReminder =
+    [...reminders]
+      .reverse()
+      .find(
+        (reminder) =>
+          reminder.status ===
+          REMINDER_STATUS.TRIGGERED
+      ) || null;
+
+  return {
+    pendingCount,
+    triggeredCount,
+    expiredCount,
+    nextReminder,
+    lastReminder,
+  };
+};
+
+const getReminderDecision = async (
+  challengeId,
+  userId
+) => {
+  const challenge =
+    await challengeRepository.getChallengeById(
+      challengeId
+    );
+
+  if (!challenge) {
+    throw new Error(
+      "Challenge not found"
+    );
+  }
+
+  if (
+    challenge.userId.toString() !==
+    userId
+  ) {
+    throw new Error(
+      "Forbidden"
+    );
+  }
+
+  return reminderDecisionService.shouldSendReminder({
+    challenge,
+    userId,
+  });
+};
+
+ export default {
   createReminderSchedule,
   createManyReminderSchedules,
   generateCheckpointReminder,
   updateReminderStatus,
   getChallengeReminders,
+  getReminderStatus,
+  getReminderDecision,
 };

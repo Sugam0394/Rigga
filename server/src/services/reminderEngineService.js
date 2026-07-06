@@ -1,23 +1,14 @@
-import reminderRepository from "../repositories/reminderRepository.js";
+ import reminderRepository from "../repositories/reminderRepository.js";
+import reminderDecisionService from "./reminderDecisionServices.js";
+import reminderCoordinator from "./reminderCoordinator.js";
 
-import notificationDispatcher from "./notificationDispatcher.js";
-import reminderDecisionServices from "./reminderDecisionServices.js";
- 
-import challengeRepository
-  from "../repositories/challengeRepositories.js";
-
-import userNotificationService
-  from "./userNotificationService.js";
-
-import {
-  NOTIFICATION_EVENTS,
-} from "../constants/notificationEvents.js";
+import challengeRepository from "../repositories/challengeRepositories.js";
 
 import {
   REMINDER_STATUS,
 } from "../constants/reminderConstants.js";
 
- const executePendingReminders = async () => {
+const executePendingReminders = async () => {
   console.log("[REMINDER JOB START]");
 
   const reminders =
@@ -36,13 +27,31 @@ import {
           reminder.challengeId
         );
 
-      const decision =
-  await reminderDecisionServices.shouldSendReminder({
-    challenge,
-    userId: challenge.userId,
-  });
+      // Fix #1: Handle deleted/missing challenge safely
+      if (!challenge) {
+        await reminderRepository.updateReminderStatus(
+          reminder._id,
+          REMINDER_STATUS.EXPIRED,
+          new Date()
+        );
 
+        continue;
+      }
+
+      const decision =
+        await reminderDecisionService.shouldSendReminder({
+          challenge,
+          userId: challenge.userId,
+        });
+
+      // Fix #2: Close suppressed reminders
       if (!decision.shouldSend) {
+        await reminderRepository.updateReminderStatus(
+          reminder._id,
+          REMINDER_STATUS.EXPIRED,
+          new Date()
+        );
+
         continue;
       }
 
@@ -50,20 +59,11 @@ import {
         reminder
       );
 
-      if (challenge) {
-        await userNotificationService.createEventNotification(
-          {
-            userId: challenge.userId,
-
-            type:
-              NOTIFICATION_EVENTS.REMINDER_TRIGGERED,
-
-            entityType: "CHALLENGE",
-
-            entityId: challenge._id,
-          }
-        );
-      }
+     await reminderCoordinator.onReminderTriggered({
+  reminder,
+  challenge,
+  decision,
+});
 
       await reminderRepository.updateReminderStatus(
         reminder._id,

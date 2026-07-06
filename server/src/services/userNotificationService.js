@@ -51,6 +51,9 @@ const markAllNotificationsRead =  async (userId) => {
         userId
       );
   };
+
+
+  
   const createEventNotification = async ({
     userId,
     type,
