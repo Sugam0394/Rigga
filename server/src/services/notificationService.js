@@ -1,3 +1,22 @@
+/*
+ * LEGACY NOTIFICATION SERVICE
+ *
+ * This service belongs to the legacy
+ * challenge notification pipeline.
+ *
+ * Rigga V2 Notification Engine uses:
+ *
+ * UserNotificationService
+ *
+ * This service is retained only for
+ * backward compatibility until the
+ * Witness communication flow is migrated
+ * to the Notification Engine.
+ */
+
+
+
+
 import notificationRepository from "../repositories/notificationRepository.js";
 
 

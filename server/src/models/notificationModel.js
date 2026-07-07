@@ -55,3 +55,9 @@ const Notification = mongoose.model(
 );
 
 export default Notification;
+/*
+ * LEGACY MODEL
+ *
+ * Scheduled for migration into
+ * Notification Engine.
+ */

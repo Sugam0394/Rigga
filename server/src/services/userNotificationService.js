@@ -102,14 +102,7 @@ const getNotification = async (
       userId
     );
 };
-  const getNotificationTimeline = async (
-  userId
-) => {
-  return userNotificationRepository
-    .getUserNotifications(
-      userId
-    );
-};
+  
  const createEventNotification = async (
   notificationEvent
 ) => {

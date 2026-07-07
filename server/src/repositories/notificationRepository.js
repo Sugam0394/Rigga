@@ -1,3 +1,14 @@
+/*
+ * LEGACY REPOSITORY
+ *
+ * Used only by the legacy challenge
+ * notification flow.
+ *
+ * Do not use for Notification Engine.
+ */
+
+
+
 import Notification from "../models/notificationModel.js";
 
 const createNotification = async (notificationData) => {
