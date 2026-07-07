@@ -1,0 +1,9 @@
+export const DELIVERY_STATUS = {
+  PENDING: "PENDING",
+
+  DELIVERED: "DELIVERED",
+
+  FAILED: "FAILED",
+
+  SKIPPED: "SKIPPED",
+};

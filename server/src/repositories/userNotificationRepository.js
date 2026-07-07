@@ -58,11 +58,76 @@ const markAllNotificationsRead = async (userId) => {
         }
       );
   };
+const getUnreadNotifications = async (
+  userId
+) => {
+  return UserNotification
+    .find({
+      userId,
+      isRead: false,
+    })
+    .sort({
+      createdAt: -1,
+    });
+};
 
-export default {
+const getNotificationById = async (
+  notificationId,
+  userId
+) => {
+  return UserNotification
+    .findOne({
+      _id: notificationId,
+      userId,
+    });
+};
+
+const updateDeliveryOutcome = async (
+  notificationId,
+  deliveryResult
+) => {
+
+  return UserNotification
+    .findByIdAndUpdate(
+      notificationId,
+      {
+        $set: {
+          delivery: {
+            channel:
+              deliveryResult.channel,
+
+            status:
+              deliveryResult.status,
+
+            reason:
+              deliveryResult.reason,
+
+            attemptedAt:
+              deliveryResult.attemptedAt,
+
+            deliveredAt:
+              deliveryResult.deliveredAt,
+          },
+        },
+
+        $inc: {
+          "delivery.attempts": 1,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+};
+
+
+ export default {
   createNotification,
   getUserNotifications,
   getUnreadCount,
+  getUnreadNotifications,
+  getNotificationById,
   markNotificationRead,
   markAllNotificationsRead,
+  updateDeliveryOutcome,
 };

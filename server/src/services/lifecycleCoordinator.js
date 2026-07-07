@@ -4,26 +4,43 @@ import userNotificationService
 import {
   NOTIFICATION_EVENTS,
 } from "../constants/notificationEvents.js";
+import notificationEventService from "./notificationEventService.js"
+
+
 
 const onChallengeUnderReview = async (
   challenge
 ) => {
   try {
-    await userNotificationService
-      .createEventNotification({
-        userId:
-          challenge.userId,
+    const notificationEvent =
+  notificationEventService
+    .createNotificationEvent({
+      eventType:
+        NOTIFICATION_EVENTS
+          .CHALLENGE_UNDER_REVIEW,
 
-        type:
-          NOTIFICATION_EVENTS
-            .CHALLENGE_UNDER_REVIEW,
+      sourceEngine:
+        "LIFECYCLE",
 
-        entityType:
-          "CHALLENGE",
+      userId:
+        challenge.userId,
 
-        entityId:
-          challenge._id,
-      });
+      entityType:
+        "CHALLENGE",
+
+      entityId:
+        challenge._id,
+
+      payload: {
+        status:
+          "UNDER_REVIEW",
+      },
+    });
+
+await userNotificationService
+  .createEventNotification(
+    notificationEvent
+  );
 
   } catch (error) {
 

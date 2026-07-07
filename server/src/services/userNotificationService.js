@@ -1,5 +1,8 @@
 import userNotificationRepository from "../repositories/userNotificationRepository.js";
-import notificationFactory  from "./notificationEvents.js"
+ import notificationTemplateService from "./notificationTemplateService.js"
+import notificationCoordinator from "./notificationCoordinator.js"
+
+
 
 const createNotification = async ({
   userId,
@@ -20,12 +23,14 @@ const createNotification = async ({
     });
 };
 
-const getUserNotifications = async (userId) => {
-    return userNotificationRepository
-      .getUserNotifications(
-        userId
-      );
-  };
+ const getNotificationTimeline = async (
+  userId
+) => {
+  return userNotificationRepository
+    .getUserNotifications(
+      userId
+    );
+};
 
 const getUnreadCount = async (userId) => {
     return userNotificationRepository
@@ -51,41 +56,108 @@ const markAllNotificationsRead =  async (userId) => {
         userId
       );
   };
+const getUnreadNotifications = async (
+  userId
+) => {
+  return userNotificationRepository
+    .getUnreadNotifications(
+      userId
+    );
+};
+const getNotificationSummary = async (
+  userId
+) => {
 
+  const notifications =
+    await userNotificationRepository
+      .getUserNotifications(
+        userId
+      );
 
-  
-  const createEventNotification = async ({
+  const unreadNotifications =
+    await userNotificationRepository
+      .getUnreadCount(
+        userId
+      );
+
+  return {
+    totalNotifications:
+      notifications.length,
+
+    unreadNotifications,
+
+    latestNotification:
+      notifications[0] ?? null,
+
+    lastReadAt: null,
+  };
+};
+const getNotification = async (
+  userId,
+  notificationId
+) => {
+  return userNotificationRepository
+    .getNotificationById(
+      notificationId,
+      userId
+    );
+};
+  const getNotificationTimeline = async (
+  userId
+) => {
+  return userNotificationRepository
+    .getUserNotifications(
+      userId
+    );
+};
+ const createEventNotification = async (
+  notificationEvent
+) => {
+
+  const {
     userId,
-    type,
-    entityType = null,
-    entityId = null,
-  }) => {
+    eventType,
+    entityType,
+    entityId,
+  } = notificationEvent;
 
-    const {
+  const {
+    title,
+    message,
+  } =
+    notificationTemplateService
+      .resolveNotificationTemplate(
+        notificationEvent
+      );
+
+  const notification =
+  await userNotificationRepository
+    .createNotification({
+      userId,
+      type:
+        eventType,
       title,
       message,
-    } =
-      notificationFactory
-        .buildNotification({
-          type,
-        });
+      entityType,
+      entityId,
+    });
 
-    return userNotificationRepository
-      .createNotification({
-        userId,
-        type,
-        title,
-        message,
-        entityType,
-        entityId,
-      });
-  };
+await notificationCoordinator
+  .deliverNotification(
+    notification
+  );
 
-export default {
+return notification;
+};
+
+ export default {
   createNotification,
-  getUserNotifications,
   getUnreadCount,
   markNotificationRead,
   markAllNotificationsRead,
-  createEventNotification
+  createEventNotification,
+  getNotificationTimeline,
+  getNotificationSummary,
+  getUnreadNotifications,
+  getNotification,
 };

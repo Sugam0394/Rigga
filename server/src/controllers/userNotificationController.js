@@ -1,23 +1,28 @@
 import userNotificationService
   from "../services/userNotificationService.js";
 
-export const getUserNotifications = async (req, res, next) => {
-    try {
-      const notifications =
-        await userNotificationService
-          .getUserNotifications(
-            req.user.userId
-          );
+ export const getNotificationTimeline = async (
+  req,
+  res,
+  next
+) => {
+  try {
 
-      res.status(200).json({
-        success: true,
-        data: notifications,
-      });
+    const notifications =
+      await userNotificationService
+        .getNotificationTimeline(
+          req.user.userId
+        );
 
-    } catch (error) {
-      next(error);
-    }
-  };
+    res.status(200).json({
+      success: true,
+      data: notifications,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getUnreadCount = async (req, res, next) => {
     try {
@@ -73,3 +78,73 @@ export const markAllNotificationsRead =  async (req, res, next) => {
       next(error);
     }
   };
+
+  export const getNotificationSummary = async (
+  req,
+  res,
+  next
+) => {
+  try {
+
+    const summary =
+      await userNotificationService
+        .getNotificationSummary(
+          req.user.userId
+        );
+
+    res.status(200).json({
+      success: true,
+      data: summary,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUnreadNotifications = async (
+  req,
+  res,
+  next
+) => {
+  try {
+
+    const notifications =
+      await userNotificationService
+        .getUnreadNotifications(
+          req.user.userId
+        );
+
+    res.status(200).json({
+      success: true,
+      data: notifications,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getNotification = async (
+  req,
+  res,
+  next
+) => {
+  try {
+
+    const notification =
+      await userNotificationService
+        .getNotification(
+          req.user.userId,
+          req.params.id
+        );
+
+    res.status(200).json({
+      success: true,
+      data: notification,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};

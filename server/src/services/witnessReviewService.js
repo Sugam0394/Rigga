@@ -3,7 +3,7 @@ import challengeRepository from "../repositories/challengeRepositories.js";
 import { CHALLENGE_STATUS } from "../constants/challengeStatus.js";
 
 import consequenceReleaseService from "./consequenceReleaseService.js";
-
+import notificationEventService from "./notificationEventService.js";
  
 
  import userNotificationService
@@ -109,21 +109,35 @@ const updatedChallenge =
       CHALLENGE_STATUS.COMPLETED
     );
 
+ const notificationEvent =
+  notificationEventService
+    .createNotificationEvent({
+      eventType:
+        NOTIFICATION_EVENTS
+          .CHALLENGE_APPROVED,
+
+      sourceEngine:
+        "WITNESS",
+
+      userId:
+        updatedChallenge.userId,
+
+      entityType:
+        "CHALLENGE",
+
+      entityId:
+        updatedChallenge._id,
+
+      payload: {
+        status:
+          CHALLENGE_STATUS.COMPLETED,
+      },
+    });
+
 await userNotificationService
-  .createEventNotification({
-    userId:
-      updatedChallenge.userId,
-
-    type:
-      NOTIFICATION_EVENTS
-        .CHALLENGE_APPROVED,
-
-    entityType:
-      "CHALLENGE",
-
-    entityId:
-      updatedChallenge._id,
-  });
+  .createEventNotification(
+    notificationEvent
+  );
 
 return updatedChallenge;
 
@@ -170,21 +184,35 @@ return updatedChallenge;
       CHALLENGE_STATUS.FAILED
     );
 
+ const notificationEvent =
+  notificationEventService
+    .createNotificationEvent({
+      eventType:
+        NOTIFICATION_EVENTS
+          .CHALLENGE_FAILED,
+
+      sourceEngine:
+        "WITNESS",
+
+      userId:
+        failedChallenge.userId,
+
+      entityType:
+        "CHALLENGE",
+
+      entityId:
+        failedChallenge._id,
+
+      payload: {
+        status:
+          CHALLENGE_STATUS.FAILED,
+      },
+    });
+
 await userNotificationService
-  .createEventNotification({
-    userId:
-      failedChallenge.userId,
-
-    type:
-      NOTIFICATION_EVENTS
-        .CHALLENGE_FAILED,
-
-    entityType:
-      "CHALLENGE",
-
-    entityId:
-      failedChallenge._id,
-  });
+  .createEventNotification(
+    notificationEvent
+  );
 
 return failedChallenge;
   }
@@ -196,21 +224,35 @@ return failedChallenge;
       CHALLENGE_STATUS.REJECTED
     );
 
+ const notificationEvent =
+  notificationEventService
+    .createNotificationEvent({
+      eventType:
+        NOTIFICATION_EVENTS
+          .CHALLENGE_REJECTED,
+
+      sourceEngine:
+        "WITNESS",
+
+      userId:
+        updatedChallenge.userId,
+
+      entityType:
+        "CHALLENGE",
+
+      entityId:
+        updatedChallenge._id,
+
+      payload: {
+        status:
+          CHALLENGE_STATUS.REJECTED,
+      },
+    });
+
 await userNotificationService
-  .createEventNotification({
-    userId:
-      updatedChallenge.userId,
-
-    type:
-      NOTIFICATION_EVENTS
-        .CHALLENGE_REJECTED,
-
-    entityType:
-      "CHALLENGE",
-
-    entityId:
-      updatedChallenge._id,
-  });
+  .createEventNotification(
+    notificationEvent
+  );
 
 return updatedChallenge;
 };

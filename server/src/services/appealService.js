@@ -11,6 +11,9 @@ import {
   NOTIFICATION_EVENTS,
 } from "../constants/notificationEvents.js";
  
+import notificationEventService from "./notificationEventService.js"
+
+
 
  const validateAppealNotes = (
   notes
@@ -155,21 +158,38 @@ if (
       CHALLENGE_STATUS.APPEALED
     );
 
+ const notificationEvent =
+  notificationEventService
+    .createNotificationEvent({
+      eventType:
+        NOTIFICATION_EVENTS
+          .APPEAL_SUBMITTED,
+
+      sourceEngine:
+        "APPEAL",
+
+      userId:
+        updatedChallenge.userId,
+
+      entityType:
+        "CHALLENGE",
+
+      entityId:
+        updatedChallenge._id,
+
+      payload: {
+        status:
+          CHALLENGE_STATUS.APPEALED,
+
+        appealId:
+          appeal._id,
+      },
+    });
+
 await userNotificationService
-  .createEventNotification({
-    userId:
-      updatedChallenge.userId,
-
-    type:
-      NOTIFICATION_EVENTS
-        .APPEAL_SUBMITTED,
-
-    entityType:
-      "CHALLENGE",
-
-    entityId:
-      updatedChallenge._id,
-  });
+  .createEventNotification(
+    notificationEvent
+  );
 
 return appeal;
 

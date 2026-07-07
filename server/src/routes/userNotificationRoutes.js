@@ -3,8 +3,11 @@ import express from "express";
 import authMiddleware
   from "../middlewares/authMiddleware.js";
 
-import {
-  getUserNotifications,
+ import {
+  getNotificationTimeline,
+  getNotificationSummary,
+  getUnreadNotifications,
+  getNotification,
   getUnreadCount,
   markNotificationRead,
   markAllNotificationsRead,
@@ -13,10 +16,10 @@ import {
 const router =
   express.Router();
 
-router.get(
+ router.get(
   "/notifications",
   authMiddleware,
-  getUserNotifications
+  getNotificationTimeline
 );
 
 router.get(
@@ -37,6 +40,23 @@ router.patch(
   markNotificationRead
 );
 
- 
+router.get(
+  "/notifications/summary",
+  authMiddleware,
+  getNotificationSummary
+);
+
+ router.get(
+  "/notifications/unread",
+  authMiddleware,
+  getUnreadNotifications
+);
+
+
+router.get(
+  "/notifications/:id",
+  authMiddleware,
+  getNotification
+);
 
 export default router;

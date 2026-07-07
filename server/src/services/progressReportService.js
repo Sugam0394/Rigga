@@ -19,6 +19,11 @@ import progressEligibilityService
 import { getTodayRange }
   from "../utils/dateUtils.js";
 
+import notificationEventService from "./notificationEventService.js"
+
+
+
+
 const validateProgressPayload = ({
   challengeId,
   userId,
@@ -166,21 +171,32 @@ const submitProgressReport = async (
       });
 
   try {
-  await userNotificationService
-    .createEventNotification({
-      userId:
-        challenge.userId,
-
-      type:
+   const notificationEvent =
+  notificationEventService
+    .createNotificationEvent({
+      eventType:
         NOTIFICATION_EVENTS
           .PROGRESS_REPORT_SUBMITTED,
+
+      sourceEngine:
+        "PROGRESS",
+
+      userId:
+        challenge.userId,
 
       entityType:
         "CHALLENGE",
 
       entityId:
         challenge._id,
+
+      payload: {},
     });
+
+await userNotificationService
+  .createEventNotification(
+    notificationEvent
+  );
 } catch (error) {
   console.error(
     "[PROGRESS NOTIFICATION FAILED]",
