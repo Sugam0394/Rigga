@@ -13,62 +13,14 @@ import {
  
 import notificationEventService from "./notificationEventService.js"
 
+import witnessDecisionService
+  from "./witnessDecisionService.js";
 
+ 
 
- const validateAppealNotes = (
-  notes
-) => {
+ 
 
-  if (!notes) {
-    throw new Error(
-      "Appeal notes are required"
-    );
-  }
- const trimmedNotes =
-  notes.trim();
-
-if (
-  trimmedNotes.length < 50
-) {
-  throw new Error(
-    "Appeal explanation must be at least 50 characters"
-  );
-}
-
-if (
-  trimmedNotes.length > 1000
-) {
-  throw new Error(
-    "Appeal explanation cannot exceed 1000 characters"
-  );
-}
-};
-
-const validateAppealEligibility = (
-  challenge
-) => {
-
-  if (
-    challenge?.witness
-      ?.decision !==
-    "REJECTED"
-  ) {
-    throw new Error(
-      "Appeal is only allowed for rejected challenges"
-    );
-  }
-};
-
-const validateSingleAppealRule = (
-  existingAppeal
-) => {
-
-  if (existingAppeal) {
-    throw new Error(
-      "This challenge has already been appealed"
-    );
-  }
-};
+ 
 
 const validateAppealWindow = (
   decidedAt
@@ -92,7 +44,6 @@ const validateAppealWindow = (
 };
 
 
-
  const submitAppeal = async ({
   challengeId,
   userId,
@@ -100,73 +51,65 @@ const validateAppealWindow = (
   imageUrl,
 }) => {
 
-  validateAppealNotes(
-    notes
-  );
-
   const challenge =
-    await challengeRepository
-      .getChallengeById(
-        challengeId
-      );
+    await challengeRepository.getChallengeById(
+      challengeId
+    );
 
-      if (!challenge) {
-  throw new Error(
-    "Challenge not found"
-  );
-}
+  if (!challenge) {
+    throw new Error(
+      "Challenge not found"
+    );
+  }
 
-if (
-  challenge.userId.toString() !==
-  userId
-) {
-  throw new Error(
-    "Unauthorized appeal attempt"
-  );
-}
-
-  validateAppealEligibility(
-    challenge
-  );
-
-  validateAppealWindow(
-    challenge.witness.decidedAt
-  );
+  // Authorization Runtime Responsibility
+  if (
+    challenge.userId.toString() !==
+    userId
+  ) {
+    throw new Error(
+      "Unauthorized appeal attempt"
+    );
+  }
 
   const existingAppeal =
-    await appealRepository
-      .getByChallengeId(
-        challengeId
-      );
+    await appealRepository.getByChallengeId(
+      challengeId
+    );
 
-  validateSingleAppealRule(
-    existingAppeal
-  );
+  const decision =
+    witnessDecisionService.evaluateWitnessDecision({
+      action: "SUBMIT_APPEAL",
+      challenge,
+      appeal: existingAppeal,
+      notes,
+    });
+
+  if (!decision.allowed) {
+    throw new Error(
+      decision.reason
+    );
+  }
 
   const appeal =
-  await appealRepository
-    .createAppeal({
+    await appealRepository.createAppeal({
       challengeId,
       notes,
       imageUrl,
     });
 
- const updatedChallenge =
-  await challengeRepository
-    .updateStatus(
+  const updatedChallenge =
+    await challengeRepository.updateStatus(
       challengeId,
       CHALLENGE_STATUS.APPEALED
     );
 
- const notificationEvent =
-  notificationEventService
-    .createNotificationEvent({
+  const notificationEvent =
+    notificationEventService.createNotificationEvent({
       eventType:
-        NOTIFICATION_EVENTS
-          .APPEAL_SUBMITTED,
+        NOTIFICATION_EVENTS.APPEAL_SUBMITTED,
 
-      sourceEngine:
-        "APPEAL",
+      sourceEngine: "APPEAL",
 
       userId:
         updatedChallenge.userId,
@@ -186,16 +129,15 @@ if (
       },
     });
 
-await userNotificationService
-  .createEventNotification(
-    notificationEvent
-  );
+  await userNotificationService
+    .createEventNotification(
+      notificationEvent
+    );
 
-return appeal;
-
-
+  return appeal;
 };
 
+ 
 export default {
   submitAppeal,
 };

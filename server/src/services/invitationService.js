@@ -88,7 +88,7 @@ const createInvitation = async ({ challengeId }) => {
   witness,
 }) => {
   // -----------------------------
-  // Validation (No data mutation)
+  // Fetch Runtime Data
   // -----------------------------
 
   const invitation =
@@ -96,57 +96,26 @@ const createInvitation = async ({ challengeId }) => {
       token
     );
 
-  if (!invitation) {
-    throw new Error(
-      "Invitation not found."
-    );
-  }
+  const challenge = invitation
+    ? await challengeRepository.getChallengeById(
+        invitation.challengeId
+      )
+    : null;
 
-  if (
-    invitation.status ===
-    "SUPERSEDED"
-  ) {
-    throw new Error(
-      "Invitation has been superseded."
-    );
-  }
+  // -----------------------------
+  // Trust Decision
+  // -----------------------------
 
-  if (
-    invitation.status ===
-    "ACCEPTED"
-  ) {
-    throw new Error(
-      "Invitation already accepted."
-    );
-  }
+  const decision =
+    witnessDecisionService.evaluateWitnessDecision({
+      action: "ACCEPT_INVITATION",
+      invitation,
+      challenge,
+      witness,
+    });
 
-  const challenge =
-    await challengeRepository.getChallengeById(
-      invitation.challengeId
-    );
-
-  if (!challenge) {
-    throw new Error(
-      "Challenge not found."
-    );
-  }
-
-  if (
-    challenge.deadlineAt <=
-    new Date()
-  ) {
-    throw new Error(
-      "Challenge deadline has passed."
-    );
-  }
-
-  if (
-    challenge.status !==
-    "PENDING_WITNESS"
-  ) {
-    throw new Error(
-      "Challenge is no longer accepting witnesses."
-    );
+  if (!decision.allowed) {
+    throw new Error(decision.reason);
   }
 
   // -----------------------------
@@ -177,29 +146,22 @@ const createInvitation = async ({ challengeId }) => {
       session,
     });
 
+    const activeChallenge =
+      await challengeRepository.activateChallenge(
+        challenge._id,
+        session
+      );
 
+    await session.commitTransaction();
 
-  const activeChallenge =
-  await challengeRepository.activateChallenge(
-    challenge._id,
-    session
-  );
+    await lifecycleCoordinator.onChallengeActive(
+      activeChallenge
+    );
 
-await session.commitTransaction();
-
-await lifecycleCoordinator
-  .onChallengeActive(
-    activeChallenge
-  );
-
-return {
-  success: true,
-  challengeId: challenge._id,
-};
-
-
-
-
+    return {
+      success: true,
+      challengeId: challenge._id,
+    };
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -245,9 +207,9 @@ return {
   };
 };
 
-const declineInvitation = async ({ token }) => {
+ const declineInvitation = async ({ token }) => {
   // -----------------------------
-  // Validation (No data mutation)
+  // Fetch Runtime Data
   // -----------------------------
 
   const invitation =
@@ -255,67 +217,30 @@ const declineInvitation = async ({ token }) => {
       token
     );
 
-  if (!invitation) {
-    throw new Error(
-      "Invitation not found."
-    );
+  const challenge = invitation
+    ? await challengeRepository.getChallengeById(
+        invitation.challengeId
+      )
+    : null;
+
+  // -----------------------------
+  // Trust Decision
+  // -----------------------------
+
+  const decision =
+    witnessDecisionService.evaluateWitnessDecision({
+      action: "DECLINE_INVITATION",
+      invitation,
+      challenge,
+    });
+
+  if (!decision.allowed) {
+    throw new Error(decision.reason);
   }
 
-  if (
-    invitation.status ===
-    "SUPERSEDED"
-  ) {
-    throw new Error(
-      "Invitation has been superseded."
-    );
-  }
-
-  if (
-    invitation.status ===
-    "ACCEPTED"
-  ) {
-    throw new Error(
-      "Invitation already accepted."
-    );
-  }
-
-  if (
-    invitation.status ===
-    "DECLINED"
-  ) {
-    throw new Error(
-      "Invitation already declined."
-    );
-  }
-
-  const challenge =
-    await challengeRepository.getChallengeById(
-      invitation.challengeId
-    );
-
-  if (!challenge) {
-    throw new Error(
-      "Challenge not found."
-    );
-  }
-
-  if (
-    challenge.deadlineAt <=
-    new Date()
-  ) {
-    throw new Error(
-      "Challenge deadline has passed."
-    );
-  }
-
-  if (
-    challenge.status !==
-    "PENDING_WITNESS"
-  ) {
-    throw new Error(
-      "Challenge is no longer accepting witnesses."
-    );
-  }
+  // -----------------------------
+  // Runtime Execution
+  // -----------------------------
 
   await invitationRepository.declineInvitation(
     invitation._id

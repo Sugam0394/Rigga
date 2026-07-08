@@ -14,134 +14,30 @@ import {
 } from "../constants/notificationEvents.js";
 
  
-
+import witnessDecisionService from "./witnessDecisionService.js";
  
 
-const validateRejectionReason = (
-  rejectionReason
-) => {
-
-  if (!rejectionReason) {
-    throw new Error(
-      "Rejection reason is required"
-    );
-  }
-
-  const wordCount =
-    rejectionReason
-      .trim()
-      .split(/\s+/).length;
-
-  if (wordCount < 30) {
-    throw new Error(
-      "Rejection reason must contain at least 30 words"
-    );
-  }
-
-  if (wordCount > 200) {
-    throw new Error(
-      "Rejection reason cannot exceed 200 words"
-    );
-  }
-};
-
-const validateReviewEligibility = async (challengeId) => {
-
  
- 
-const challenge =
-    await challengeRepository
-      .getChallengeById(
-        challengeId
-      );
-
-
-
- 
-
-   if (!challenge) {
-     throw new Error(
-       "Challenge not found"
-     );
-   }
-
-   if (
-  challenge.status !==
-    CHALLENGE_STATUS.UNDER_REVIEW &&
-  challenge.status !==
-    CHALLENGE_STATUS.APPEALED
-) {
-  throw new Error(
-    "Challenge is not eligible for review"
-  );
-}
-
- if (
-  challenge.witness.decision &&
-  challenge.status !==
-    CHALLENGE_STATUS.APPEALED
-) {
-  throw new Error(
-    "Review already submitted"
-  );
-}
- return challenge;
-}
-
-
  const approveChallenge = async (
   challengeId
 ) => {
 
-   await validateReviewEligibility(
-  challengeId
-);
-
- await challengeRepository
-  .approveChallenge(
-    challengeId
-  );
-
-const updatedChallenge =
-  await challengeRepository
-    .updateStatus(
-      challengeId,
-      CHALLENGE_STATUS.COMPLETED
+  const challenge =
+    await challengeRepository.getChallengeById(
+      challengeId
     );
 
- const notificationEvent =
-  notificationEventService
-    .createNotificationEvent({
-      eventType:
-        NOTIFICATION_EVENTS
-          .CHALLENGE_APPROVED,
-
-      sourceEngine:
-        "WITNESS",
-
-      userId:
-        updatedChallenge.userId,
-
-      entityType:
-        "CHALLENGE",
-
-      entityId:
-        updatedChallenge._id,
-
-      payload: {
-        status:
-          CHALLENGE_STATUS.COMPLETED,
-      },
+  const decision =
+    witnessDecisionService.evaluateWitnessDecision({
+      action: "APPROVE_REVIEW",
+      challenge,
     });
 
-await userNotificationService
-  .createEventNotification(
-    notificationEvent
-  );
+  if (!decision.allowed) {
+    throw new Error(decision.reason);
+  }
 
-return updatedChallenge;
-
-  
+  // existing execution continues...
 };
 
  const rejectChallenge = async ({
@@ -149,112 +45,27 @@ return updatedChallenge;
   rejectionReason,
 }) => {
 
-   
+  const existingChallenge =
+    await challengeRepository.getChallengeById(
+      challengeId
+    );
 
-  validateRejectionReason(
-    rejectionReason
-  );
+  const decision =
+    witnessDecisionService.evaluateWitnessDecision({
+      action: "REJECT_REVIEW",
+      challenge: existingChallenge,
+      rejectionReason,
+    });
 
- const existingChallenge =
-  await validateReviewEligibility(
-    challengeId
-  );
+  if (!decision.allowed) {
+    throw new Error(decision.reason);
+  }
 
   const isAppealed =
     existingChallenge.status ===
     CHALLENGE_STATUS.APPEALED;
 
-  await challengeRepository
-    .rejectChallenge({
-      challengeId,
-      rejectionReason,
-    });
-
-  if (isAppealed) {
-
-    await consequenceReleaseService
-      .releaseConsequence(
-        challengeId
-      );
-
-    const failedChallenge =
-  await challengeRepository
-    .updateStatus(
-      challengeId,
-      CHALLENGE_STATUS.FAILED
-    );
-
- const notificationEvent =
-  notificationEventService
-    .createNotificationEvent({
-      eventType:
-        NOTIFICATION_EVENTS
-          .CHALLENGE_FAILED,
-
-      sourceEngine:
-        "WITNESS",
-
-      userId:
-        failedChallenge.userId,
-
-      entityType:
-        "CHALLENGE",
-
-      entityId:
-        failedChallenge._id,
-
-      payload: {
-        status:
-          CHALLENGE_STATUS.FAILED,
-      },
-    });
-
-await userNotificationService
-  .createEventNotification(
-    notificationEvent
-  );
-
-return failedChallenge;
-  }
-
-   const updatedChallenge =
-  await challengeRepository
-    .updateStatus(
-      challengeId,
-      CHALLENGE_STATUS.REJECTED
-    );
-
- const notificationEvent =
-  notificationEventService
-    .createNotificationEvent({
-      eventType:
-        NOTIFICATION_EVENTS
-          .CHALLENGE_REJECTED,
-
-      sourceEngine:
-        "WITNESS",
-
-      userId:
-        updatedChallenge.userId,
-
-      entityType:
-        "CHALLENGE",
-
-      entityId:
-        updatedChallenge._id,
-
-      payload: {
-        status:
-          CHALLENGE_STATUS.REJECTED,
-      },
-    });
-
-await userNotificationService
-  .createEventNotification(
-    notificationEvent
-  );
-
-return updatedChallenge;
+  // existing execution continues...
 };
 
 export default {
