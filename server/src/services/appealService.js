@@ -25,6 +25,10 @@ import witnessDecisionService
   notes,
   imageUrl,
 }) => {
+  // -----------------------------
+  // Fetch Runtime Data
+  // -----------------------------
+
   const challenge =
     await challengeRepository.getChallengeById(
       challengeId
@@ -36,7 +40,10 @@ import witnessDecisionService
     );
   }
 
-  // Authorization stays in runtime
+  // -----------------------------
+  // Authorization
+  // -----------------------------
+
   if (
     challenge.userId.toString() !==
     userId
@@ -45,6 +52,10 @@ import witnessDecisionService
       "Unauthorized appeal attempt"
     );
   }
+
+  // -----------------------------
+  // Trust Decision
+  // -----------------------------
 
   const existingAppeal =
     await appealRepository.getByChallengeId(
@@ -79,17 +90,29 @@ import witnessDecisionService
   const updatedChallenge =
     await challengeRepository.updateStatus(
       challengeId,
+      CHALLENGE_STATUS.REJECTED,
       CHALLENGE_STATUS.APPEALED
     );
 
   // -----------------------------
-  // Cross-engine orchestration
+  // Cross-engine Coordination
   // -----------------------------
 
-  await witnessCoordinator.onAppealSubmitted({
-    challenge: updatedChallenge,
-    appeal,
-  });
+  try {
+    await witnessCoordinator.onAppealSubmitted({
+      challenge: updatedChallenge,
+      appeal,
+    });
+  } catch (error) {
+    console.error(
+      "[WITNESS COORDINATOR]",
+      error
+    );
+  }
+
+  // -----------------------------
+  // Runtime Response
+  // -----------------------------
 
   return appeal;
 };

@@ -1,0 +1,4 @@
+export const WITNESS_DECISION = {
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+};

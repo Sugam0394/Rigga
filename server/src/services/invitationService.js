@@ -10,37 +10,69 @@ import witnessCoordinator from "./witnessCoordinator.js";
 import witnessDecisionService from "./witnessDecisionService.js";
  
 
-const createInvitation = async ({ challengeId }) => {
-  // Check if an active invitation already exists
-  const activeInvitation =
-    await invitationRepository.getActiveInvitationByChallengeId(
-      challengeId
-    );
+ const createInvitation = async ({
+  challengeId,
+}) => {
+  const session =
+    await mongoose.startSession();
 
-  // Invalidate previous active invitation
-  if (activeInvitation) {
-    await invitationRepository.invalidateInvitation(
-      activeInvitation._id
-    );
+  try {
+    session.startTransaction();
+
+    // -----------------------------
+    // Existing Active Invitation
+    // -----------------------------
+
+    const activeInvitation =
+      await invitationRepository.getActiveInvitationByChallengeId(
+        challengeId
+      );
+
+    // -----------------------------
+    // Invalidate Previous
+    // -----------------------------
+
+    if (activeInvitation) {
+      await invitationRepository.invalidateInvitation(
+        activeInvitation._id,
+        session
+      );
+    }
+
+    // -----------------------------
+    // Generate New Invitation
+    // -----------------------------
+
+    const token =
+      reviewTokenService.generateReviewToken();
+
+    const expiresAt =
+      reviewTokenService.generateReviewTokenExpiry();
+
+    // -----------------------------
+    // Create Invitation
+    // -----------------------------
+
+    const invitation =
+      await invitationRepository.createInvitation(
+        {
+          challengeId,
+          token,
+          expiresAt,
+          status: "ACTIVE",
+        },
+        session
+      );
+
+    await session.commitTransaction();
+
+    return invitation;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
   }
-
-  // Generate new invitation
-  const token =
-    reviewTokenService.generateReviewToken();
-
-  const expiresAt =
-    reviewTokenService.generateReviewTokenExpiry();
-
-  // Create new active invitation
-  const invitation =
-    await invitationRepository.createInvitation({
-      challengeId,
-      token,
-      expiresAt,
-      status: "ACTIVE",
-    });
-
-  return invitation;
 };
 
  const regenerateInvitation = async ({
@@ -153,14 +185,23 @@ const createInvitation = async ({ challengeId }) => {
 
     await session.commitTransaction();
 
-   await witnessCoordinator.onInvitationAccepted({
-  challenge: activeChallenge,
-});
+   
 
-    return {
-      success: true,
-      challengeId: challenge._id,
-    };
+try {
+  await witnessCoordinator.onInvitationAccepted({
+    challenge: activeChallenge,
+  });
+} catch (error) {
+  console.error(
+    "[WITNESS COORDINATOR]",
+    error
+  );
+}
+
+return {
+  success: true,
+  challengeId: challenge._id,
+};
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -234,20 +275,33 @@ const createInvitation = async ({ challengeId }) => {
     });
 
   if (!decision.allowed) {
-    throw new Error(decision.reason);
+    throw new Error(
+      decision.reason
+    );
   }
 
   // -----------------------------
-  // Runtime Execution
+  // Runtime Persistence
   // -----------------------------
 
   await invitationRepository.declineInvitation(
     invitation._id
   );
 
-  await witnessCoordinator.onInvitationDeclined({
-  challenge,
-});
+  // -----------------------------
+  // Failure-Isolated Coordination
+  // -----------------------------
+
+  try {
+    await witnessCoordinator.onInvitationDeclined({
+      challenge,
+    });
+  } catch (error) {
+    console.error(
+      "[WITNESS COORDINATOR]",
+      error
+    );
+  }
 
   return {
     success: true,

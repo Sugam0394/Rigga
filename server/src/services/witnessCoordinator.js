@@ -1,38 +1,76 @@
-import lifecycleCoordinator from "./lifecycleCoordinator.js";
+ import lifecycleCoordinator from "./lifecycleCoordinator.js";
 
 const onInvitationAccepted = async ({
   challenge,
 }) => {
-  await lifecycleCoordinator.onChallengeActive(
-    challenge
-  );
+  try {
+    await lifecycleCoordinator.onChallengeActive(
+      challenge
+    );
 
-  // Notification
-  // Witness Analytics
+    // Notification
+
+    // Witness Analytics
+  } catch (error) {
+    console.error(
+      "[WITNESS COORDINATOR][INVITATION_ACCEPTED]",
+      error
+    );
+    throw error;
+  }
 };
 
 const onInvitationDeclined = async ({
   challenge,
 }) => {
-  // Notification
-  // Witness Analytics
+  try {
+    // Notification
+
+    // Witness Analytics
+  } catch (error) {
+    console.error(
+      "[WITNESS COORDINATOR][INVITATION_DECLINED]",
+      error
+    );
+    throw error;
+  }
 };
 
- const onReviewSubmitted = async ({
+const onReviewSubmitted = async ({
   challenge,
   decision,
   appealed,
 }) => {
-  // Notification
-  // Witness Analytics
+  try {
+    // Notification
+
+    // Consequence
+
+    // Witness Analytics
+  } catch (error) {
+    console.error(
+      "[WITNESS COORDINATOR][REVIEW_SUBMITTED]",
+      error
+    );
+    throw error;
+  }
 };
 
 const onAppealSubmitted = async ({
   challenge,
   appeal,
 }) => {
-  // Notification
-  // Witness Analytics
+  try {
+    // Notification
+
+    // Witness Analytics
+  } catch (error) {
+    console.error(
+      "[WITNESS COORDINATOR][APPEAL_SUBMITTED]",
+      error
+    );
+    throw error;
+  }
 };
 
 export default {

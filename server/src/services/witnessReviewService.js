@@ -11,10 +11,18 @@ import witnessDecisionService from "./witnessDecisionService.js";
  const approveChallenge = async (
   challengeId
 ) => {
+  // -----------------------------
+  // Fetch Runtime Data
+  // -----------------------------
+
   const challenge =
     await challengeRepository.getChallengeById(
       challengeId
     );
+
+  // -----------------------------
+  // Trust Decision
+  // -----------------------------
 
   const decision =
     witnessDecisionService.evaluateWitnessDecision({
@@ -29,39 +37,59 @@ import witnessDecisionService from "./witnessDecisionService.js";
   }
 
   // -----------------------------
-  // Existing Runtime Execution
+  // Runtime Persistence
   // -----------------------------
 
-  await challengeRepository
-    .approveChallenge(
-      challengeId
-    );
+  await challengeRepository.approveChallenge(
+    challengeId
+  );
 
   const updatedChallenge =
-    await challengeRepository
-      .updateStatus(
-        challengeId,
-        CHALLENGE_STATUS.COMPLETED
-      );
+    await challengeRepository.updateStatus(
+      challengeId,
+      CHALLENGE_STATUS.UNDER_REVIEW,
+      CHALLENGE_STATUS.COMPLETED
+    );
 
-  await witnessCoordinator.onReviewSubmitted({
-  challenge: updatedChallenge,
-  decision: "APPROVED",
-});
+  // -----------------------------
+  // Cross-engine Coordination
+  // -----------------------------
 
-return updatedChallenge;
+  try {
+    await witnessCoordinator.onReviewSubmitted({
+      challenge: updatedChallenge,
+      decision: "APPROVED",
+    });
+  } catch (error) {
+    console.error(
+      "[WITNESS COORDINATOR]",
+      error
+    );
+  }
 
-   
+  // -----------------------------
+  // Runtime Response
+  // -----------------------------
+
+  return updatedChallenge;
 };
 
  const rejectChallenge = async ({
   challengeId,
   rejectionReason,
 }) => {
+  // -----------------------------
+  // Fetch Runtime Data
+  // -----------------------------
+
   const existingChallenge =
     await challengeRepository.getChallengeById(
       challengeId
     );
+
+  // -----------------------------
+  // Trust Decision
+  // -----------------------------
 
   const decision =
     witnessDecisionService.evaluateWitnessDecision({
@@ -86,41 +114,54 @@ return updatedChallenge;
   // Runtime Persistence
   // -----------------------------
 
-  await challengeRepository
-    .rejectChallenge({
-      challengeId,
-      rejectionReason,
-    });
+  await challengeRepository.rejectChallenge({
+    challengeId,
+    rejectionReason,
+  });
 
   if (isAppealed) {
     const failedChallenge =
-      await challengeRepository
-        .updateStatus(
-          challengeId,
-          CHALLENGE_STATUS.FAILED
-        );
+      await challengeRepository.updateStatus(
+        challengeId,
+        CHALLENGE_STATUS.APPEALED,
+        CHALLENGE_STATUS.FAILED
+      );
 
-    await witnessCoordinator.onReviewSubmitted({
-      challenge: failedChallenge,
-      decision: "REJECTED",
-      appealed: true,
-    });
+    try {
+      await witnessCoordinator.onReviewSubmitted({
+        challenge: failedChallenge,
+        decision: "REJECTED",
+        appealed: true,
+      });
+    } catch (error) {
+      console.error(
+        "[WITNESS COORDINATOR]",
+        error
+      );
+    }
 
     return failedChallenge;
   }
 
   const updatedChallenge =
-    await challengeRepository
-      .updateStatus(
-        challengeId,
-        CHALLENGE_STATUS.REJECTED
-      );
+    await challengeRepository.updateStatus(
+      challengeId,
+      CHALLENGE_STATUS.UNDER_REVIEW,
+      CHALLENGE_STATUS.REJECTED
+    );
 
-  await witnessCoordinator.onReviewSubmitted({
-    challenge: updatedChallenge,
-    decision: "REJECTED",
-    appealed: false,
-  });
+  try {
+    await witnessCoordinator.onReviewSubmitted({
+      challenge: updatedChallenge,
+      decision: "REJECTED",
+      appealed: false,
+    });
+  } catch (error) {
+    console.error(
+      "[WITNESS COORDINATOR]",
+      error
+    );
+  }
 
   return updatedChallenge;
 };
