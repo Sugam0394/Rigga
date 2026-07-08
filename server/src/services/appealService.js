@@ -4,14 +4,12 @@
 
 import { CHALLENGE_STATUS } from "../constants/challengeStatus.js";
 
-import userNotificationService
-  from "./userNotificationService.js";
+ import witnessCoordinator
+  from "./witnessCoordinator.js";
 
-import {
-  NOTIFICATION_EVENTS,
-} from "../constants/notificationEvents.js";
  
-import notificationEventService from "./notificationEventService.js"
+ 
+ 
 
 import witnessDecisionService
   from "./witnessDecisionService.js";
@@ -21,36 +19,12 @@ import witnessDecisionService
  
 
  
-
-const validateAppealWindow = (
-  decidedAt
-) => {
-
-  const appealDeadline =
-    new Date(decidedAt);
-
-  appealDeadline.setHours(
-    appealDeadline.getHours() + 6
-  );
-
-  if (
-    new Date() >
-    appealDeadline
-  ) {
-    throw new Error(
-      "Appeal window has expired"
-    );
-  }
-};
-
-
  const submitAppeal = async ({
   challengeId,
   userId,
   notes,
   imageUrl,
 }) => {
-
   const challenge =
     await challengeRepository.getChallengeById(
       challengeId
@@ -62,7 +36,7 @@ const validateAppealWindow = (
     );
   }
 
-  // Authorization Runtime Responsibility
+  // Authorization stays in runtime
   if (
     challenge.userId.toString() !==
     userId
@@ -91,6 +65,10 @@ const validateAppealWindow = (
     );
   }
 
+  // -----------------------------
+  // Runtime Persistence
+  // -----------------------------
+
   const appeal =
     await appealRepository.createAppeal({
       challengeId,
@@ -104,35 +82,14 @@ const validateAppealWindow = (
       CHALLENGE_STATUS.APPEALED
     );
 
-  const notificationEvent =
-    notificationEventService.createNotificationEvent({
-      eventType:
-        NOTIFICATION_EVENTS.APPEAL_SUBMITTED,
+  // -----------------------------
+  // Cross-engine orchestration
+  // -----------------------------
 
-      sourceEngine: "APPEAL",
-
-      userId:
-        updatedChallenge.userId,
-
-      entityType:
-        "CHALLENGE",
-
-      entityId:
-        updatedChallenge._id,
-
-      payload: {
-        status:
-          CHALLENGE_STATUS.APPEALED,
-
-        appealId:
-          appeal._id,
-      },
-    });
-
-  await userNotificationService
-    .createEventNotification(
-      notificationEvent
-    );
+  await witnessCoordinator.onAppealSubmitted({
+    challenge: updatedChallenge,
+    appeal,
+  });
 
   return appeal;
 };

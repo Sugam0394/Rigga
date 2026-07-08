@@ -6,10 +6,9 @@ import reviewTokenService from "./reviewTokenService.js";
 import challengeRepository from "../repositories/challengeRepositories.js";
 import userRepository from "../repositories/userRepository.js";
 import lifecycleCoordinator from "./lifecycleCoordinator.js";
-
-
+import witnessCoordinator from "./witnessCoordinator.js";
 import witnessDecisionService from "./witnessDecisionService.js";
-
+ 
 
 const createInvitation = async ({ challengeId }) => {
   // Check if an active invitation already exists
@@ -154,9 +153,9 @@ const createInvitation = async ({ challengeId }) => {
 
     await session.commitTransaction();
 
-    await lifecycleCoordinator.onChallengeActive(
-      activeChallenge
-    );
+   await witnessCoordinator.onInvitationAccepted({
+  challenge: activeChallenge,
+});
 
     return {
       success: true,
@@ -245,6 +244,10 @@ const createInvitation = async ({ challengeId }) => {
   await invitationRepository.declineInvitation(
     invitation._id
   );
+
+  await witnessCoordinator.onInvitationDeclined({
+  challenge,
+});
 
   return {
     success: true,
