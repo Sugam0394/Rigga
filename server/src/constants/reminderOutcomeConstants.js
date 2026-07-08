@@ -1,4 +1,4 @@
-export const REMINDER_OUTCOMES = {
+ const REMINDER_OUTCOMES = {
   TRIGGERED: "TRIGGERED",
 
   SUPPRESSED: "SUPPRESSED",
@@ -7,3 +7,5 @@ export const REMINDER_OUTCOMES = {
 
   FAILED: "FAILED",
 };
+
+export default REMINDER_OUTCOMES;
