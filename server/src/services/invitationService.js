@@ -8,7 +8,7 @@ import userRepository from "../repositories/userRepository.js";
 import lifecycleCoordinator from "./lifecycleCoordinator.js";
 
 
-
+import witnessDecisionService from "./witnessDecisionService.js";
 
 
 const createInvitation = async ({ challengeId }) => {
