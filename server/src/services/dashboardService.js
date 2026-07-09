@@ -3,7 +3,7 @@ import progressReportRepository from "../repositories/progressReportRepository.j
 import checkpointRepository from "../repositories/checkPointRepository.js";
 import reminderRepository from "../repositories/reminderRepository.js";
 import consequenceRepository from "../repositories/consequenceRepository.js";
-import lifecycleService from "./lifecycleService.js";
+import witnessService from "./witnessService.js";
 import accountabilityAggregateService from "./accountabilityAggregateService.js";
 import accountabilityPlanService from "./accountabilityPlanService.js";
 
@@ -11,15 +11,12 @@ import accountabilityPlanService from "./accountabilityPlanService.js";
 
 const getChallengeDashboard = async (challengeId , userId) => {
 
-   let challenge =
+   const challenge =
   await challengeRepository.getChallengeById(
     challengeId
   );
 
-challenge =
-  await lifecycleService.evaluateChallengeLifecycle(
-    challenge
-  );
+ 
 
       if (!challenge) {
   throw new Error(
@@ -80,7 +77,13 @@ await accountabilityAggregateService
   .getAccountabilityContext(
     challengeId
   );
-
+  
+  
+    const witnessStatus =
+  await witnessService.getWitnessStatus({
+    challengeId,
+    userId,
+  });
  
 
      return {
@@ -98,25 +101,13 @@ await accountabilityAggregateService
         challenge.status,
     },
 
-    accountabilityPlan,
-
+     accountabilityPlan,
+ 
     witness: {
-      name:
-        challenge.witness?.name,
-
-      phone:
-        challenge.witness?.phone,
-
-      decision:
-        challenge.witness?.decision,
-
-      reviewToken:
-        challenge.witness?.reviewToken,
-
-      reviewTokenExpiresAt:
-        challenge.witness
-          ?.reviewTokenExpiresAt,
-    },
+    name: witnessStatus.witness?.name,
+    phone: witnessStatus.witness?.phone,
+    decision: witnessStatus.decision,
+  },
 
     progress: {
       totalReports:
