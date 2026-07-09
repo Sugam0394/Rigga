@@ -1,7 +1,7 @@
  import { useEffect, useState } from "react";
 
 import {
-  getInvitation,
+  getReviewSummary,
 } from "../api/reviewApi";
 
 const useReviewSummary = (
@@ -17,21 +17,21 @@ const useReviewSummary = (
     useState("");
 
   useEffect(() => {
-    const loadInvitation =
+    const loadReviewSummary =
       async () => {
         try {
           setLoading(true);
 
-          const invitation =
-            await getInvitation(
+          const summary =
+            await getReviewSummary(
               token
             );
 
-          setData(invitation);
+          setData(summary);
         } catch (error) {
           setError(
             error.response?.data?.message ||
-              "Failed to load invitation."
+              "Failed to load review."
           );
         } finally {
           setLoading(false);
@@ -39,7 +39,7 @@ const useReviewSummary = (
       };
 
     if (token) {
-      loadInvitation();
+      loadReviewSummary();
     }
   }, [token]);
 

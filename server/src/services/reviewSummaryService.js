@@ -1,5 +1,5 @@
  import accountabilityAggregateService from "./accountabilityAggregateService.js";
-import challengeRepositories from "../repositories/challengeRepositories.js";
+import challengeRepository from "../repositories/challengeRepositories.js";
 
 
 

@@ -1,8 +1,7 @@
  import api from "../../../api/apiClient";
-
-// -----------------------------
+ 
 // Public Invitation
-// -----------------------------
+ 
 
 export const getInvitation = async (token) => {
   const response =
@@ -13,9 +12,9 @@ export const getInvitation = async (token) => {
   return response.data.invitation;
 };
 
-// -----------------------------
+ 
 // Accept Invitation
-// -----------------------------
+ 
 
 export const acceptInvitation = async ({
   token,
@@ -34,9 +33,9 @@ export const acceptInvitation = async ({
   return response.data.data;
 };
 
-// -----------------------------
+ 
 // Decline Invitation
-// -----------------------------
+ 
 
 export const declineInvitation = async (
   token
@@ -44,6 +43,43 @@ export const declineInvitation = async (
   const response =
     await api.post(
       `/witness/${token}/decline`
+    );
+
+  return response.data.data;
+};
+
+
+  
+ 
+// Public Review Summary
+ 
+
+export const getReviewSummary = async (
+  token
+) => {
+  const response =
+    await api.get(
+      `/review/${token}`
+    );
+
+  return response.data.data;
+};
+
+ 
+// Submit Review
+ 
+export const submitReview = async ({
+  token,
+  decision,
+  rejectionReason,
+}) => {
+  const response =
+    await api.patch(
+      `/review/${token}/submit`,
+      {
+        decision,
+        rejectionReason,
+      }
     );
 
   return response.data.data;

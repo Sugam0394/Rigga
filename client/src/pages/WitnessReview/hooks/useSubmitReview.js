@@ -1,8 +1,7 @@
  import { useState } from "react";
 
 import {
-  acceptInvitation,
-  declineInvitation,
+  submitReview,
 } from "../api/reviewApi";
 
 const useSubmitReview = () => {
@@ -18,50 +17,27 @@ const useSubmitReview = () => {
   const [decision, setDecision] =
     useState("");
 
-  const handleAccept = async ({
+  const handleSubmitReview = async ({
     token,
-    name,
-    phone,
+    decision,
+    rejectionReason = "",
   }) => {
     try {
       setLoading(true);
       setError("");
 
-      await acceptInvitation({
+      await submitReview({
         token,
-        name,
-        phone,
+        decision,
+        rejectionReason,
       });
 
-      setDecision("ACCEPTED");
+      setDecision(decision);
       setSuccess(true);
     } catch (error) {
       setError(
         error.response?.data?.message ||
-          "Unable to accept invitation."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDecline = async (
-    token
-  ) => {
-    try {
-      setLoading(true);
-      setError("");
-
-      await declineInvitation(
-        token
-      );
-
-      setDecision("DECLINED");
-      setSuccess(true);
-    } catch (error) {
-      setError(
-        error.response?.data?.message ||
-          "Unable to decline invitation."
+        "Unable to submit review."
       );
     } finally {
       setLoading(false);
@@ -69,8 +45,7 @@ const useSubmitReview = () => {
   };
 
   return {
-    handleAccept,
-    handleDecline,
+    handleSubmitReview,
     loading,
     error,
     success,

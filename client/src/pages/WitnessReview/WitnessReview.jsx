@@ -1,5 +1,9 @@
- import { useState } from "react";
+ 
 import { useParams } from "react-router-dom";
+
+// css
+
+import "./WitnessReview.css";
 
 // Hooks
 import useReviewSummary from "./hooks/useReviewSummary";
@@ -13,11 +17,7 @@ import ReviewCompletedState from "./components/ReviewCompletedState";
 function WitnessReview() {
   const { token } = useParams();
 
-  const [name, setName] =
-    useState("");
-
-  const [phone, setPhone] =
-    useState("");
+ 
 
   const {
     data,
@@ -25,14 +25,13 @@ function WitnessReview() {
     error: summaryError,
   } = useReviewSummary(token);
 
-  const {
-    handleAccept,
-    handleDecline,
-    loading,
-    error,
-    success,
-    decision,
-  } = useSubmitReview();
+ const {
+  handleSubmitReview,
+  loading,
+  error,
+  success,
+  decision,
+} = useSubmitReview();
 
   if (summaryLoading) {
     return <LoadingState />;
@@ -73,108 +72,231 @@ function WitnessReview() {
   return (
     <main className="witness-review-page">
       <div className="witness-review-page__container">
+      <div className="witness-review-page__hero">
 
-        <h1>
-          Become a Witness
-        </h1>
+  <div className="witness-review-page__badge">
+    Rigga Challenge Review
+  </div>
+
+  <h1 className="witness-review-page__title">
+    Review this accountability challenge.
+  </h1>
+
+  <p className="witness-review-page__description">
+    Your decision helps determine whether this
+    commitment was successfully completed. Please
+    review the challenge details carefully before
+    making an honest and fair decision.
+  </p>
+
+</div>
+
+ 
+
+
+       <section className="witness-review-page__card">
+
+  <div className="witness-review-page__section">
+    <h3>Commitment</h3>
+
+    <p>
+      {data.challenge.title}
+    </p>
+  </div>
+
+  <div className="witness-review-page__section">
+    <h3>Success Criteria</h3>
+
+    <p>
+      {data.challenge.successCriteria}
+    </p>
+  </div>
+
+  <div className="witness-review-page__section">
+    <h3>Deadline</h3>
+
+    <p>
+      {new Date(
+        data.challenge.deadlineAt
+      ).toLocaleDateString()}
+    </p>
+  </div>
+
+  <div className="witness-review-page__section">
+    <h3>Current Status</h3>
+
+    <p>
+      {data.challenge.status}
+    </p>
+  </div>
+
+  </section>
+
+  <section className="witness-review-page__progress">
+
+  <h2 className="witness-review-page__section-title">
+    Challenge Progress
+  </h2>
+
+  <div className="witness-review-page__progress-grid">
+
+    <div className="witness-review-page__progress-card">
+      <h3>Completed</h3>
+
+      <p>
+        {data.checkpoints.completed}
+      </p>
+    </div>
+
+    <div className="witness-review-page__progress-card">
+      <h3>Pending</h3>
+
+      <p>
+        {data.checkpoints.pending}
+      </p>
+    </div>
+
+    <div className="witness-review-page__progress-card">
+      <h3>Missed</h3>
+
+      <p>
+        {data.checkpoints.missed}
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<section className="witness-review-page__reports">
+
+  <h2 className="witness-review-page__section-title">
+    Progress Reports
+  </h2>
+
+  {data.progressReports.count === 0 ? (
+    <p className="witness-review-page__empty">
+      No progress reports were submitted for this
+      challenge.
+    </p>
+  ) : (
+    data.progressReports.reports.map((report) => (
+      <div
+        key={report.id}
+        className="witness-review-page__report-card"
+      >
+        <h3>Progress Update</h3>
 
         <p>
-          Review this invitation and
-          decide whether you'd like to
-          become the witness.
+          {report.notes || "No notes provided."}
         </p>
 
-        <div className="witness-review-card">
-
-          <h3>Creator</h3>
-          <p>
-            {data.creatorName}
-          </p>
-
-          <h3>Commitment</h3>
-          <p>
-            {data.title}
-          </p>
-
-          <h3>Deadline</h3>
-          <p>
-            {data.deadlineAt}
-          </p>
-
-          <h3>
-            Success Criteria
-          </h3>
-          <p>
-            {data.successCriteria}
-          </p>
-
-        </div>
-
-        <input
-          type="text"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) =>
-            setName(
-              e.target.value
-            )
-          }
-        />
-
-        <input
-          type="tel"
-          placeholder="Phone number"
-          value={phone}
-          onChange={(e) =>
-            setPhone(
-              e.target.value
-            )
-          }
-        />
-
-        {error && (
-          <p className="review-error">
-            {error}
-          </p>
+        {report.imageUrl && (
+          <img
+            src={report.imageUrl}
+            alt="Progress evidence"
+            className="witness-review-page__report-image"
+          />
         )}
 
-        <div className="witness-review-actions">
+        <small>
+          Submitted on{" "}
+          {new Date(
+            report.submittedAt
+          ).toLocaleDateString()}
+        </small>
+      </div>
+    ))
+  )}
 
-          <button
-            type="button"
-            disabled={
-              loading ||
-              !name ||
-              !phone
-            }
-            onClick={() =>
-              handleAccept({
-                token,
-                name,
-                phone,
-              })
-            }
-          >
-            {loading
-              ? "Accepting..."
-              : "Accept"}
-          </button>
+</section>
 
-          <button
-            type="button"
-            disabled={loading}
-            onClick={() =>
-              handleDecline(
-                token
-              )
-            }
-          >
-            {loading
-              ? "Declining..."
-              : "Decline"}
-          </button>
+<section className="witness-review-page__responsibility">
 
-        </div>
+  <h2 className="witness-review-page__section-title">
+    Your Responsibility
+  </h2>
+
+  <div className="witness-review-page__responsibility-card">
+
+    <p>
+      You were invited because the challenge creator
+      trusts your judgment. Please make your decision
+      based on what you know about this commitment and
+      the information provided above.
+    </p>
+
+    <ul className="witness-review-page__responsibility-list">
+
+      <li>
+        Review the commitment carefully.
+      </li>
+
+      <li>
+        Consider the available progress and evidence.
+      </li>
+
+      <li>
+        Approve only if you genuinely believe the
+        commitment was completed.
+      </li>
+
+      <li>
+        Reject only if you genuinely believe it was
+        not completed.
+      </li>
+
+    </ul>
+
+  </div>
+
+</section>
+
+       <section className="witness-review-page__decision">
+
+  <h2 className="witness-review-page__section-title">
+    Submit Your Decision
+  </h2>
+
+  <p className="witness-review-page__decision-text">
+    Please choose the option that honestly reflects
+    whether this commitment was successfully completed.
+  </p>
+
+  {error && (
+    <p className="review-error">
+      {error}
+    </p>
+  )}
+
+  <div className="witness-review-page__actions">
+
+    <button
+      type="button"
+      className="witness-review-page__approve-button"
+      disabled={loading}
+      onClick={() =>
+        handleSubmitReview({
+          token,
+          decision: "APPROVED",
+        })
+      }
+    >
+      {loading
+        ? "Submitting..."
+        : "Approve Challenge"}
+    </button>
+
+   
+
+  </div>
+
+</section>
+ 
+
+       
+
+      
 
       </div>
     </main>
