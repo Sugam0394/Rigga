@@ -1,15 +1,15 @@
- import dashboardService
-  from "./dashboardService.js";
+ import dashboardCoordinator
+  from "./dashboardCoordinator.js";
 
 const getDashboardRuntime = async ({
   challengeId,
   userId,
 }) => {
   const dashboard =
-    await dashboardService.getChallengeDashboard(
+    await dashboardCoordinator.buildDashboard({
       challengeId,
-      userId
-    );
+      userId,
+    });
 
   return {
     attention: null,
@@ -36,6 +36,9 @@ const getDashboardRuntime = async ({
 
     consequence:
       dashboard.consequence,
+
+    timeline:
+      dashboard.timeline,
 
     dashboardMeta: {
       version: 1,

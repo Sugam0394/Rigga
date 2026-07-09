@@ -1,33 +1,60 @@
- import dashboardRuntimeService
-  from "../services/dashboardRuntimeService.js";
+ import dashboardCoordinator
+  from "./dashboardCoordinator.js";
 
-const getChallengeDashboard = async (
-  req,
-  res
-) => {
-  try {
-    const dashboard =
-      await dashboardRuntimeService
-        .getDashboardRuntime({
-          challengeId:
-            req.params.id,
-
-          userId:
-            req.user.userId,
-        });
-
-    res.status(200).json({
-      success: true,
-      data: dashboard,
+const getDashboardRuntime = async ({
+  challengeId,
+  userId,
+}) => {
+  const dashboard =
+    await dashboardCoordinator.buildDashboard({
+      challengeId,
+      userId,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+
+  return {
+    attention: null,
+
+    focus: null,
+
+    challenge:
+      dashboard.challenge,
+
+    accountabilityPlan:
+      dashboard.accountabilityPlan,
+
+    witness:
+      dashboard.witness,
+
+    progress:
+      dashboard.progress,
+
+    checkpoints:
+      dashboard.checkpoints,
+
+    reminders:
+      dashboard.reminders,
+
+    consequence:
+      dashboard.consequence,
+
+    timeline:
+      dashboard.timeline,
+
+    dashboardMeta: {
+      version: 1,
+      runtime:
+        "DASHBOARD_RUNTIME_V1",
+      generatedAt:
+        new Date().toISOString(),
+    },
+  };
 };
 
+// Official Public Runtime API
+const getChallengeDashboard =
+  getDashboardRuntime;
+
 export default {
+  getDashboardRuntime,
   getChallengeDashboard,
 };
