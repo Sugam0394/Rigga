@@ -31,6 +31,25 @@
   margin-bottom: 32px;
 }
 
+.witness-invitation-page__hero {
+  margin-bottom: 32px;
+}
+
+.witness-invitation-page__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  margin-bottom: 20px;
+
+  border-radius: 999px;
+
+  background: #dbeafe;
+  color: #1d4ed8;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .witness-invitation-page__card {
   border: 1px solid #e2e8f0;
   border-radius: 16px;
@@ -112,3 +131,59 @@
     padding: 14px;
   }
 }
+.witness-invitation-page__info {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.witness-invitation-page__info-card {
+  padding: 20px 24px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+
+  background: #f8fafc;
+}
+
+.witness-invitation-page__info-card h3 {
+  margin: 0 0 10px;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  color: #0f172a;
+}
+
+.witness-invitation-page__info-card p {
+  margin: 0;
+
+  color: #475569;
+
+  line-height: 1.7;
+}
+
+.witness-invitation-page__cta-note {
+  margin-bottom: 16px;
+
+  text-align: center;
+
+  font-size: 0.95rem;
+
+  color: #64748b;
+
+  line-height: 1.6;
+}
+
+.witness-invitation-page__badge {
+  font-size: 0.8rem;
+}
+
+.witness-invitation-page__info-card {
+  padding: 18px;
+}
+
+.witness-invitation-page__cta-note {
+  font-size: 0.9rem;
+}
+
