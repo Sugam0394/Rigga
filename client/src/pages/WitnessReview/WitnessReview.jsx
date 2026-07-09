@@ -176,9 +176,12 @@ function WitnessReview() {
 
   {data.progressReports.count === 0 ? (
     <p className="witness-review-page__empty">
-      No progress reports were submitted for this
-      challenge.
-    </p>
+  No progress evidence was submitted for this
+  challenge. If you personally know the challenge
+  creator, please make your decision based on your
+  own knowledge and the commitment details shown
+  above.
+</p>
   ) : (
     data.progressReports.reports.map((report) => (
       <div
@@ -286,6 +289,22 @@ function WitnessReview() {
         ? "Submitting..."
         : "Approve Challenge"}
     </button>
+
+    <button
+  type="button"
+  className="witness-review-page__reject-button"
+  disabled={loading}
+  onClick={() =>
+    handleSubmitReview({
+      token,
+      decision: "REJECTED",
+    })
+  }
+>
+  {loading
+    ? "Submitting..."
+    : "Reject Challenge"}
+</button>
 
    
 
