@@ -69,38 +69,85 @@ ${invitationLink}`;
   return (
     <main className="share-with-witness-page">
       <div className="share-with-witness-page__container">
-        <h1 className="share-with-witness-page__title">
-          Challenge Created ✅
-        </h1>
+         <div className="share-with-witness-page__hero">
 
-        <p className="share-with-witness-page__description">
-          Your challenge has been created successfully.
-          Now invite someone to become your witness.
-        </p>
+  <div className="share-with-witness-page__badge">
+    Challenge Ready
+  </div>
+
+  <h1 className="share-with-witness-page__title">
+    Your accountability challenge is ready.
+  </h1>
+
+  <p className="share-with-witness-page__description">
+    The final step is inviting someone you trust to
+    become your witness. Their honest review will help
+    keep this commitment meaningful.
+  </p>
+
+</div>
 
         <div className="share-with-witness-page__card">
-          <p>
-            <strong>Commitment</strong>
-          </p>
 
-          <p>{challenge?.title}</p>
+  <div className="share-with-witness-page__item">
+    <h3>Commitment</h3>
+    <p>{challenge.title}</p>
+  </div>
 
-          <br />
+  <div className="share-with-witness-page__item">
+    <h3>Success Criteria</h3>
+    <p>{challenge.successCriteria}</p>
+  </div>
 
-          <p>
-            <strong>Deadline</strong>
-          </p>
+  <div className="share-with-witness-page__item">
+    <h3>Deadline</h3>
+    <p>
+      {new Date(challenge.deadlineAt).toLocaleDateString()}
+    </p>
+  </div>
 
-          <p>{challenge?.deadlineAt}</p>
+  <div className="share-with-witness-page__item">
+    <h3>Status</h3>
+    <p>{challenge.status}</p>
+  </div>
 
-          <br />
+</div>
+ 
 
-          <p>
-            <strong>Status</strong>
-          </p>
+<section className="share-with-witness-page__info">
 
-          <p>{challenge?.status}</p>
-        </div>
+  <div className="share-with-witness-page__info-card">
+
+    <h3>
+      Why invite a witness?
+    </h3>
+
+    <p>
+      Your witness will honestly verify whether this
+      commitment was completed. Accountability works
+      best when someone you trust can confirm your
+      progress.
+    </p>
+
+  </div>
+
+</section>
+
+<section className="share-with-witness-page__trust">
+
+  <div className="share-with-witness-page__trust-item">
+    ✓ Only invited witnesses can review
+  </div>
+
+  <div className="share-with-witness-page__trust-item">
+    ✓ Private invitation link
+  </div>
+
+  <div className="share-with-witness-page__trust-item">
+    ✓ No public sharing
+  </div>
+
+</section>
 
         <button
           type="button"
