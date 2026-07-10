@@ -1,213 +1,107 @@
- 
- 
- 
- 
- 
- export const theme = {
-  colors: {
-    /* Brand */
+ const colors = {   };
 
-    primary: "#F97316",
-    primaryHover: "#EA580C",
-    primarySoft: "#FFF7ED",
+const radius = {  };
 
-    secondary: "#111827",
+const spacing = {  };
 
-    /* Text */
+const typography = {   };
 
-    text: "#111827",
-    textSecondary: "#6B7280",
-    textMuted: "#9CA3AF",
+const layout = {
+  headerHeight: "64px",
+  footerHeight: "64px",
+};
 
-    /* Surfaces */
-
-    white: "#FFFFFF",
-    surface: "#F9FAFB",
-
-    /* Borders */
-
-    border: "#E5E7EB",
-    borderStrong: "#D1D5DB",
-
-    /* Status */
-
-    success: "#16A34A",
-    successSoft: "#DCFCE7",
-
-    warning: "#D97706",
-    warningSoft: "#FEF3C7",
-
-    danger: "#DC2626",
-    dangerSoft: "#FEE2E2",
-
-    info: "#2563EB",
-    infoSoft: "#DBEAFE",
-  },
-  radius: {
-    xs: "6px",
-    sm: "8px",
-    md: "12px",
-    lg: "16px",
-    xl: "24px",
-    pill: "999px",
-  },
-  spacing: {
-    xs: "4px",
-    sm: "8px",
-    md: "16px",
-    lg: "24px",
-    xl: "32px",
-    xxl: "48px",
-  },
-  typography: {
-  display: {
-    fontSize: "40px",
-    fontWeight: 800,
-    lineHeight: 1.1,
-    letterSpacing: "-1px",
-  },
-
-  pageHeading: {
-    fontSize: "32px",
-    fontWeight: 800,
-    lineHeight: 1.1,
-    letterSpacing: "-1px",
-  },
-
-  sectionHeading: {
-    fontSize: "24px",
-    fontWeight: 700,
-    lineHeight: 1.2,
-  },
-
-  cardHeading: {
-    fontSize: "20px",
-    fontWeight: 700,
-    lineHeight: 1.3,
-  },
-
-  body: {
-    fontSize: "16px",
-    fontWeight: 400,
-    lineHeight: 1.6,
-  },
-
-  secondary: {
-    fontSize: "14px",
-    fontWeight: 400,
-    lineHeight: 1.6,
-  },
-
-  label: {
-    fontSize: "14px",
-    fontWeight: 600,
-    lineHeight: 1.4,
-  },
-
-  helper: {
-    fontSize: "13px",
-    fontWeight: 400,
-    lineHeight: 1.5,
-  },
-
-  button: {
-    fontSize: "16px",
-    fontWeight: 600,
-    lineHeight: 1.2,
-  },
-
-  badge: {
-    fontSize: "13px",
-    fontWeight: 600,
-    lineHeight: 1,
-  },
-},
-  buttons: {
+const buttons = {
   height: {
     sm: "40px",
     md: "48px",
     lg: "56px",
   },
 
-  radius: "16px",
+  radius: radius.lg,
 
   primary: {
-    background: "#F97316",
-    hover: "#EA580C",
-    text: "#FFFFFF",
+    background: colors.primary,
+    hover: colors.primaryHover,
+    text: colors.white,
   },
 
   secondary: {
-    background: "#FFFFFF",
-    border: "#E5E7EB",
-    text: "#111827",
+    background: colors.white,
+    border: colors.border,
+    text: colors.text,
   },
 
   ghost: {
     background: "transparent",
-    text: "#F97316",
+    text: colors.primary,
   },
 
   success: {
-    background: "#16A34A",
-    text: "#FFFFFF",
+    background: colors.success,
+    text: colors.white,
   },
 
   danger: {
-    background: "#DC2626",
-    text: "#FFFFFF",
+    background: colors.danger,
+    text: colors.white,
   },
 
   disabled: {
-    background: "#E5E7EB",
-    text: "#9CA3AF",
+    background: colors.border,
+    text: colors.textMuted,
   },
-},
-inputs: {
+};
+
+const inputs = {
   height: "56px",
 
-  radius: "16px",
+  radius: radius.lg,
 
-  paddingX: "16px",
+  paddingX: spacing.md,
 
-  border: "#D1D5DB",
+  border: colors.borderStrong,
 
-  borderFocus: "#F97316",
+  borderFocus: colors.primary,
 
-  borderError: "#DC2626",
+  borderError: colors.danger,
 
-  borderSuccess: "#16A34A",
+  borderSuccess: colors.success,
 
-  background: "#FFFFFF",
+  background: colors.white,
 
-  text: "#111827",
+  text: colors.text,
 
-  placeholder: "#9CA3AF",
+  placeholder: colors.textMuted,
 
-  disabledBackground: "#F9FAFB",
+  disabledBackground: colors.surface,
 
-  disabledText: "#9CA3AF",
-},
-cards: {
-  radius: "16px",
+  disabledText: colors.textMuted,
+};
 
-  padding: "16px",
+const cards = {
+  radius: radius.lg,
 
-  border: "#E5E7EB",
+  padding: spacing.md,
 
-  background: "#FFFFFF",
+  border: colors.border,
 
-  sectionGap: "12px",
+  background: colors.white,
 
-  hoverBorder: "#D1D5DB",
+  sectionGap: radius.md,
+
+  hoverBorder: colors.borderStrong,
 
   shadow: "none",
-},
- layout: {
-  pageMaxWidth: "480px",
+};
 
-  cardMaxWidth: "100%",
-
-  contentMaxWidth: "720px",
-},
+export const theme = {
+  colors,
+  radius,
+  spacing,
+  typography,
+  buttons,
+  inputs,
+  cards,
+   layout,
 };

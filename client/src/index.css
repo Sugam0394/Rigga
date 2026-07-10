@@ -4,26 +4,35 @@
   box-sizing: border-box;
 }
 
-:root {
-  /* Surface Colors */
-  --color-surface-page: #F5F5F5;
-  --color-surface-card: #FFFFFF;
+ :root {
+  --color-primary: #F97316;
+  --color-primary-hover: #EA580C;
 
-  /* Text Colors */
-  --color-text-primary: #111827;
+  --color-text: #111827;
+  --color-text-secondary: #6B7280;
+
+  --color-surface: #F9FAFB;
+  --color-white: #FFFFFF;
+
+  --color-border: #E5E7EB;
+  --color-border-strong: #D1D5DB;
+
+  --radius-lg: 16px;
+
+  --spacing-md: 16px;
+}
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 html,
 body,
 #root {
   min-height: 100%;
-}
-
-body {
-  font-family: Inter, system-ui, sans-serif;
-
-  background: var(--color-surface-page);
-  color: var(--color-text-primary);
 }
 
 button,
