@@ -1,5 +1,5 @@
  import dashboardCoordinator
-  from "./dashboardCoordinator.js";
+  from "../services/dashboardCoordinator.js";
 
 const getDashboardRuntime = async ({
   challengeId,
