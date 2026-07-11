@@ -1,8 +1,8 @@
  import dashboardRunTimeService
   from "../services/dashboardRunTimeService.js";
 
-import dashboardHomeRunTimeService
-  from "../services/dashboardHomeService.js";
+ import dashboardHomeRunTimeService
+   from "../services/dashboardHomeRunTimeServices.js";
 
 const getChallengeDashboard = async (
   req,
