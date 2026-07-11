@@ -4,7 +4,11 @@ const TodayFocusSection = ({
   immediateAction,
 }) => {
 
-  if (!immediateAction) {
+  if (
+    !immediateAction ||
+    !immediateAction.title ||
+    !immediateAction.action
+  ) {
     return null;
   }
 
