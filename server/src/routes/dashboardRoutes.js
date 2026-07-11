@@ -1,13 +1,24 @@
-import express from "express";
-import authMiddleware from "../middlewares/authMiddleware.js"
+ import express from "express";
+
+import authMiddleware
+  from "../middlewares/authMiddleware.js";
 
 import dashboardController
   from "../controllers/dashboardController.js";
 
-const router = express.Router();
+const router =
+  express.Router();
 
 router.get(
-  "/challenges/:id/dashboard", authMiddleware,
+  "/dashboard/runtime",
+  authMiddleware,
+  dashboardController
+    .getHomeDashboardRuntime
+);
+
+router.get(
+  "/challenges/:id/dashboard",
+  authMiddleware,
   dashboardController
     .getChallengeDashboard
 );
