@@ -73,6 +73,43 @@ const getInteractionState = (
 
 };
 
+const getTrustStateFromLifecycle = (
+  lifecycleState
+) => {
+
+  const mapping = {
+
+    PENDING_WITNESS:
+      "VERIFICATION_PENDING",
+
+    ACTIVE:
+      "VERIFICATION_SCHEDULED",
+
+    UNDER_REVIEW:
+      "WITNESS_REVIEWING",
+
+    REJECTED:
+      "WITNESS_REJECTED",
+
+    APPEALED:
+      "APPEAL_UNDER_REVIEW",
+
+    COMPLETED:
+      "VERIFICATION_COMPLETE",
+
+    FAILED:
+      "VERIFICATION_FAILED",
+
+  };
+
+  return getTrustState(
+    mapping[
+      lifecycleState
+    ]
+  );
+
+};
+
 export default {
 
   getLifecycleState,
@@ -86,5 +123,7 @@ export default {
   getTemporalState,
 
   getInteractionState,
+
+  getTrustStateFromLifecycle,
 
 };
