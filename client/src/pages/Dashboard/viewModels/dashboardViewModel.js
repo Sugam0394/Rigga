@@ -44,14 +44,21 @@ const formatDeadline = (
   );
 };
 
-const buildRemainingState = (
+ const buildRemainingState = (
   deadlineAt
 ) => {
 
   if (!deadlineAt) {
     return {
-      label: "",
-      variant: "",
+
+      days: null,
+
+      temporalState:
+        VisualStateObjects
+          .getTemporalState(
+            "NO_DEADLINE"
+          ),
+
     };
   }
 
@@ -79,30 +86,48 @@ const buildRemainingState = (
     remainingDays <= 0
   ) {
     return {
-      label:
-        "Deadline Passed",
-      variant:
-        "danger",
+
+      days:
+        remainingDays,
+
+      temporalState:
+        VisualStateObjects
+          .getTemporalState(
+            "DEADLINE_PASSED"
+          ),
+
     };
   }
 
   if (
-    remainingDays <= 2
+    remainingDays === 0
   ) {
     return {
-      label:
-        `${remainingDays} Days Remaining`,
-      variant:
-        "urgent",
+
+      days: 0,
+
+      temporalState:
+        VisualStateObjects
+          .getTemporalState(
+            "DUE_TODAY"
+          ),
+
     };
   }
 
   return {
-    label:
-      `${remainingDays} Days Remaining`,
-    variant:
-      "default",
+
+    days:
+      remainingDays,
+
+    temporalState:
+      VisualStateObjects
+        .getTemporalState(
+          "REMAINING_TIME"
+        ),
+
   };
+
 };
 
  const buildTrustState = (

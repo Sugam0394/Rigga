@@ -165,36 +165,54 @@ const VisualStateDictionary = {
 
   },
 
-  temporal: {
+   temporal: {
 
-    DEADLINE: {
-      id: "DEADLINE",
-      label: "Deadline",
-      meaning:
-        "The scheduled completion time.",
-      interactionIntent:
-        "Monitor remaining time.",
-    },
-
-    REMAINING_TIME: {
-      id: "REMAINING_TIME",
-      label: "Remaining Time",
-      meaning:
-        "Time remaining before the deadline.",
-      interactionIntent:
-        "Stay on schedule.",
-    },
-
-    DEADLINE_PASSED: {
-      id: "DEADLINE_PASSED",
-      label: "Deadline Passed",
-      meaning:
-        "The commitment deadline has passed.",
-      interactionIntent:
-        "Review the commitment status.",
-    },
-
+  DEADLINE: {
+    id: "DEADLINE",
+    label: "Deadline",
+    meaning:
+      "The scheduled completion time.",
+    interactionIntent:
+      "Monitor remaining time.",
   },
+
+  NO_DEADLINE: {
+    id: "NO_DEADLINE",
+    label: "No Deadline",
+    meaning:
+      "No completion deadline has been assigned.",
+    interactionIntent:
+      "Continue the commitment.",
+  },
+
+  REMAINING_TIME: {
+    id: "REMAINING_TIME",
+    label: "Days Remaining",
+    meaning:
+      "Time remaining before the deadline.",
+    interactionIntent:
+      "Stay on schedule.",
+  },
+
+  DUE_TODAY: {
+    id: "DUE_TODAY",
+    label: "Due Today",
+    meaning:
+      "The commitment reaches its deadline today.",
+    interactionIntent:
+      "Complete the commitment.",
+  },
+
+  DEADLINE_PASSED: {
+    id: "DEADLINE_PASSED",
+    label: "Deadline Passed",
+    meaning:
+      "The commitment deadline has passed.",
+    interactionIntent:
+      "Review the commitment status.",
+  },
+
+},
 
   runtime: {
 

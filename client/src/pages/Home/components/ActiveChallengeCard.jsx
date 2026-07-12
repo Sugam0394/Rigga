@@ -89,24 +89,20 @@ const ActiveChallengeCard = ({
         {challenge.deadlineLabel}
       </p>
 
-      <p
-        className={
-          remainingClass
-        }
-      >
-        {
-          challenge.remaining
-            ?.label
-        }
-      </p>
+      <p className={remainingClass}>
+
+  {challenge.remaining?.days !== null &&
+   challenge.remaining?.days > 0
+    ? `${challenge.remaining.days} ${challenge.remaining.temporalState?.label}`
+    : challenge.remaining?.temporalState?.label}
+
+</p>
 
       <div className="active-challenge-card__footer">
 
-        <p className="active-challenge-card__witness">
-          {
-            challenge.witnessLabel
-          }
-        </p>
+         <p className="active-challenge-card__witness">
+  {challenge.trustState?.label}
+</p>
 
       </div>
 
