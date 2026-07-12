@@ -1,27 +1,42 @@
+ import VisualStateDictionary
+  from "../../../constants/VisualsStateDictionary.js";
+
 import "./ErrorState.css";
 
 const ErrorState = ({
   message,
   onRetry,
 }) => {
+
+  const {
+    title,
+    retry,
+  } =
+    VisualStateDictionary.runtime.errorState;
+
   return (
+
     <div className="error-state">
-     <h2>
-  Unable To Load Your Commitments
-</h2>
 
-<p>
-  {message}
-</p>
+      <h2>
+        {title}
+      </h2>
 
-<button
-  onClick={onRetry}
-  className="error-state__button"
->
-  Retry
-</button>
+      <p>
+        {message}
+      </p>
+
+      <button
+        onClick={onRetry}
+        className="error-state__button"
+      >
+        {retry}
+      </button>
+
     </div>
+
   );
+
 };
 
 export default ErrorState;

@@ -63,15 +63,21 @@ const ActiveChallengeCard = ({
       onClick={handleClick}
     >
 
-      <span
-        className={`active-challenge-card__badge ${
-          badgeClassMap[
-            challenge.status
-          ] || ""
-        }`}
-      >
-        {challenge.statusLabel}
-      </span>
+     <span
+  className={`active-challenge-card__badge ${
+    badgeClassMap[
+      challenge.status?.id
+    ] || ""
+  }`}
+>
+  {challenge.status?.label}
+</span>
+
+...
+
+<p className="active-challenge-card__witness">
+  {challenge.trustState?.label}
+</p>
 
       <h2 className="active-challenge-card__title">
         {challenge.title ||

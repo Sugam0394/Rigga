@@ -1,15 +1,27 @@
- import "./LoadingState.css";
+ import VisualStateDictionary
+  from "../../../constants/VisualsStateDictionary.js";
+
+import "./LoadingState.css";
 
 const LoadingState = () => {
+
+  const {
+    title,
+    description,
+  } =
+    VisualStateDictionary.runtime.loadingState;
+
   return (
     <div className="loading-state">
-      <h2>
-  Loading Your Commitments
-</h2>
 
-<p>
-  Preparing your Accountability Command Center...
-</p>
+      <h2>
+        {title}
+      </h2>
+
+      <p>
+        {description}
+      </p>
+
     </div>
   );
 };

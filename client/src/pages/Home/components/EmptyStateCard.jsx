@@ -1,21 +1,38 @@
  import { Link } from "react-router-dom";
+
+import VisualStateDictionary
+  from "../../../constants/VisualsStateDictionary.js";
+
 import "./EmptyStateCard.css";
 
 const EmptyStateCard = () => {
+
+  const {
+    title,
+    description,
+    journey,
+    action,
+  } =
+    VisualStateDictionary
+      .runtime
+      .emptyState;
+
   return (
+
     <div className="empty-state-card">
+
       <h2>
-        Every commitment starts with a promise.
+        {title}
       </h2>
 
-     <p className="empty-state-card__description">
-  Rigga turns personal promises into verified commitments.
-  Choose a witness, track your progress, and know that your witness will verify the outcome.
-</p>
+      <p className="empty-state-card__description">
+        {description}
+      </p>
 
       <div className="empty-state-card__journey">
+
         <div className="empty-state-card__step">
-          Promise
+          {journey.promise}
         </div>
 
         <div className="empty-state-card__arrow">
@@ -23,7 +40,7 @@ const EmptyStateCard = () => {
         </div>
 
         <div className="empty-state-card__step">
-          Commitment
+          {journey.commitment}
         </div>
 
         <div className="empty-state-card__arrow">
@@ -31,7 +48,7 @@ const EmptyStateCard = () => {
         </div>
 
         <div className="empty-state-card__step">
-          Verification
+          {journey.verification}
         </div>
 
         <div className="empty-state-card__arrow">
@@ -39,18 +56,22 @@ const EmptyStateCard = () => {
         </div>
 
         <div className="empty-state-card__step">
-          Credibility
+          {journey.credibility}
         </div>
+
       </div>
 
       <Link
         to="/challenges/create"
         className="empty-state-card__cta"
       >
-        Create Commitment
+        {action}
       </Link>
+
     </div>
+
   );
+
 };
 
 export default EmptyStateCard;

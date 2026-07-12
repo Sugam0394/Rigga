@@ -1,10 +1,52 @@
+
+
+import VisualStateDictionary
+  from "./VisualsStateDictionary.js";
+
 const challengeStatusLabels = {
-  ACTIVE: "In Progress",
-  UNDER_REVIEW: "Under Review",
-  REJECTED: "Awaiting Your Response",
-  APPEALED: "Under Final Review",
-  FAILED: "Challenge Failed",
-  COMPLETED: "Completed",
+
+  PENDING_WITNESS:
+    VisualStateDictionary
+      .lifecycle
+      .PENDING_WITNESS
+      .label,
+
+  ACTIVE:
+    VisualStateDictionary
+      .lifecycle
+      .ACTIVE
+      .label,
+
+  UNDER_REVIEW:
+    VisualStateDictionary
+      .lifecycle
+      .UNDER_REVIEW
+      .label,
+
+  REJECTED:
+    VisualStateDictionary
+      .lifecycle
+      .REJECTED
+      .label,
+
+  APPEALED:
+    VisualStateDictionary
+      .lifecycle
+      .APPEALED
+      .label,
+
+  COMPLETED:
+    VisualStateDictionary
+      .lifecycle
+      .COMPLETED
+      .label,
+
+  FAILED:
+    VisualStateDictionary
+      .lifecycle
+      .FAILED
+      .label,
+
 };
 
 export default challengeStatusLabels;

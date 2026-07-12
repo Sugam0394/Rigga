@@ -1,7 +1,7 @@
- import challengeStatusLabels
-  from "../../../constants/ChallengeStatusLabels.js";
+ import VisualStateObjects
+  from "../../../constants/VisualStateObjects.js";
 
-const buildImmediateActionViewModel = (
+ const buildImmediateActionViewModel = (
   immediateAction
 ) => {
 
@@ -9,34 +9,20 @@ const buildImmediateActionViewModel = (
     return null;
   }
 
-  const actionLabels = {
+ return {
 
-    REVIEW_REJECTION:
-      "Review Rejection",
+  title:
+    immediateAction.title,
 
-    WAIT_FOR_WITNESS:
-      "Waiting For Witness",
-
-    SUBMIT_PROGRESS:
-      "Submit Progress Report",
-
-    INVITE_WITNESS:
-      "Invite Witness",
-  };
-
-  return {
-
-    title:
-      immediateAction.title,
-
-    action:
-      actionLabels[
+  attentionState:
+    VisualStateObjects
+      .getAttentionState(
         immediateAction.type
-      ] ||
-      immediateAction.type,
+      ),
 
-  };
 };
+
+}
 
 const formatDeadline = (
   deadlineAt
@@ -119,32 +105,45 @@ const buildRemainingState = (
   };
 };
 
-const buildWitnessLabel = (
+ const buildTrustState = (
   status
 ) => {
 
   switch (status) {
 
     case "UNDER_REVIEW":
-      return "Witness Reviewing";
+      return VisualStateObjects.getTrustState(
+        "WITNESS_REVIEWING"
+      );
 
     case "REJECTED":
-      return "Witness Rejected";
+      return VisualStateObjects.getTrustState(
+        "WITNESS_REJECTED"
+      );
 
     case "COMPLETED":
-      return "Verification Complete";
+      return VisualStateObjects.getTrustState(
+        "VERIFICATION_COMPLETE"
+      );
 
     case "ACTIVE":
-      return "Verification Scheduled";
+      return VisualStateObjects.getTrustState(
+        "VERIFICATION_SCHEDULED"
+      );
 
     case "APPEALED":
-      return "Appeal Under Review";
+      return VisualStateObjects.getTrustState(
+        "APPEAL_UNDER_REVIEW"
+      );
 
     case "FAILED":
-      return "Verification Failed";
+      return VisualStateObjects.getTrustState(
+        "VERIFICATION_FAILED"
+      );
 
     default:
-      return "Verification Pending";
+      return null;
+
   }
 
 };
@@ -158,11 +157,11 @@ const buildActiveCommitmentsViewModel = (
 
       ...commitment,
 
-      statusLabel:
-        challengeStatusLabels[
-          commitment.status
-        ] ||
-        commitment.status,
+    status:
+  VisualStateObjects
+    .getLifecycleState(
+      commitment.status
+    ),
 
       deadlineLabel:
         formatDeadline(
@@ -174,10 +173,10 @@ const buildActiveCommitmentsViewModel = (
           commitment.deadlineAt
         ),
 
-      witnessLabel:
-        buildWitnessLabel(
-          commitment.status
-        ),
+      trustState:
+  buildTrustState(
+    commitment.status
+  ),
 
     })
   );

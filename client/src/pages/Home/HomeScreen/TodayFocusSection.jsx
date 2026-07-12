@@ -1,4 +1,6 @@
- import "./TodayFocusSection.css";
+ 
+
+import "./TodayFocusSection.css";
 
 const TodayFocusSection = ({
   immediateAction,
@@ -13,11 +15,12 @@ const TodayFocusSection = ({
   }
 
   return (
+
     <section className="today-focus-section">
 
       <h2 className="today-focus-section__title">
-        Immediate Action
-      </h2>
+  Immediate Action
+</h2>
 
       <div className="today-focus-section__item">
 
@@ -28,7 +31,7 @@ const TodayFocusSection = ({
         <div className="today-focus-section__content">
 
           <p className="today-focus-section__action">
-            {immediateAction.action}
+            {immediateAction.attentionState?.label}
           </p>
 
           <p className="today-focus-section__challenge">
@@ -40,7 +43,9 @@ const TodayFocusSection = ({
       </div>
 
     </section>
+
   );
+
 };
 
 export default TodayFocusSection;
