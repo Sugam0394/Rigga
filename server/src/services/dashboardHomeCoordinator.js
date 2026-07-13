@@ -1,31 +1,21 @@
- import dashboardService
-  from "./dashboardService.js";
+ import dashboardHomeService
+  from "./dashboardHomeService.js";
 
-import dashboardTimelineService
-  from "./dashboardTimelineService.js";
-
-const buildDashboard = async ({
-  challengeId,
+const buildHomeDashboard = async ({
   userId,
 }) => {
-  const dashboard =
-    await dashboardService.getChallengeDashboard(
-      challengeId,
-      userId
-    );
 
-  const timeline =
-  dashboardTimelineService.buildDashboardTimeline(
-    [] // TODO: Replace with real awareness events during timeline integration.
-  );
+  const dashboard =
+    await dashboardHomeService
+      .getHomeDashboard(
+        userId
+      );
+
   return {
     ...dashboard,
-
-    timeline:
-      timeline.events,
   };
 };
 
 export default {
-  buildDashboard,
+  buildHomeDashboard,
 };

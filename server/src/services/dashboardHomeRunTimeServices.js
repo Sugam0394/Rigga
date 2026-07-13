@@ -1,5 +1,15 @@
+console.log(import.meta.url);
+
+
 import dashboardHomeCoordinator
-  from "./dashboardHomeCoordinator.js";
+  from "./dashboardCoordinator.js";
+
+ 
+
+console.log(
+  "dashboardHomeCoordinator =",
+  dashboardHomeCoordinator
+);
 
 const getHomeDashboardRuntime = async ({
   userId,
