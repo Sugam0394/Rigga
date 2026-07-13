@@ -1,8 +1,8 @@
 console.log(import.meta.url);
 
 
-import dashboardHomeCoordinator
-  from "./dashboardCoordinator.js";
+ import dashboardHomeCoordinator
+  from "./dashboardHomeCoordinator.js";
 
  
 
