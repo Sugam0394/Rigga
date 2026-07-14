@@ -8,17 +8,17 @@ const ProgressReportCard = ({
   report,
 }) => {
 
-  const formattedDate =
-    new Date(
-      report.timestamp
-    ).toLocaleDateString(
-      "en-US",
-      {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      }
-    );
+ const formattedDate =
+  report?.timestamp
+    ? new Date(report.timestamp).toLocaleDateString(
+        "en-US",
+        {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }
+      )
+    : "Unknown date";
 
   return (
 
@@ -30,7 +30,8 @@ const ProgressReportCard = ({
 
       <p className="progress-report__notes">
         {
-          report.metadata?.notes
+           report.metadata?.notes ||
+"No progress notes provided."
         }
       </p>
 

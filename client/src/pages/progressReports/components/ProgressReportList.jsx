@@ -32,12 +32,15 @@ const ProgressReportList = ({
         Review every piece of evidence submitted throughout this commitment.
       </p>
 
-      {reports.map((report) => (
-        <ProgressReportCard
-          key={report.metadata.reportId}
-          report={report}
-        />
-      ))}
+     {reports.map((report) => (
+  <ProgressReportCard
+    key={
+      report.metadata?.reportId ??
+      report.timestamp
+    }
+    report={report}
+  />
+))}
 
     </section>
   );
