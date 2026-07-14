@@ -3,6 +3,8 @@
   useState,
 } from "react";
 
+import "./ProgressImageUpload.css";
+
 const ProgressImageUpload = ({
   image,
   onChange,
@@ -13,23 +15,23 @@ const ProgressImageUpload = ({
     setPreviewUrl,
   ] = useState(null);
 
+  // Error state jo code me use ho rahi thi, use declare kiya
+  const [error, setError] = useState("");
+
   useEffect(() => {
     if (!image) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPreviewUrl(null);
       return;
     }
 
-    const url =
-      URL.createObjectURL(
-        image
-      );
-
+    const url = URL.createObjectURL(image);
+    
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPreviewUrl(url);
 
     return () => {
-      URL.revokeObjectURL(
-        url
-      );
+      URL.revokeObjectURL(url);
     };
   }, [image]);
 
@@ -37,7 +39,7 @@ const ProgressImageUpload = ({
     event
   ) => {
     const file =
-      event.target.files[0];
+      event.target.files?.[0];
 
     if (!file) {
       return;
@@ -48,38 +50,52 @@ const ProgressImageUpload = ({
         "image/"
       )
     ) {
-      alert(
+      setError(
         "Please select a valid image."
       );
       return;
     }
 
+    setError("");
     onChange(file);
   };
 
   return (
-    <div>
-      <label>
+    <div className="progress-image-upload">
+      <label
+        className="progress-image-upload__label"
+        htmlFor="progress-image"
+      >
         Upload proof of your progress
       </label>
 
       <input
+        id="progress-image"
+        className="progress-image-upload__input"
         type="file"
         accept="image/*"
-        onChange={
-          handleFileChange
-        }
+        onChange={handleFileChange}
       />
 
+      {error && (
+        <p
+          className="progress-image-upload__error"
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
+
       {image && (
-        <div>
+        <div className="progress-image-upload__preview">
           <img
+            className="progress-image-upload__image"
             src={previewUrl}
-            alt="Preview"
-            width="200"
+            alt="Selected progress evidence preview"
           />
 
           <button
+            className="progress-image-upload__remove"
             type="button"
             onClick={onRemove}
           >

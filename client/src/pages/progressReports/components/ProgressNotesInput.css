@@ -1,0 +1,50 @@
+.progress-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.progress-notes__label {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.progress-notes__textarea {
+  width: 100%;
+  min-height: 10rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  color: var(--color-text);
+  font: inherit;
+  resize: vertical;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.progress-notes__textarea::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.progress-notes__textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.progress-notes__counter {
+  margin: 0;
+  text-align: right;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+
+  .progress-notes__textarea {
+    min-height: 8rem;
+  }
+
+}

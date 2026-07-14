@@ -1,105 +1,100 @@
  .progress-timeline {
-  background: #ffffff;
-
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-
-  padding: 24px;
-
-  box-shadow:
-    0 2px 8px rgba(15, 23, 42, 0.04);
-
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem;
+
+  padding: 1.5rem;
+
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .progress-timeline__title {
   margin: 0;
 
-  font-size: 22px;
-  font-weight: 700;
+  color: var(--color-text);
 
-  color: #111827;
+  font-size: 1.375rem;
+  font-weight: 700;
 }
 
 .progress-timeline__subtitle {
   margin: 0;
 
-  font-size: 15px;
-  line-height: 1.7;
+  color: var(--color-text-secondary);
 
-  color: #6b7280;
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
 
 .progress-timeline__loading,
 .progress-timeline__error,
 .progress-timeline__empty {
-  background: #ffffff;
-
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-
-  padding: 32px 24px;
+  padding: 2rem 1.5rem;
 
   text-align: center;
 
-  box-shadow:
-    0 2px 8px rgba(15, 23, 42, 0.04);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .progress-timeline__loading {
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .progress-timeline__error {
-  color: #b91c1c;
+  color: var(--color-danger);
 }
 
 .progress-timeline__empty {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .progress-timeline__empty h2 {
   margin: 0;
 
-  font-size: 22px;
-  font-weight: 700;
+  color: var(--color-text);
 
-  color: #111827;
+  font-size: 1.375rem;
+  font-weight: 700;
 }
 
 .progress-timeline__empty p {
   margin: 0;
 
-  font-size: 15px;
-  line-height: 1.7;
+  color: var(--color-text-secondary);
 
-  color: #6b7280;
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
 
 @media (max-width: 768px) {
 
   .progress-timeline {
-    padding: 20px;
-    gap: 18px;
+    padding: 1.25rem;
+    gap: 1rem;
   }
 
   .progress-timeline__title,
   .progress-timeline__empty h2 {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
   .progress-timeline__subtitle,
   .progress-timeline__empty p {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   .progress-timeline__loading,
   .progress-timeline__error,
   .progress-timeline__empty {
-    padding: 24px 20px;
+    padding: 1.5rem 1.25rem;
   }
+
 }
