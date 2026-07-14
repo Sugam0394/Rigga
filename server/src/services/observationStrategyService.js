@@ -1,7 +1,7 @@
  import observationResolverRules
   from "../constants/observationResolverRules.js";
 
-import {observationRuntimeRules} from "../constants/observationRunTimeRules.js";
+import observationRuntimeRules from  "../constants/observationRunTimeRules.js";
 
 const generateObservationStrategy = ({
   title,

@@ -1,6 +1,6 @@
  import { OBSERVATION_MODES } from "./observationModes.js";
 
- export const getObservationRuntime = ({
+  const getObservationRuntime = ({
   observationMode,
 }) => {
   switch (observationMode) {
@@ -31,5 +31,7 @@
       );
   }
 };
+
+export default getObservationRuntime;
 
  
