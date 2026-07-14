@@ -1,0 +1,90 @@
+.home-reminder-section {
+
+  background: var(--color-background);
+
+  border: 1px solid
+    var(--color-border);
+
+  border-radius:
+    var(--radius-md);
+
+  padding: 1rem;
+
+  box-shadow:
+    var(--shadow-sm);
+
+}
+
+.home-reminder-section__header{
+
+  margin-bottom:1rem;
+
+}
+
+.home-reminder-section__title{
+
+  margin:0;
+
+  color:
+    var(--color-text);
+
+  font-size:1rem;
+
+  font-weight:600;
+
+}
+
+.home-reminder-section__content{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:.75rem;
+
+}
+
+.home-reminder-section__row{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding:.65rem 0;
+
+  border-bottom:1px solid
+    var(--color-border);
+
+}
+
+.home-reminder-section__row:last-child{
+
+  border-bottom:none;
+
+}
+
+.home-reminder-section__row span{
+
+  color:
+    var(--color-text-secondary);
+
+}
+
+.home-reminder-section__row strong{
+
+  color:
+    var(--color-text);
+
+}
+
+@media (max-width:768px){
+
+  .home-reminder-section{
+
+    padding:1rem;
+
+  }
+
+}

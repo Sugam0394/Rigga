@@ -1,10 +1,15 @@
  import challengeRepository
   from "../repositories/challengeRepositories.js";
 
+ 
+
+ 
+
 import { CHALLENGE_STATUS }
   from "../constants/challengeStatus.js";
 
-
+import reminderRepository
+  from "../repositories/reminderRepository.js";
   
 
 const buildSummary = (
@@ -142,6 +147,33 @@ const buildImmediateAction = (
   return null;
 };
 
+
+const buildReminderSummary = (
+  reminders
+) => {
+  return {
+    total: reminders.length,
+
+    pending:
+      reminders.filter(
+        reminder =>
+          reminder.status === "PENDING"
+      ).length,
+
+    triggered:
+      reminders.filter(
+        reminder =>
+          reminder.status === "TRIGGERED"
+      ).length,
+
+    expired:
+      reminders.filter(
+        reminder =>
+          reminder.status === "EXPIRED"
+      ).length,
+  };
+};
+
 const getHomeDashboard = async (userId) => {
 
     const challenges =
@@ -149,6 +181,17 @@ const getHomeDashboard = async (userId) => {
         .getChallengesByUserId(
           userId
         );
+
+        const challengeIds =
+  challenges.map(
+    challenge => challenge._id
+  );
+
+
+
+const reminders =  await reminderRepository .getRemindersByChallenges(
+      challengeIds
+    );
 
     return {
   summary:
@@ -159,9 +202,20 @@ const getHomeDashboard = async (userId) => {
 
   activeCommitments:
     buildActiveCommitments(challenges),
+
+  reminders:
+    buildReminderSummary(
+      reminders
+    ),
 };
-  };
+
+}
+
+   
 
 export default {
   getHomeDashboard,
 };
+  
+
+ 

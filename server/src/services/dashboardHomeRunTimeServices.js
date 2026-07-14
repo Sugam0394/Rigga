@@ -1,4 +1,4 @@
-console.log(import.meta.url);
+ 
 
 
  import dashboardHomeCoordinator
@@ -6,10 +6,7 @@ console.log(import.meta.url);
 
  
 
-console.log(
-  "dashboardHomeCoordinator =",
-  dashboardHomeCoordinator
-);
+ 
 
 const getHomeDashboardRuntime = async ({
   userId,
@@ -21,27 +18,30 @@ const getHomeDashboardRuntime = async ({
         userId,
       });
 
-  return {
+   return {
 
-    summary:
-      dashboard.summary,
+  summary:
+    dashboard.summary,
 
-    immediateAction:
-      dashboard.immediateAction,
+  immediateAction:
+    dashboard.immediateAction,
 
-    activeCommitments:
-      dashboard.activeCommitments,
+  activeCommitments:
+    dashboard.activeCommitments,
 
-    dashboardMeta: {
-      version: 1,
+  reminders:
+    dashboard.reminders,
 
-      runtime:
-        "HOME_DASHBOARD_RUNTIME_V1",
+  dashboardMeta: {
+    version: 1,
 
-      generatedAt:
-        new Date().toISOString(),
-    },
-  };
+    runtime:
+      "HOME_DASHBOARD_RUNTIME_V1",
+
+    generatedAt:
+      new Date().toISOString(),
+  },
+};
 };
 
 export default {

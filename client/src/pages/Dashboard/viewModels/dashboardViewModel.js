@@ -217,23 +217,26 @@ const buildDashboardViewModel = (
 
   return {
 
-    summary:
-      dashboard.summary,
+  summary:
+    dashboard.summary,
 
-    immediateAction:
-      buildImmediateActionViewModel(
-        dashboard.immediateAction
-      ),
+  immediateAction:
+    buildImmediateActionViewModel(
+      dashboard.immediateAction
+    ),
 
-    activeCommitments:
-      buildActiveCommitmentsViewModel(
-        dashboard.activeCommitments
-      ),
+  activeCommitments:
+    buildActiveCommitmentsViewModel(
+      dashboard.activeCommitments
+    ),
 
-    dashboardMeta:
-      dashboard.dashboardMeta,
+  reminders:
+    dashboard.reminders,
 
-  };
+  dashboardMeta:
+    dashboard.dashboardMeta,
+
+};
 };
 
 export default {

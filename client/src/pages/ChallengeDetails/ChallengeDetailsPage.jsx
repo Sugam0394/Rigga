@@ -16,7 +16,7 @@ import ProgressReportList from "../progressReports/components/ProgressReportList
 import NextActionCard from "./components/NextActionCard";
 import AccountabilityPlanCard from "../../components/AccountabilityPlanCard";
 import getNextAction from "./components/getNextAction";
-
+import ReminderSection from "../reminder/components/ReminderSection";
 
 
 
@@ -373,6 +373,11 @@ const nextAction =  getNextAction(
       <WitnessAccountabilityCard
         witness={dashboard.witness}
       />
+
+
+      <ReminderSection
+  reminder={reminderRuntime}
+/>
 
      
   

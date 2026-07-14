@@ -47,7 +47,17 @@ const getDuePendingReminders =  async (currentTime) => {
     });
   };
 
-  
+  const getRemindersByChallenges = async (
+  challengeIds
+) => {
+  return Reminder.find({
+    challengeId: {
+      $in: challengeIds,
+    },
+  }).sort({
+    scheduledAt: 1,
+  });
+};
 
 const updateReminderOutcome = async (
   reminderId,
@@ -90,8 +100,9 @@ export default {
   createReminder,
   createManyReminders,
   getRemindersByChallenge,
-  updateReminderHistory,
+ 
   updateReminderStatus,
   getDuePendingReminders,
   updateReminderOutcome,
+    getRemindersByChallenges, // ✅ NEW
 };

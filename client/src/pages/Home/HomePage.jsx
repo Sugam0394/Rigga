@@ -10,9 +10,16 @@ import ErrorState from "./state/ErrorState";
 // HomeScreen
 import TodayFocusSection from "./HomeScreen/TodayFocusSection";
 
+// Reminder
+import HomeReminderSection
+  from "../reminder/components/HomeReminderSection";
+
 // Dashboard Runtime
-import useDashboardRuntime from "../Dashboard/hooks/useDashboardRunTime";
-import dashboardViewModel from "../Dashboard/viewModels/dashboardViewModel";
+import useDashboardRuntime
+  from "../Dashboard/hooks/useDashboardRunTime";
+
+import dashboardViewModel
+  from "../Dashboard/viewModels/dashboardViewModel";
 
 function HomePage() {
 
@@ -45,51 +52,57 @@ function HomePage() {
     return null;
   }
 
-   const commitments =
-  viewModel.activeCommitments ?? [];
+  const commitments =
+    viewModel.activeCommitments ?? [];
 
-return (
-  <div className="home-page">
+  return (
+    <div className="home-page">
 
-    <TodayFocusSection
-      immediateAction={
-        viewModel.immediateAction
-      }
-    />
+      <TodayFocusSection
+        immediateAction={
+          viewModel.immediateAction
+        }
+      />
 
-    {commitments.length === 0 ? (
+      <HomeReminderSection
+        reminders={
+          viewModel.reminders
+        }
+      />
 
-      <EmptyStateCard />
+      {commitments.length === 0 ? (
 
-    ) : (
+        <EmptyStateCard />
 
-      <>
+      ) : (
 
-        <section>
+        <>
 
-          <h2 className="home-page__section-title">
-            Commitments Requiring Attention
-          </h2>
+          <section>
 
-        </section>
+            <h2 className="home-page__section-title">
+              Commitments Requiring Attention
+            </h2>
 
-        {commitments.map(
-          (challenge) => (
+          </section>
 
-            <ActiveChallengeCard
-              key={challenge.id}
-              challenge={challenge}
-            />
+          {commitments.map(
+            (challenge) => (
 
-          )
-        )}
+              <ActiveChallengeCard
+                key={challenge.id}
+                challenge={challenge}
+              />
 
-      </>
+            )
+          )}
 
-    )}
+        </>
 
-  </div>
-);
+      )}
+
+    </div>
+  );
 }
 
 export default HomePage;
