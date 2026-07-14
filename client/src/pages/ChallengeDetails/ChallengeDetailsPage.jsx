@@ -24,6 +24,25 @@ import getNextAction from "./components/getNextAction";
 import useProgressEligibility from "../progressReports/hooks/useProgressEligibility";
 
 
+// Reminder Hooks
+
+
+import useReminders
+  from "../reminder/hooks/useReminders";
+
+import useReminderStatus
+  from "../reminder/hooks/useReminderStatus";
+
+import useReminderDecision
+  from "../reminder/hooks/useReminderDecision";
+
+import useReminderHistory
+  from "../reminder/hooks/useReminderHistory";
+
+import reminderViewModel
+  from "../reminder/viewModels/reminderViewModel";
+
+
 // appeals
 import AppealStatusCard from "../appeals/components/AppealStatusCard";
 
@@ -87,6 +106,30 @@ const ChallengeDetailsPage = () => {
   loading: eligibilityLoading,
   error: eligibilityError,
 } = useProgressEligibility(id);
+
+const {
+  reminders,
+  loading: remindersLoading,
+  error: remindersError,
+} = useReminders(id);
+
+const {
+  status,
+  loading: statusLoading,
+  error: statusError,
+} = useReminderStatus(id);
+
+const {
+  decision,
+  loading: decisionLoading,
+  error: decisionError,
+} = useReminderDecision(id);
+
+const {
+  history,
+  loading: historyLoading,
+  error: historyError,
+} = useReminderHistory(id);
  
 const navigate = useNavigate();
   const {
@@ -96,8 +139,7 @@ const navigate = useNavigate();
     retry,
   } = useChallengeDashboard(id);
 
-const handleSubmitProgress =
-  () => {
+const handleSubmitProgress =  () => {
     navigate(
       `/challenges/${id}/progress-report`
     );
@@ -190,8 +232,34 @@ useAICoach(id);
     </div>
   );
 }
-const nextAction =
-  getNextAction(
+
+const reminderRuntime = reminderViewModel.buildReminderViewModel({
+
+    reminders,
+
+    status,
+
+    decision,
+
+    history,
+
+    loading:
+      remindersLoading ||
+      statusLoading ||
+      decisionLoading ||
+      historyLoading,
+
+    error:
+      remindersError ||
+      statusError ||
+      decisionError ||
+      historyError,
+
+  });
+
+
+
+const nextAction =  getNextAction(
     dashboard.challenge.status
   );
 
