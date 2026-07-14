@@ -242,16 +242,31 @@ const nextAction =
   )}
  
 
-  {dashboard.challenge.status ===
-    "ACTIVE" &&
-    !eligibilityLoading &&
-    eligibility &&
-    !eligibility.canSubmit && (
-      <p className="challenge-details-accountability-message">
-        You have already submitted evidence today.
-        Return tomorrow to continue building accountability.
+ {dashboard.challenge.status ===
+  "ACTIVE" &&
+  !eligibilityLoading &&
+  eligibility &&
+  !eligibility.canSubmit && (
+
+  <div className="challenge-details-accountability-message">
+
+    <p>
+      {eligibility.reason}
+    </p>
+
+    {eligibility.nextEligibleAt && (
+      <p>
+        Next submission available:
+        {" "}
+        {new Date(
+          eligibility.nextEligibleAt
+        ).toLocaleString()}
       </p>
-  )}
+    )}
+
+  </div>
+
+)}
 
   {eligibilityError && (
     <p className="challenge-details-error">

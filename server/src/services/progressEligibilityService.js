@@ -106,23 +106,24 @@ import observationStrategyService
       endOfDay,
     });
 
- 
+    
 
- if (
-  reports.length >=
-  observationRuntime.maxReportsPerWindow
+ let nextEligibleAt = null;
+
+if (
+  observationRuntime.observationWindow === "DAY"
 ) {
-  return {
-    canSubmit: false,
-    reason:
-      "Already submitted in current observation window",
-    observationMode:
-      challenge
-        .observationStrategy
-        .observationMode,
-    nextEligibleAt: null,
-  };
+  nextEligibleAt = new Date(endOfDay.getTime() + 1);
 }
+
+ return {
+  canSubmit: false,
+  reason:
+    "Already submitted in current observation window",
+  observationMode:
+    challenge.observationStrategy.observationMode,
+  nextEligibleAt,
+};
 
   return {
     canSubmit: true,

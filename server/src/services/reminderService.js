@@ -34,18 +34,7 @@ const generateCheckpointReminder = async ({
   });
 };
 
- const updateReminderStatus = async (
-  reminderId,
-  status,
-  triggeredAt = null
-) => {
-  return reminderRepository
-    .updateReminderStatus(
-      reminderId,
-      status,
-      triggeredAt
-    );
-};
+  
 
 const getChallengeReminders = async (challengeId , userId) => {
   const challenge =

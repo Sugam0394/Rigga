@@ -47,37 +47,7 @@ const getDuePendingReminders =  async (currentTime) => {
     });
   };
 
-  const updateReminderHistory = async (
-  reminderId,
-  {
-    outcome,
-    reason,
-    urgency,
-    tone,
-    observationMode,
-    processedAt = new Date(),
-  }
-) => {
-  return Reminder.findByIdAndUpdate(
-    reminderId,
-    {
-      $set: {
-        history: {
-          outcome,
-          reason,
-          urgency,
-          tone,
-          observationMode,
-          processedAt,
-        },
-      },
-    },
-    {
-      new: true,
-    }
-  );
-};
-
+  
 
 const updateReminderOutcome = async (
   reminderId,
