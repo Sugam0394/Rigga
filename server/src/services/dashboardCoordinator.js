@@ -34,13 +34,19 @@ const buildDashboard = async ({
 
         metadata: {
 
-          reportId:
-            report._id,
+  reportId:
+    report._id,
 
-          challengeId:
-            report.challengeId,
+  challengeId:
+    report.challengeId,
 
-        },
+  notes:
+    report.notes,
+
+  imageUrl:
+    report.imageUrl,
+
+}
 
       })
     );

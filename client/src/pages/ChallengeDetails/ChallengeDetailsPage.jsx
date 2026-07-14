@@ -21,7 +21,6 @@ import getNextAction from "./components/getNextAction";
 
 
 // Hooks
-import useProgressReports from "../progressReports/hooks/useProgressReports";
 import useProgressEligibility from "../progressReports/hooks/useProgressEligibility";
 
 
@@ -88,11 +87,7 @@ const ChallengeDetailsPage = () => {
   loading: eligibilityLoading,
   error: eligibilityError,
 } = useProgressEligibility(id);
-  const {
-  reports,
-  loading: reportsLoading,
-  error: reportsError,
-} = useProgressReports(id);
+ 
 const navigate = useNavigate();
   const {
     dashboard,
@@ -282,11 +277,9 @@ const nextAction =
       />
 
       {/* Progress & Evidence */}
-      <ProgressReportList
-        reports={reports}
-        loading={reportsLoading}
-        error={reportsError}
-      />
+    <ProgressReportList
+  reports={dashboard.timeline}
+/>
 
       {/* Checkpoint Journey */}
       <CheckpointSummaryCard

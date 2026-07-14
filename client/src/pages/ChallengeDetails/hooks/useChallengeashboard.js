@@ -55,11 +55,12 @@ const useChallengeDashboard = (
   ]);
 
   return {
-    dashboard,
-    loading,
-    error,
-    retry: fetchDashboard,
-  };
+  dashboard,
+  loading,
+  error,
+  retry: fetchDashboard,
+  refresh: fetchDashboard,
+};
 };
 
 export default useChallengeDashboard;

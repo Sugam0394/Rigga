@@ -7,40 +7,55 @@ const BASE_URL =
 const ProgressReportCard = ({
   report,
 }) => {
+
   const formattedDate =
     new Date(
-      report.createdAt
-    ).toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
+      report.timestamp
+    ).toLocaleDateString(
+      "en-US",
+      {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }
+    );
 
   return (
+
     <article className="progress-report">
+
       <p className="progress-report__date">
         {formattedDate}
       </p>
 
       <p className="progress-report__notes">
-        {report.notes}
+        {
+          report.metadata?.notes
+        }
       </p>
 
-      {report.imageUrl && (
+      {report.metadata?.imageUrl && (
+
         <>
+
           <p className="progress-report__label">
-           Submitted Evidence
+            Submitted Evidence
           </p>
 
           <img
             className="progress-report__image"
-            src={`${BASE_URL}${report.imageUrl}`}
+            src={`${BASE_URL}${report.metadata.imageUrl}`}
             alt="Progress Evidence"
           />
+
         </>
+
       )}
+
     </article>
+
   );
+
 };
 
 export default ProgressReportCard;
