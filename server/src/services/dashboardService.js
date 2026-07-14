@@ -122,6 +122,9 @@ await accountabilityAggregateService
           : null,
     },
 
+      // 👇 ADD THIS
+      progressReports,
+
     checkpoints: {
       total:
         checkpoints.length,
