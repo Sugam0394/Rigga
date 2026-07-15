@@ -9,10 +9,7 @@ const deliverNotification = async (
   notification
 ) => {
 
-  console.log(
-    "[NOTIFICATION DELIVERY STARTED]",
-    notification._id
-  );
+   
 
   try {
 

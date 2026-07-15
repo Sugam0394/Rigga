@@ -1,4 +1,4 @@
- import challengeRepository from "../repositories/challengeRepositories.js";
+import challengeRepository from "../repositories/challengeRepositories.js";
 import witnessService from "./witnessServices.js";
 import consequenceService from "./consequenceService.js";
 import checkpointService from "./checkPointService.js";
@@ -7,15 +7,11 @@ import userNotificationService from "./userNotificationService.js";
 import { NOTIFICATION_EVENTS } from "../constants/notificationEvents.js";
 import generateReviewLink from "./reviewLinkService.js";
 import challengeClasssifier from "./challengeClasssifier.js";
-import accountabilityPlanService
-  from "./accountabilityPlanService.js";
+import accountabilityPlanService from "./accountabilityPlanService.js";
 import invitationService from "./invitationService.js";
-import {
-  NOTIFICATION_TYPES,
-} from "../constants/notificationConstants.js";
-
+import { NOTIFICATION_TYPES,} from "../constants/notificationConstants.js";
 import observationStrategyService from "./observationStrategyService.js";
-
+import notificationEventService from "./notificationEventService.js";
 
 
 
@@ -132,21 +128,44 @@ const {
 
  
  
+try {
 
+  const notificationEvent =
+    notificationEventService
+      .createNotificationEvent({
+        eventType:
+          NOTIFICATION_EVENTS
+            .CHALLENGE_CREATED,
+
+        sourceEngine:
+          "CHALLENGE",
+
+        userId,
+
+        entityType:
+          "CHALLENGE",
+
+        entityId:
+          challenge._id,
+
+        payload: {},
+      });
 
   await userNotificationService
-  .createEventNotification({
-    userId,
-    type:
-      NOTIFICATION_EVENTS
-        .CHALLENGE_CREATED,
+    .createEventNotification(
+      notificationEvent
+    );
 
-    entityType:
-      "CHALLENGE",
+} catch (error) {
 
-    entityId:
-      challenge._id,
-  });
+  console.error(
+    "[CHALLENGE NOTIFICATION FAILED]",
+    error
+  );
+
+}
+
+ 
 
   return {
     challenge,
