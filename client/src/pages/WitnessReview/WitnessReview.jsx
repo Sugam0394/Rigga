@@ -1,5 +1,10 @@
  
 import { useParams } from "react-router-dom";
+import { useState } from "react";
+
+import RejectionReasonForm
+  from "./components/RejectReasonForm";
+
 
 // css
 
@@ -16,7 +21,11 @@ import ReviewCompletedState from "./components/ReviewCompletedState";
 
 function WitnessReview() {
   const { token } = useParams();
+  const [showRejectForm, setShowRejectForm] =
+  useState(false);
 
+const [rejectionReason, setRejectionReason] =
+  useState("");
  
 
   const {
@@ -32,6 +41,8 @@ function WitnessReview() {
   success,
   decision,
 } = useSubmitReview();
+
+
 
   if (summaryLoading) {
     return <LoadingState />;
@@ -290,24 +301,64 @@ function WitnessReview() {
         : "Approve Challenge"}
     </button>
 
-    <button
+   <button
   type="button"
   className="witness-review-page__reject-button"
   disabled={loading}
   onClick={() =>
-    handleSubmitReview({
-      token,
-      decision: "REJECTED",
-    })
+    setShowRejectForm(true)
   }
 >
-  {loading
-    ? "Submitting..."
-    : "Reject Challenge"}
+  Reject Challenge
 </button>
 
-   
+    {showRejectForm && (
+  <>
 
+    <RejectionReasonForm
+      reason={rejectionReason}
+      onReasonChange={
+        setRejectionReason
+      }
+      error={
+        !rejectionReason.trim()
+          ? "A rejection reason is required."
+          : ""
+      }
+    />
+
+    <button
+      type="button"
+      className="witness-review-page__reject-button"
+      disabled={
+        loading ||
+        !rejectionReason.trim()
+      }
+      onClick={() =>
+        handleSubmitReview({
+          token,
+          decision: "REJECTED",
+          rejectionReason,
+        })
+      }
+    >
+      {loading
+        ? "Submitting..."
+        : "Submit Rejection"}
+    </button>
+
+    <button
+      type="button"
+      onClick={() => {
+        setShowRejectForm(false);
+        setRejectionReason("");
+      }}
+    >
+      Cancel
+    </button>
+
+  </>
+)}
   </div>
 
 </section>

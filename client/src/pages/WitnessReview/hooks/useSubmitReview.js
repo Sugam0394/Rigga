@@ -23,8 +23,10 @@ const useSubmitReview = () => {
     rejectionReason = "",
   }) => {
     try {
-      setLoading(true);
-      setError("");
+       setLoading(true);
+  setError("");
+  setSuccess(false);
+  setDecision("");
 
       await submitReview({
         token,
