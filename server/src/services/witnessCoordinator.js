@@ -1,4 +1,19 @@
  import lifecycleCoordinator from "./lifecycleCoordinator.js";
+import userNotificationService
+  from "./userNotificationService.js";
+
+import notificationEventService
+  from "./notificationEventService.js";
+
+import {
+  NOTIFICATION_EVENTS,
+} from "../constants/notificationEvents.js";
+
+
+
+
+
+
 
 const onInvitationAccepted = async ({
   challenge,
@@ -36,23 +51,70 @@ const onInvitationDeclined = async ({
   }
 };
 
-const onReviewSubmitted = async ({
+ const onReviewSubmitted = async ({
   challenge,
   decision,
   appealed,
 }) => {
+
+  let eventType = null;
+
+  if (decision === "APPROVED") {
+    eventType =
+      NOTIFICATION_EVENTS
+        .CHALLENGE_COMPLETED;
+  }
+
+  if (
+    decision === "REJECTED" &&
+    appealed
+  ) {
+    eventType =
+      NOTIFICATION_EVENTS
+        .CHALLENGE_FAILED;
+  }
+
+  if (!eventType) {
+    return;
+  }
+
   try {
-    // Notification
 
-    // Consequence
+    const notificationEvent =
+      notificationEventService
+        .createNotificationEvent({
+          eventType,
 
-    // Witness Analytics
+          sourceEngine:
+            "WITNESS",
+
+          userId:
+            challenge.userId,
+
+          entityType:
+            "CHALLENGE",
+
+          entityId:
+            challenge._id,
+
+          payload: {
+            decision,
+            appealed,
+          },
+        });
+
+    await userNotificationService
+      .createEventNotification(
+        notificationEvent
+      );
+
   } catch (error) {
+
     console.error(
-      "[WITNESS COORDINATOR][REVIEW_SUBMITTED]",
+      "[WITNESS NOTIFICATION FAILED]",
       error
     );
-    throw error;
+
   }
 };
 
@@ -60,16 +122,46 @@ const onAppealSubmitted = async ({
   challenge,
   appeal,
 }) => {
-  try {
-    // Notification
 
-    // Witness Analytics
+  try {
+
+    const notificationEvent =
+      notificationEventService
+        .createNotificationEvent({
+          eventType:
+            NOTIFICATION_EVENTS
+              .APPEAL_SUBMITTED,
+
+          sourceEngine:
+            "WITNESS",
+
+          userId:
+            challenge.userId,
+
+          entityType:
+            "CHALLENGE",
+
+          entityId:
+            challenge._id,
+
+           payload: {
+  appealId: appeal._id,
+  submittedAt: appeal.submittedAt,
+}
+        });
+
+    await userNotificationService
+      .createEventNotification(
+        notificationEvent
+      );
+
   } catch (error) {
+
     console.error(
-      "[WITNESS COORDINATOR][APPEAL_SUBMITTED]",
+      "[WITNESS NOTIFICATION FAILED]",
       error
     );
-    throw error;
+
   }
 };
 
