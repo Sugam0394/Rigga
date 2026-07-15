@@ -187,3 +187,79 @@
   font-size: 0.9rem;
 }
 
+
+.witness-invitation-page__actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.witness-invitation-page__button {
+  flex: 1;
+}
+
+.witness-invitation-page__button--secondary {
+  background: #ffffff;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.witness-invitation-page__button--secondary:hover {
+  background: #fef2f2;
+}
+
+
+.witness-invitation-page__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.witness-invitation-page__form input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.witness-invitation-page__form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+
+.witness-invitation-page__success {
+  text-align: center;
+}
+
+.witness-invitation-page__success h1 {
+  color: #15803d;
+  margin-bottom: 16px;
+}
+
+.witness-invitation-page__success p {
+  color: #475569;
+  line-height: 1.7;
+}
+
+.witness-invitation-page__error {
+  margin: 16px 0;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+@media (max-width:768px){
+
+  .witness-invitation-page__actions{
+    flex-direction:column;
+  }
+
+}
+
