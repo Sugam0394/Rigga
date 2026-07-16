@@ -4,23 +4,49 @@ import notificationCoordinator from "./notificationCoordinator.js"
 
 
 
-const createNotification = async ({
-  userId,
-  type,
-  title,
-  message,
-  entityType = null,
-  entityId = null,
-}) => {
-  return userNotificationRepository
-    .createNotification({
-      userId,
-      type,
-      title,
-      message,
-      entityType,
-      entityId,
-    });
+ const createEventNotification = async (
+  notificationEvent,
+  runtimeContext = {
+    appState: "ACTIVE",
+  }
+) => {
+
+  const {
+    userId,
+    eventType,
+    entityType,
+    entityId,
+  } = notificationEvent;
+
+  const {
+    title,
+    message,
+  } =
+    notificationTemplateService
+      .resolveNotificationTemplate(
+        notificationEvent
+      );
+
+  const notification =
+    await userNotificationRepository
+      .createNotification({
+        userId,
+        type:
+          eventType,
+        title,
+        message,
+        entityType,
+        entityId,
+      });
+
+  await notificationCoordinator
+    .deliverNotification(
+      notification,
+      runtimeContext
+    );
+
+  return notification;
+
 };
 
  const getNotificationTimeline = async (
@@ -103,45 +129,7 @@ const getNotification = async (
     );
 };
   
- const createEventNotification = async (
-  notificationEvent
-) => {
-
-  const {
-    userId,
-    eventType,
-    entityType,
-    entityId,
-  } = notificationEvent;
-
-  const {
-    title,
-    message,
-  } =
-    notificationTemplateService
-      .resolveNotificationTemplate(
-        notificationEvent
-      );
-
-  const notification =
-  await userNotificationRepository
-    .createNotification({
-      userId,
-      type:
-        eventType,
-      title,
-      message,
-      entityType,
-      entityId,
-    });
-
-await notificationCoordinator
-  .deliverNotification(
-    notification
-  );
-
-return notification;
-};
+ 
 
  export default {
   createNotification,
