@@ -132,7 +132,6 @@ const getNotification = async (
  
 
  export default {
-  createNotification,
   getUnreadCount,
   markNotificationRead,
   markAllNotificationsRead,

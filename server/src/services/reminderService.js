@@ -203,7 +203,7 @@ const getReminderHistory = async (
   createReminderSchedule,
   createManyReminderSchedules,
   generateCheckpointReminder,
-  updateReminderStatus,
+  
   getChallengeReminders,
   getReminderStatus,
   getReminderDecision,
