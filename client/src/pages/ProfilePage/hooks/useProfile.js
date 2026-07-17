@@ -17,35 +17,38 @@ const useProfile = () => {
   const [error, setError] =
     useState("");
 
-  useEffect(() => {
-    const fetchProfile =
-      async () => {
-        try {
-          const response =
-            await getProfile();
+ 
+ const loadProfile = async () => {
+  try {
+    setLoading(true);
+    setError("");
 
-          setProfile(
-            response.data
-          );
-        } catch (error) {
-          setError(
-            error?.response?.data
-              ?.message ||
-              "Unable to load profile"
-          );
-        } finally {
-          setLoading(false);
-        }
-      };
+    const response =
+      await getProfile();
 
-    fetchProfile();
-  }, []);
+    setProfile(response.data);
+  } catch (error) {
+    setError(
+      error?.response?.data
+        ?.message ||
+      "Unable to load profile."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
-  return {
-    profile,
-    loading,
-    error,
-  };
+useEffect(() => {
+  loadProfile();
+}, []);
+
+return {
+  profile,
+  loading,
+  error,
+  refreshProfile: loadProfile,
+};
+ 
 };
 
 export default useProfile;

@@ -1,18 +1,17 @@
  import "./ProfileHeader.css";
 
 const ProfileHeader = ({
-  name,
-  memberSince,
+  profile,
 }) => {
   const formattedMemberSince =
-    memberSince &&
+    profile?.createdAt &&
     !Number.isNaN(
       new Date(
-        memberSince
+        profile.createdAt
       ).getTime()
     )
       ? new Date(
-          memberSince
+          profile.createdAt
         ).toLocaleDateString(
           "en-US",
           {
@@ -25,22 +24,47 @@ const ProfileHeader = ({
 
   return (
     <header className="profile-header">
-      <h1>
-        {name || "Unknown User"}
+
+      {profile?.avatarUrl ? (
+        <img
+          src={profile.avatarUrl}
+          alt={profile.name}
+          className="profile-header__avatar"
+        />
+      ) : (
+        <div className="profile-header__avatar-placeholder">
+          {profile?.name
+            ? profile.name
+                .charAt(0)
+                .toUpperCase()
+            : "U"}
+        </div>
+      )}
+
+      <h1 className="profile-header__name">
+        {profile?.name ||
+          "Unknown User"}
       </h1>
 
-      <p>
+      <p className="profile-header__username">
+        {profile?.username
+          ? `@${profile.username}`
+          : "Username not set"}
+      </p>
+
+      <p className="profile-header__member">
         Member since{" "}
         {formattedMemberSince}
       </p>
 
-      <p>
+      <p className="profile-header__tagline">
         Your accountability
         identity is built
         through the
         commitments you
         honor.
       </p>
+
     </header>
   );
 };

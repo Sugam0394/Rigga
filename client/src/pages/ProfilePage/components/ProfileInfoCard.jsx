@@ -5,27 +5,47 @@ const ProfileInfoCard = ({
 }) => {
   return (
     <section className="profile-info-card">
+
       <h2>
         Account Information
       </h2>
 
-      <div>
+      <div className="profile-info-card__item">
         <p>Phone</p>
 
         <strong>
-          {profile.phone}
+          {profile.phone ||
+            "Not provided"}
         </strong>
       </div>
 
-      {profile.email && (
-        <div>
-          <p>Email</p>
+      <div className="profile-info-card__item">
+        <p>Email</p>
 
-          <strong>
-            {profile.email}
-          </strong>
-        </div>
-      )}
+        <strong>
+          {profile.email ||
+            "Not available"}
+        </strong>
+      </div>
+
+      <div className="profile-info-card__item">
+        <p>Timezone</p>
+
+        <strong>
+          {profile.timezone ||
+            "UTC"}
+        </strong>
+      </div>
+
+      <div className="profile-info-card__item">
+        <p>Language</p>
+
+        <strong>
+          {profile.language ||
+            "English"}
+        </strong>
+      </div>
+
     </section>
   );
 };

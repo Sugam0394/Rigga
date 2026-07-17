@@ -43,14 +43,7 @@ export const verifyOtp = async (
   return response.data;
 };
 
-export const getCurrentUser = async () => {
-    const response =
-      await apiClient.get(
-        "/auth/me"
-      );
-
-    return response.data;
-  };
+ 
 
   export const googleSignIn = async (
   idToken
@@ -66,17 +59,7 @@ export const getCurrentUser = async () => {
   return response.data;
 };
 
-export const updateProfile = async (
-  profileData
-) => {
-  const response =
-    await apiClient.post(
-      "/auth/update-profile",
-      profileData
-    );
-
-  return response.data;
-};
+ 
 
   export const logoutUser =  async () => {
     const response =
