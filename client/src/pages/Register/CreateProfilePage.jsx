@@ -7,7 +7,7 @@ import "./CreateProfilePage.css"
 import CreateProfileHero from "./CreateProfileHero";
 import AuthError from "../../features/auth/components/AuthError"
 import AuthSubmitButton from "../../features/auth/components/AuthSubmitButton"
- 
+ import { updateProfile } from "../ProfilePage/api/ProfileApi";
 
 
 
@@ -79,11 +79,17 @@ if (
     setLoading(true);
     setError("");
 
+  if (provider === "google") {
+  await updateProfile({
+    name,
+  });
+} else {
   await completeProfile({
-  name,
-  email,
-  phone: verifiedPhone,
-});
+    name,
+    email,
+    phone: verifiedPhone,
+  });
+}
 
     await restoreSession();
 
