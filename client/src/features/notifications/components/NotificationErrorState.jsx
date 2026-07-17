@@ -1,12 +1,17 @@
- import "./NotificationStates.css"
- 
- 
- const NotificationErrorState = ({
+ import "./NotificationStates.css";
+
+const NotificationErrorState = ({
   message,
+  onRetry,
 }) => {
   return (
-    <section className="notification-state">
+    <section
+      className="notification-state"
+      role="alert"
+      aria-live="assertive"
+    >
       <div className="notification-state__content">
+
         <div className="notification-state__icon">
           ⚠️
         </div>
@@ -16,8 +21,19 @@
         </h2>
 
         <p className="notification-state__text">
-          {message}
+          {message || "Something went wrong while loading your notifications."}
         </p>
+
+        {onRetry && (
+          <button
+            type="button"
+            className="notification-state__button"
+            onClick={onRetry}
+          >
+            Try Again
+          </button>
+        )}
+
       </div>
     </section>
   );

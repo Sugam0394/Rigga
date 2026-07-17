@@ -1,22 +1,21 @@
- import {
+import {
+  useCallback,
   useEffect,
   useState,
-  useCallback,
 } from "react";
 
 import {
-  getNotifications,
+  getNotification,
 } from "../api/notificationApi";
 
-import notificationRuntime
-  from "../runtime/notificationRuntime";
-
-const useNotifications = () => {
+const useNotification = (
+  notificationId
+) => {
 
   const [
-    notifications,
-    setNotifications,
-  ] = useState([]);
+    notification,
+    setNotification,
+  ] = useState(null);
 
   const [
     loading,
@@ -28,18 +27,29 @@ const useNotifications = () => {
     setError,
   ] = useState(null);
 
-  const fetchNotifications =
+  const fetchNotification =
     useCallback(
       async () => {
+
+        if (!notificationId) {
+
+          setNotification(null);
+          setLoading(false);
+
+          return;
+
+        }
 
         try {
 
           setLoading(true);
 
           const response =
-            await getNotifications();
+            await getNotification(
+              notificationId
+            );
 
-          setNotifications(
+          setNotification(
             response.data
           );
 
@@ -59,39 +69,28 @@ const useNotifications = () => {
         }
 
       },
-      []
+      [notificationId]
     );
 
   useEffect(() => {
 
-    fetchNotifications();
+    fetchNotification();
 
-  }, [fetchNotifications]);
-
-  useEffect(() => {
-
-    const unsubscribe =
-      notificationRuntime.subscribe(
-        fetchNotifications
-      );
-
-    return unsubscribe;
-
-  }, [fetchNotifications]);
+  }, [fetchNotification]);
 
   return {
 
-    notifications,
+    notification,
 
     loading,
 
     error,
 
     refetch:
-      fetchNotifications,
+      fetchNotification,
 
   };
 
 };
 
-export default useNotifications;
+export default useNotification;

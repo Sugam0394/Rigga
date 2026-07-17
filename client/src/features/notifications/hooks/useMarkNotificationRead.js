@@ -1,13 +1,13 @@
  import { useState } from "react";
 
 import {
-  markNotificationRead,
+  markAllNotificationsRead,
 } from "../api/notificationApi";
 
 import notificationRuntime
   from "../runtime/notificationRuntime";
 
-const useMarkNotificationRead = () => {
+const useMarkAllNotificationsRead = () => {
 
   const [
     loading,
@@ -19,17 +19,15 @@ const useMarkNotificationRead = () => {
     setError,
   ] = useState(null);
 
-  const markAsRead =
-    async (notificationId) => {
+  const markAllAsRead =
+    async () => {
 
       try {
 
         setLoading(true);
 
         const response =
-          await markNotificationRead(
-            notificationId
-          );
+          await markAllNotificationsRead();
 
         setError(null);
 
@@ -59,7 +57,7 @@ const useMarkNotificationRead = () => {
 
   return {
 
-    markAsRead,
+    markAllAsRead,
 
     loading,
 
@@ -69,4 +67,4 @@ const useMarkNotificationRead = () => {
 
 };
 
-export default useMarkNotificationRead;
+export default useMarkAllNotificationsRead;

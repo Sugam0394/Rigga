@@ -1,4 +1,4 @@
-/* ===================================
+ /* ===================================
    Notification Page
 =================================== */
 
@@ -35,11 +35,18 @@
   font-size: 0.95rem;
   font-weight: 500;
 
-  transition: color 180ms ease;
+  transition:
+    color 180ms ease;
 }
 
 .notifications-page__back:hover {
   color: #dc2626;
+}
+
+.notifications-page__back:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 /* ===================================
@@ -47,6 +54,11 @@
 =================================== */
 
 .notifications-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+
   margin-bottom: 32px;
 }
 
@@ -65,7 +77,6 @@
   margin-top: 10px;
 
   font-size: 1rem;
-
   line-height: 1.7;
 
   color: #6b7280;
@@ -73,29 +84,86 @@
   max-width: 560px;
 }
 
+.notifications-page__summary {
+  margin-top: 12px;
+
+  font-size: 0.92rem;
+  font-weight: 500;
+
+  color: #4b5563;
+}
+
+/* ===================================
+   Mark All Button
+=================================== */
+
+.notifications-page__mark-all {
+  flex-shrink: 0;
+
+  padding: 10px 18px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #dc2626;
+  color: #ffffff;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 180ms ease,
+    transform 180ms ease,
+    opacity 180ms ease;
+}
+
+.notifications-page__mark-all:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.notifications-page__mark-all:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.notifications-page__mark-all:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 3px;
+}
+
+.notifications-page__mark-all:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* ===================================
    Notification List Rhythm
 =================================== */
 
-.notifications-page ul {
-  list-style: none;
-
-  margin: 0;
-  padding: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 18px;
-}
+ 
 
 /* ===================================
-   Mobile
+   Tablet
 =================================== */
 
 @media (max-width: 768px) {
+
   .notifications-page {
     padding: 24px 16px 48px;
+  }
+
+  .notifications-page__header {
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 20px;
+
+    margin-bottom: 24px;
+  }
+
+  .notifications-page__mark-all {
+    width: 100%;
   }
 
   .notifications-page__title {
@@ -106,12 +174,14 @@
     font-size: 0.95rem;
   }
 
-  .notifications-page__header {
-    margin-bottom: 24px;
-  }
 }
 
+/* ===================================
+   Mobile
+=================================== */
+
 @media (max-width: 480px) {
+
   .notifications-page__title {
     font-size: 1.45rem;
   }
@@ -121,7 +191,12 @@
     line-height: 1.6;
   }
 
+  .notifications-page__summary {
+    font-size: 0.85rem;
+  }
+
   .notifications-page ul {
     gap: 14px;
   }
+
 }

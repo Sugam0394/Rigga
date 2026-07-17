@@ -5,18 +5,18 @@
 } from "react";
 
 import {
-  getUnreadCount,
+  getNotificationSummary,
 } from "../api/notificationApi";
 
 import notificationRuntime
   from "../runtime/notificationRuntime";
 
-const useUnreadCount = () => {
+const useNotificationSummary = () => {
 
   const [
-    unreadCount,
-    setUnreadCount,
-  ] = useState(0);
+    summary,
+    setSummary,
+  ] = useState(null);
 
   const [
     loading,
@@ -28,17 +28,19 @@ const useUnreadCount = () => {
     setError,
   ] = useState(null);
 
-  const fetchUnreadCount =
+  const fetchSummary =
     useCallback(
       async () => {
 
         try {
 
-          const response =
-            await getUnreadCount();
+          setLoading(true);
 
-          setUnreadCount(
-            response.data.count
+          const response =
+            await getNotificationSummary();
+
+          setSummary(
+            response.data
           );
 
           setError(null);
@@ -62,49 +64,34 @@ const useUnreadCount = () => {
 
   useEffect(() => {
 
-    fetchUnreadCount();
+    fetchSummary();
 
-    const interval =
-      setInterval(
-        fetchUnreadCount,
-        5000
-      );
-
-    return () =>
-      clearInterval(
-        interval
-      );
-
-  }, [fetchUnreadCount]);
+  }, [fetchSummary]);
 
   useEffect(() => {
 
     const unsubscribe =
       notificationRuntime.subscribe(
-        fetchUnreadCount
+        fetchSummary
       );
 
     return unsubscribe;
 
-  }, [fetchUnreadCount]);
+  }, [fetchSummary]);
 
   return {
 
-    unreadCount,
+    summary,
 
     loading,
 
     error,
 
     refetch:
-      fetchUnreadCount,
+      fetchSummary,
 
   };
 
 };
 
-export default useUnreadCount;
-
- 
-
- 
+export default useNotificationSummary;

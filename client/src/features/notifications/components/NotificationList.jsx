@@ -7,7 +7,10 @@ const NotificationList = ({
   onNotificationRead,
 }) => {
   return (
-    <ul className="notification-list">
+    <ul
+  className="notification-list"
+  aria-label="Notifications"
+>
       {notifications.map(
         (notification) => (
           <li

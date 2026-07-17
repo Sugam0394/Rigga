@@ -37,3 +37,28 @@ export const markAllNotificationsRead = async () => {
 
     return response.data;
   };
+
+
+  export const getNotification = async (
+  notificationId
+) => {
+
+  const response =
+    await api.get(
+      `/notifications/${notificationId}`
+    );
+
+  return response.data;
+
+};
+
+export const getNotificationSummary = async () => {
+
+  const response =
+    await api.get(
+      "/notifications/summary"
+    );
+
+  return response.data;
+
+};
