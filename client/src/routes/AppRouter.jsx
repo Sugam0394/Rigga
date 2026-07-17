@@ -23,7 +23,7 @@ import Profile from "../pages/ProfilePage/Profile";
 import SubmitProgressReportPage from "../pages/progressReports/SubmitProgressReportPage";
 import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
 import NotificationsPage from "../features/notifications/pages/NotificationPage"
-
+import Settings from "../pages/Settings/Settings";
 
 // Legal Pages
 import TermsOfServicePage from "../pages/legal/TermsOfServicePage";
@@ -64,7 +64,7 @@ import WitnessReview from "../pages/WitnessReview/WitnessReview";
         <Route path="/challenges/:id/progress-report"element={<SubmitProgressReportPage/>}/>
         <Route path="/challenges/:id/appeal" element={<SubmitAppealPage />}/>
         <Route path="/profile" element={<Profile />}/></Route>
-        
+        <Route path="/settings" element={<Settings />} />
       
       
         {/* Public Routes */}

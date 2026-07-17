@@ -11,7 +11,7 @@ import VerificationRecord from "./components/VerificationRecord";
 import ProfileInfoCard from "./components/ProfileInfoCard";
 import LogoutCard from "./components/LogoutCard";
 import AboutCard from "./components/AboutCard";
- 
+ import ProfileActions from "./components/ProfileActions";
 
 import useUpdateProfile from "./hooks/useUpdateProfile";
 import ProfileEditForm from "./ProfileEditForm";
@@ -57,6 +57,10 @@ function Profile() {
     language: "",
     avatarUrl: "",
   });
+
+  const handleOpenSettings = () => {
+  navigate("/settings");
+};
 
 const {
   update,
@@ -215,17 +219,11 @@ const hasChanges =
       </p>
     )}
 
-<div className="profile-page__actions">
-  {!isEditing && (
-    <button
-      type="button"
-      onClick={handleEdit}
-      className="profile-page__edit-button"
-    >
-      Edit Profile
-    </button>
-  )}
-</div>
+  <ProfileActions
+  isEditing={isEditing}
+  onEdit={handleEdit}
+  onSettings={handleOpenSettings}
+/>
 
     {isEditing ? (
   <ProfileEditForm
