@@ -22,11 +22,7 @@ router.post(
   authController.completeProfile
 );
 
-router.post(
-  "/auth/update-profile",
-  authMiddleware,
-  authController.updateProfile
-);
+ 
 
 router.get( "/auth/me", authMiddleware, authController.getCurrentUser);
 

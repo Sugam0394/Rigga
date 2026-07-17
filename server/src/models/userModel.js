@@ -12,6 +12,43 @@ const userSchema = new mongoose.Schema(
         trim: true,
       },
 
+      username: {
+  type: String,
+  unique: true,
+  sparse: true,
+  trim: true,
+  default: null,
+},
+
+bio: {
+  type: String,
+  default: "",
+  trim: true,
+},
+
+avatarUrl: {
+  type: String,
+  default: null,
+  trim: true,
+},
+
+avatarUpdatedAt: {
+  type: Date,
+  default: null,
+},
+
+timezone: {
+  type: String,
+  default: "UTC",
+  trim: true,
+},
+
+language: {
+  type: String,
+  default: "en",
+  trim: true,
+},
+
       email: {
         type: String,
         required: true,
@@ -39,6 +76,64 @@ authProvider: {
   enum: ["phone", "google"],
   required: true,
   default: "phone",
+},
+
+ settings: {
+  theme: {
+    type: String,
+    enum: ["light", "dark", "system"],
+    default: "system",
+  },
+
+  notificationPreferences: {
+    inApp: {
+      type: Boolean,
+      default: true,
+    },
+    push: {
+      type: Boolean,
+      default: false,
+    },
+    sms: {
+      type: Boolean,
+      default: false,
+    },
+    email: {
+      type: Boolean,
+      default: true,
+    },
+    whatsapp: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  privacyPreferences: {
+    profileVisibility: {
+      type: String,
+      enum: ["public", "private"],
+      default: "public",
+    },
+
+    activityVisibility: {
+      type: String,
+      enum: ["public", "private"],
+      default: "public",
+    },
+  },
+
+  appPreferences: {
+    timeFormat: {
+      type: String,
+      enum: ["12h", "24h"],
+      default: "24h",
+    },
+
+    dateFormat: {
+      type: String,
+      default: "DD/MM/YYYY",
+    },
+  },
 },
 
       role: {

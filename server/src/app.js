@@ -56,8 +56,8 @@ import aiInsight from './routes/aiInsightRoutes.js';
 import aiNarrative from './routes/aiNarrativeRoutes.js';
 import aiCouch from './routes/aiCouchRoutes.js';
 import invitationRoutes from './routes/invitationRoutes.js';
-
-
+import profileRoutes from "./routes/profileRoutes.js";
+import settingsRoutes from "./routes/settingsRoutes.js";
 
 
 
@@ -98,7 +98,9 @@ import invitationRoutes from './routes/invitationRoutes.js';
 
    app.use("/api" , invitationRoutes)
 
+   app.use("/api", profileRoutes);
 
+   app.use("/api", settingsRoutes);
 
 
 
