@@ -14,37 +14,49 @@ const TodayFocusSection = ({
     return null;
   }
 
-  return (
+ return (
 
-    <section className="today-focus-section">
+  <section className="today-focus-section">
+
+    <header className="today-focus-section__header">
+
+      <p className="today-focus-section__eyebrow">
+        TODAY'S PRIORITY
+      </p>
 
       <h2 className="today-focus-section__title">
-  Immediate Action
-</h2>
+        Immediate Action
+      </h2>
 
-      <div className="today-focus-section__item">
+    </header>
 
-        <div className="today-focus-section__indicator">
-          !
-        </div>
+    <div className="today-focus-section__item">
 
-        <div className="today-focus-section__content">
+      <div className="today-focus-section__indicator">
+        !
+      </div>
 
-          <p className="today-focus-section__action">
-            {immediateAction.attentionState?.label}
-          </p>
+      <div className="today-focus-section__content">
 
-          <p className="today-focus-section__challenge">
-            {immediateAction.title}
-          </p>
+        <p className="today-focus-section__action">
+          {immediateAction.attentionState?.label}
+        </p>
 
-        </div>
+        <h3 className="today-focus-section__challenge">
+          {immediateAction.title}
+        </h3>
+
+        <p className="today-focus-section__hint">
+          Complete this first before moving to anything else.
+        </p>
 
       </div>
 
-    </section>
+    </div>
 
-  );
+  </section>
+
+);
 
 };
 

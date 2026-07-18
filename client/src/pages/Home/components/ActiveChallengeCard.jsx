@@ -73,11 +73,8 @@ const ActiveChallengeCard = ({
   {challenge.status?.label}
 </span>
 
-...
-
-<p className="active-challenge-card__witness">
-  {challenge.trustState?.label}
-</p>
+ 
+ 
 
       <h2 className="active-challenge-card__title">
         {challenge.title ||

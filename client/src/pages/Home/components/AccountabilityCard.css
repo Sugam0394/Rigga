@@ -1,0 +1,109 @@
+.accountability-card {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+
+  padding: 24px;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: 18px;
+
+}
+
+.accountability-card__eyebrow {
+
+  margin: 0;
+
+  font-size: .75rem;
+
+  font-weight: 700;
+
+  letter-spacing: .08em;
+
+  text-transform: uppercase;
+
+  color: var(--color-primary);
+
+}
+
+.accountability-card__title {
+
+  margin: 0;
+
+  font-size: 1.25rem;
+
+  font-weight: 700;
+
+  color: var(--color-text-primary);
+
+}
+
+.accountability-card__content {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+}
+
+.accountability-card__row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 16px;
+
+}
+
+.accountability-card__label {
+
+  font-size: .9rem;
+
+  font-weight: 600;
+
+  color: var(--color-text-secondary);
+
+}
+
+.accountability-card__value,
+.accountability-card__status {
+
+  font-size: .95rem;
+
+  font-weight: 700;
+
+  color: var(--color-text-primary);
+
+  text-align: right;
+
+}
+
+@media (max-width: 480px) {
+
+  .accountability-card__row {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 6px;
+
+  }
+
+  .accountability-card__value,
+  .accountability-card__status {
+
+    text-align: left;
+
+  }
+
+}

@@ -19,7 +19,7 @@ const EmptyStateCard = () => {
 
   return (
 
-    <div className="empty-state-card">
+     <section className="empty-state-card"> 
 
       <h2>
         {title}
@@ -68,7 +68,7 @@ const EmptyStateCard = () => {
         {action}
       </Link>
 
-    </div>
+    </section>
 
   );
 

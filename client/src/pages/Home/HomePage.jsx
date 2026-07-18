@@ -56,53 +56,51 @@ function HomePage() {
     viewModel.activeCommitments ?? [];
 
   return (
-    <div className="home-page">
+  <div className="home-page">
 
-      <TodayFocusSection
-        immediateAction={
-          viewModel.immediateAction
-        }
-      />
+    <TodayFocusSection
+      immediateAction={viewModel.immediateAction}
+    />
 
-      <HomeReminderSection
-        reminders={
-          viewModel.reminders
-        }
-      />
+    {commitments.length === 0 ? (
 
-      {commitments.length === 0 ? (
+      <EmptyStateCard />
 
-        <EmptyStateCard />
+    ) : (
 
-      ) : (
+      <section className="home-page__commitments">
 
-        <>
+        <header className="home-page__section-header">
 
-          <section>
+          <p className="home-page__eyebrow">
+            ACTIVE COMMITMENTS
+          </p>
 
-            <h2 className="home-page__section-title">
-              Commitments Requiring Attention
-            </h2>
+          <h2 className="home-page__section-title">
+            Commitments Requiring Attention
+          </h2>
 
-          </section>
+        </header>
 
-          {commitments.map(
-            (challenge) => (
+        {commitments.map((challenge) => (
 
-              <ActiveChallengeCard
-                key={challenge.id}
-                challenge={challenge}
-              />
+          <ActiveChallengeCard
+            key={challenge.id}
+            challenge={challenge}
+          />
 
-            )
-          )}
+        ))}
 
-        </>
+      </section>
 
-      )}
+    )}
 
-    </div>
-  );
+    <HomeReminderSection
+      reminders={viewModel.reminders}
+    />
+
+  </div>
+);
 }
 
 export default HomePage;

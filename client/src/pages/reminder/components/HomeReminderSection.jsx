@@ -15,18 +15,22 @@ const HomeReminderSection = ({
       aria-labelledby="home-reminder-heading"
     >
 
-      <header
-        className="home-reminder-section__header"
-      >
+     <header
+  className="home-reminder-section__header"
+>
 
-        <h2
-          id="home-reminder-heading"
-          className="home-reminder-section__title"
-        >
-          Reminder Summary
-        </h2>
+  <p className="home-reminder-section__eyebrow">
+    SUPPORTING INFORMATION
+  </p>
 
-      </header>
+  <h2
+    id="home-reminder-heading"
+    className="home-reminder-section__title"
+  >
+    Reminder Summary
+  </h2>
+
+</header>
 
       <div
         className="home-reminder-section__content"

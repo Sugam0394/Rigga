@@ -1,33 +1,35 @@
  .active-challenge-card {
 
-  display: flex;
-  flex-direction: column;
+  display:flex;
+  flex-direction:column;
 
-  gap: 18px;
+  gap:22px;
 
-  padding: 24px;
+  padding:28px;
 
-  background: var(--color-surface);
+  background:var(--color-surface);
 
-  border: 1px solid var(--color-border);
+  border:1px solid var(--color-border);
 
-  border-radius: 18px;
+  border-radius:20px;
 
-  cursor: pointer;
+  cursor:pointer;
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
+
 }
 
-.active-challenge-card:hover {
+ .active-challenge-card:hover{
 
-  transform: translateY(-2px);
+transform:translateY(-4px);
 
-  border-color: var(--color-primary);
+border-color:var(--color-primary);
 
-  box-shadow: 0 10px 28px rgba(0,0,0,.08);
+box-shadow:0 14px 32px rgba(0,0,0,.10);
+
 }
 
 .active-challenge-card__badge {
@@ -73,19 +75,20 @@
   background: #6b7280;
 }
 
-.active-challenge-card__title {
+ .active-challenge-card__title{
 
-  margin: 0;
+margin:0;
 
-  font-size: 1.25rem;
+font-size:1.45rem;
 
-  font-weight: 700;
+font-weight:700;
 
-  line-height: 1.45;
+line-height:1.35;
 
-  color: var(--color-text-primary);
+color:var(--color-text-primary);
 
-  word-break: break-word;
+word-break:break-word;
+
 }
 
 .active-challenge-card__deadline {
@@ -97,15 +100,18 @@
   color: var(--color-text-secondary);
 }
 
-.active-challenge-card__remaining {
+ .active-challenge-card__remaining{
 
-  margin: 0;
+margin:0;
 
-  font-size: .95rem;
+font-size:1.05rem;
 
-  font-weight: 600;
+font-weight:700;
 
-  color: var(--color-text-primary);
+line-height:1.4;
+
+color:var(--color-text-primary);
+
 }
 
 .active-challenge-card__remaining--urgent {
@@ -125,15 +131,18 @@
   border-top: 1px solid var(--color-border);
 }
 
-.active-challenge-card__witness {
+ .active-challenge-card__witness{
 
-  margin: 0;
+margin:0;
 
-  font-size: .95rem;
+font-size:.9rem;
 
-  font-weight: 600;
+font-weight:600;
 
-  color: var(--color-text-secondary);
+letter-spacing:.02em;
+
+color:var(--color-text-secondary);
+
 }
 
 @media (max-width:768px){
@@ -179,12 +188,20 @@
 gap:14px;
 
 }
-
 .active-challenge-card__footer{
 
-padding-top:12px;
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding-top:18px;
+
+border-top:1px solid var(--color-border);
 
 }
+ 
 
 .active-challenge-card__badge{
 
