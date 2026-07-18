@@ -22,38 +22,44 @@ const ProgressReportCard = ({
 
   return (
 
-    <article className="progress-report">
+   <article className="progress-report">
 
-      <p className="progress-report__date">
-        {formattedDate}
-      </p>
+  <div className="progress-report__header">
+    <p className="progress-report__eyebrow">
+      Evidence Submitted
+    </p>
 
-      <p className="progress-report__notes">
-        {
-           report.metadata?.notes ||
-"No progress notes provided."
-        }
-      </p>
+    <p className="progress-report__date">
+      {formattedDate}
+    </p>
+  </div>
 
-      {report.metadata?.imageUrl && (
+  <div className="progress-report__content">
 
-        <>
+    <p className="progress-report__notes">
+      {report.metadata?.notes ||
+        "No progress notes provided."}
+    </p>
 
-          <p className="progress-report__label">
-            Submitted Evidence
-          </p>
+    {report.metadata?.imageUrl && (
+      <div className="progress-report__evidence">
 
-          <img
-            className="progress-report__image"
-            src={`${BASE_URL}${report.metadata.imageUrl}`}
-            alt="Progress Evidence"
-          />
+        <p className="progress-report__label">
+          Submitted Evidence
+        </p>
 
-        </>
+        <img
+          className="progress-report__image"
+          src={`${BASE_URL}${report.metadata.imageUrl}`}
+          alt="Progress Evidence"
+        />
 
-      )}
+      </div>
+    )}
 
-    </article>
+  </div>
+
+</article>
 
   );
 
