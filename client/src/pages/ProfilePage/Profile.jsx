@@ -182,28 +182,35 @@ const hasChanges =
       (profile.avatarUrl || "")
   );
 
-  if (loading) {
-    return (
-      <p>
+ if (loading) {
+  return (
+    <main className="profile-page">
+      <div className="profile-page__loading">
         Loading profile...
-      </p>
-    );
-  }
+      </div>
+    </main>
+  );
+}
 
-  if (error) {
-    return (
-      <p>{error}</p>
-    );
-  }
+if (error) {
+  return (
+    <main className="profile-page">
+      <div className="profile-page__error">
+        {error}
+      </div>
+    </main>
+  );
+}
 
-  if (!profile) {
-    return (
-      <p>
-        Unable to load
-        profile.
-      </p>
-    );
-  }
+if (!profile) {
+  return (
+    <main className="profile-page">
+      <div className="profile-page__empty">
+        Unable to load profile.
+      </div>
+    </main>
+  );
+}
 
  
 

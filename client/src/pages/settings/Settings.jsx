@@ -46,21 +46,25 @@ const handlePrivacySettings = () => {
   // Future Privacy Engine
 };
 
-  if (loading) {
-    return (
-      <main className="settings-page">
-        <p>Loading settings...</p>
-      </main>
-    );
-  }
+ if (loading) {
+  return (
+    <main className="settings-page">
+      <div className="settings-page__loading">
+        Loading settings...
+      </div>
+    </main>
+  );
+}
 
-  if (error) {
-    return (
-      <main className="settings-page">
-        <p>{error}</p>
-      </main>
-    );
-  }
+if (error) {
+  return (
+    <main className="settings-page">
+      <div className="settings-page__error">
+        {error}
+      </div>
+    </main>
+  );
+}
 
   return (
     <main className="settings-page">
