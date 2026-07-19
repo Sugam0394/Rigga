@@ -23,7 +23,7 @@ import Profile from "../pages/ProfilePage/Profile";
 import SubmitProgressReportPage from "../pages/progressReports/SubmitProgressReportPage";
 import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
 import NotificationsPage from "../features/notifications/pages/NotificationPage"
-import Settings from "../pages/Settings/Settings";
+import Settings from "../pages/settings/Settings.jsx"
 
 // Legal Pages
 import TermsOfServicePage from "../pages/legal/TermsOfServicePage";
