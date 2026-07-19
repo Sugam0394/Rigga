@@ -199,22 +199,7 @@ const getFinishedChallengesByUserId = async (userId) => {
   );
 };
 
-const getFinishedChallengesByUserId = async (userId) => {
-  return Challenge.find({
-    userId,
-    status: {
-      $in: [
-        CHALLENGE_STATUS.COMPLETED,
-        CHALLENGE_STATUS.FAILED,
-      ],
-    },
-  }).sort({
-    completedAt: -1,
-  });
-};
-
-
-
+ 
 export default {
   createChallenge,
   updateWitnessNotifiedAt,
