@@ -1,5 +1,5 @@
  import "./WitnessAccountabilityCard.css";
-import WitnessJourneyTimeline from "./WitnessJourneyTimeline";
+import WitnessJourneyTimeline from "./WitnessJourneyTimeLine";
 const DECISION_LABELS = {
   PENDING: "Awaiting Review",
   APPROVED: "Approved",

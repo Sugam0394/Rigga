@@ -9,7 +9,7 @@ import {
 } from "../api/notificationApi";
 
 import notificationRuntime
-  from "../runtime/notificationRuntime";
+  from "../runTime/NotificationRunTime";
 
 const useUnreadCount = () => {
 
