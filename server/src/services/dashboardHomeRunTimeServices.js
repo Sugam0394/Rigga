@@ -18,7 +18,7 @@ const getHomeDashboardRuntime = async ({
         userId,
       });
 
-   return {
+ return {
 
   summary:
     dashboard.summary,
@@ -28,6 +28,9 @@ const getHomeDashboardRuntime = async ({
 
   activeCommitments:
     dashboard.activeCommitments,
+
+  recentResult:
+    dashboard.recentResult,
 
   reminders:
     dashboard.reminders,
@@ -41,6 +44,7 @@ const getHomeDashboardRuntime = async ({
     generatedAt:
       new Date().toISOString(),
   },
+
 };
 };
 

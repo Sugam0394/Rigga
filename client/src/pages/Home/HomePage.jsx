@@ -2,6 +2,7 @@
 
 import EmptyStateCard from "./components/EmptyStateCard";
 import ActiveChallengeCard from "./components/ActiveChallengeCard";
+import RecentResultCard from "./components/RecentResultCard.jsx";
 
 // State
 import LoadingState from "./state/LoadingState";
@@ -21,8 +22,9 @@ import useDashboardRuntime
 import dashboardViewModel
   from "../Dashboard/viewModels/dashboardViewModel";
 
-  // Utils
-import getReminderSummary from "../Home/utils/getReminderSummary";
+// Utils
+import getReminderSummary
+  from "../Home/utils/getReminderSummary";
 
 function HomePage() {
 
@@ -57,72 +59,110 @@ function HomePage() {
 
   const commitments =
     viewModel.activeCommitments ?? [];
- 
 
-  return (
-  <div className="home-page">
-
-    <TodayFocusSection
-      immediateAction={viewModel.immediateAction}
-    />
-
-    {commitments.length === 0 ? (
-
-      <EmptyStateCard />
-
-    ) : (
-
-      <section className="home-page__commitments">
-
-        <header className="home-page__section-header">
-
-          <p className="home-page__eyebrow">
-            ACTIVE COMMITMENTS
-          </p>
-
-          <h2 className="home-page__section-title">
-            Commitments Requiring Attention
-          </h2>
-
-        </header>
-
-        {commitments.map((challenge) => {
-
-  const reminderSummary =
-    getReminderSummary(
-      challenge.reminders
-    );
+  const recentResult =
+    viewModel.recentResult;
 
   return (
 
-    <div key={challenge.id}>
+    <div className="home-page">
 
-      <ActiveChallengeCard
-        challenge={challenge}
+      <TodayFocusSection
+        immediateAction={
+          viewModel.immediateAction
+        }
       />
 
-      <HomeReminderSection
-        reminderSummary={reminderSummary}
-      />
+      {commitments.length === 0 &&
+      !recentResult ? (
+
+        <EmptyStateCard />
+
+      ) : (
+
+        <>
+
+          {commitments.length > 0 && (
+
+            <section className="home-page__commitments">
+
+              <header className="home-page__section-header">
+
+                <p className="home-page__eyebrow">
+                  ACTIVE COMMITMENTS
+                </p>
+
+                <h2 className="home-page__section-title">
+                  Commitments Requiring Attention
+                </h2>
+
+              </header>
+
+              {commitments.map(
+                (challenge) => {
+
+                  const reminderSummary =
+                    getReminderSummary(
+                      challenge.reminders
+                    );
+
+                  return (
+
+                    <div key={challenge.id}>
+
+                      <ActiveChallengeCard
+                        challenge={challenge}
+                      />
+
+                      <HomeReminderSection
+                        reminderSummary={
+                          reminderSummary
+                        }
+                      />
+
+                    </div>
+
+                  );
+
+                }
+              )}
+
+            </section>
+
+          )}
+
+          {recentResult && (
+
+            <section className="home-page__recent-result">
+
+              <header className="home-page__section-header">
+
+                <p className="home-page__eyebrow">
+                  RECENT RESULT
+                </p>
+
+                <h2 className="home-page__section-title">
+                  Latest Completed Commitment
+                </h2>
+
+              </header>
+
+              <RecentResultCard
+                result={recentResult}
+              />
+
+            </section>
+
+          )}
+
+        </>
+
+      )}
 
     </div>
 
   );
 
-})}
-
-      </section>
-
-    )}
-
-   
-
- 
-
- 
-
-  </div>
-);
 }
 
 export default HomePage;

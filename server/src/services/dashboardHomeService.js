@@ -1,7 +1,7 @@
  import challengeRepository
   from "../repositories/challengeRepositories.js";
 
- 
+ import { ACTIVE_COMMITMENT_STATUSES } from "../constants/dashboardConstants.js";
 
  
 
@@ -70,22 +70,17 @@ const buildSummary = (
   };
 };
 
- const activeStatuses = [
-  CHALLENGE_STATUS.PENDING_WITNESS,
-  CHALLENGE_STATUS.ACTIVE,
-  CHALLENGE_STATUS.UNDER_REVIEW,
-  CHALLENGE_STATUS.APPEALED,
-];
+ 
 
 const buildActiveCommitments = (
   challenges
 ) => {
  return challenges
   .filter(challenge =>
-    activeStatuses.includes(
-      challenge.status
-    )
+  ACTIVE_COMMITMENT_STATUSES.includes(
+    challenge.status
   )
+)
   .map(challenge => ({
     id: challenge._id,
     title: challenge.title,
@@ -148,6 +143,43 @@ const buildImmediateAction = (
 };
 
 
+const buildRecentResult = (
+  challenges
+) => {
+  const recentResults =
+    challenges
+      .filter(
+        challenge =>
+          challenge.status ===
+            CHALLENGE_STATUS.COMPLETED ||
+
+          challenge.status ===
+            CHALLENGE_STATUS.FAILED
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.finishedAt) -
+          new Date(a.finishedAt)
+      );
+
+  if (
+    recentResults.length === 0
+  ) {
+    return null;
+  }
+
+  const recentResult =
+    recentResults[0];
+
+  return {
+    id: recentResult._id,
+    title: recentResult.title,
+    status: recentResult.status,
+    finishedAt:
+      recentResult.finishedAt,
+  };
+};
+
 const buildReminderSummary = (
   reminders
 ) => {
@@ -193,7 +225,7 @@ const reminders =  await reminderRepository .getRemindersByChallenges(
       challengeIds
     );
 
-    return {
+  return {
   summary:
     buildSummary(challenges),
 
@@ -202,6 +234,9 @@ const reminders =  await reminderRepository .getRemindersByChallenges(
 
   activeCommitments:
     buildActiveCommitments(challenges),
+
+  recentResult:
+    buildRecentResult(challenges),
 
   reminders:
     buildReminderSummary(

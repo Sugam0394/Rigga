@@ -1,4 +1,6 @@
- export const CHALLENGE_STATUS = {
+ 
+ 
+export  const CHALLENGE_STATUS = {
   PENDING_WITNESS: "PENDING_WITNESS",
 
   ACTIVE: "ACTIVE",
@@ -13,3 +15,5 @@
 
   FAILED: "FAILED",
 };
+
+ 

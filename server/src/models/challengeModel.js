@@ -123,6 +123,14 @@ observationStrategy: {
     },
   },
 },
+completedAt: {
+    type: Date,
+    default: null,
+},
+
+ 
+
+
 
   },
   {

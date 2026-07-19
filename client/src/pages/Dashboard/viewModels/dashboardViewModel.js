@@ -207,6 +207,38 @@ const buildActiveCommitmentsViewModel = (
   );
 };
 
+const buildRecentResultViewModel = (
+  recentResult
+) => {
+
+  if (!recentResult) {
+    return null;
+  }
+
+  return {
+
+    ...recentResult,
+
+    status:
+      VisualStateObjects
+        .getLifecycleState(
+          recentResult.status
+        ),
+
+    finishedLabel:
+      formatDeadline(
+        recentResult.finishedAt
+      ),
+
+    trustState:
+      buildTrustState(
+        recentResult.status
+      ),
+
+  };
+
+};
+
 const buildDashboardViewModel = (
   dashboard
 ) => {
@@ -215,7 +247,7 @@ const buildDashboardViewModel = (
     return null;
   }
 
-  return {
+ return {
 
   summary:
     dashboard.summary,
@@ -230,6 +262,11 @@ const buildDashboardViewModel = (
       dashboard.activeCommitments
     ),
 
+  recentResult:
+    buildRecentResultViewModel(
+      dashboard.recentResult
+    ),
+
   reminders:
     dashboard.reminders,
 
@@ -241,4 +278,5 @@ const buildDashboardViewModel = (
 
 export default {
   buildDashboardViewModel,
+   
 };
