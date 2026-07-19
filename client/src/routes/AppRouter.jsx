@@ -24,6 +24,8 @@ import SubmitProgressReportPage from "../pages/progressReports/SubmitProgressRep
 import SubmitAppealPage from "../pages/appeals/SubmitAppealPage";
 import NotificationsPage from "../features/notifications/pages/NotificationPage"
 import Settings from "../pages/settings/Settings"
+import HistoryPage from "../pages/History/History";
+
 
 // Legal Pages
 import TermsOfServicePage from "../pages/legal/TermsOfServicePage";
@@ -63,9 +65,10 @@ import WitnessReview from "../pages/WitnessReview/WitnessReview";
         <Route path="/challenges/:id" element={<ChallengeDetailsPage />}/>
         <Route path="/challenges/:id/progress-report"element={<SubmitProgressReportPage/>}/>
         <Route path="/challenges/:id/appeal" element={<SubmitAppealPage />}/>
-        <Route path="/profile" element={<Profile />}/></Route>
+        <Route path="/profile" element={<Profile />}/> 
         <Route path="/settings" element={<Settings />} />
-      
+        <Route path="/history" element={<HistoryPage />}/>
+        </Route>
       
         {/* Public Routes */}
         <Route element={<PublicLayout />}>
