@@ -59,7 +59,7 @@ import invitationRoutes from './routes/invitationRoutes.js';
 import profileRoutes from "./routes/profileRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
 import historyRoutes from "./routes/historyRoutes.js";
-console.log("History routes loaded");
+ 
 
 
    // Using routes
