@@ -1,12 +1,20 @@
  import "./HomeReminderSection.css";
 
 const HomeReminderSection = ({
-  reminders,
+  reminderSummary,
 }) => {
 
-  if (!reminders) {
+  if (!reminderSummary) {
     return null;
   }
+
+  const {
+    eyebrow,
+    title,
+    nextReminder,
+    stats,
+    message,
+  } = reminderSummary;
 
   return (
 
@@ -15,64 +23,113 @@ const HomeReminderSection = ({
       aria-labelledby="home-reminder-heading"
     >
 
-     <header
-  className="home-reminder-section__header"
->
+      {/* Header */}
 
-  <p className="home-reminder-section__eyebrow">
-    SUPPORTING INFORMATION
-  </p>
+      <header
+        className="home-reminder-section__header"
+      >
 
-  <h2
-    id="home-reminder-heading"
-    className="home-reminder-section__title"
-  >
-    Reminder Summary
-  </h2>
+        <p
+          className="home-reminder-section__eyebrow"
+        >
+          {eyebrow}
+        </p>
 
-</header>
+        <h2
+          id="home-reminder-heading"
+          className="home-reminder-section__title"
+        >
+          {title}
+        </h2>
+
+      </header>
+
+      {/* Next Reminder */}
 
       <div
-        className="home-reminder-section__content"
+        className="home-reminder-section__next"
       >
 
         <div
-          className="home-reminder-section__row"
+          className="home-reminder-section__icon"
         >
-          <span>
-            Pending
-          </span>
+          ⏰
+        </div>
+
+        <div>
+
+          <p
+            className="home-reminder-section__next-label"
+          >
+            {nextReminder.label}
+          </p>
+
+          <p
+            className="home-reminder-section__next-time"
+          >
+            {nextReminder.relativeLabel}
+            {nextReminder.relativeLabel &&
+            nextReminder.scheduledAt
+              ? " • "
+              : ""}
+            {nextReminder.scheduledAt}
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* Statistics */}
+
+      <div
+        className="home-reminder-section__stats"
+      >
+
+        <div
+          className="home-reminder-section__stat"
+        >
+          <span>Pending</span>
 
           <strong>
-            {reminders.pending ?? 0}
+            {stats.pending}
           </strong>
         </div>
 
         <div
-          className="home-reminder-section__row"
+          className="home-reminder-section__stat"
         >
-          <span>
-            Triggered
-          </span>
+          <span>Triggered</span>
 
           <strong>
-            {reminders.triggered ?? 0}
+            {stats.triggered}
           </strong>
         </div>
 
         <div
-          className="home-reminder-section__row"
+          className="home-reminder-section__stat"
         >
-          <span>
-            Expired
-          </span>
+          <span>Expired</span>
 
           <strong>
-            {reminders.expired ?? 0}
+            {stats.expired}
           </strong>
         </div>
 
       </div>
+
+      {/* Footer */}
+
+      <footer
+        className="home-reminder-section__footer"
+      >
+
+        <p
+          className="home-reminder-section__message"
+        >
+          {message}
+        </p>
+
+      </footer>
 
     </section>
 

@@ -14,7 +14,6 @@ import WitnessAccountabilityCard from "./components/WitnessAccountabilityCard";
 import ConsequenceStatusCard from "./components/ConsequencesStatusCard";
 import ProgressReportList from "../progressReports/components/ProgressReportList";
 import NextActionCard from "./components/NextActionCard";
-import AccountabilityPlanCard from "../../components/AccountabilityPlanCard";
 import getNextAction from "./components/getNextAction";
 import ReminderSection from "../reminder/components/ReminderSection";
 
@@ -280,14 +279,7 @@ const nextAction =  getNextAction(
 
 </NextActionCard>
 
-
-
-      {/* Accountability Plan */}
-      <AccountabilityPlanCard
-        accountabilityPlan={
-          dashboard.accountabilityPlan
-        }
-      />
+ 
 
       {/* Progress Summary */}
       <ProgressSummaryCard

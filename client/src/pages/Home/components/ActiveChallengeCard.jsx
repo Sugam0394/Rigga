@@ -6,8 +6,7 @@ const ActiveChallengeCard = ({
   challenge,
 }) => {
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
   const badgeClassMap = {
 
@@ -34,17 +33,21 @@ const ActiveChallengeCard = ({
   const remainingClass = `
     active-challenge-card__remaining
     ${
-      challenge.remaining?.variant ===
-      "danger"
+      challenge.remaining?.variant === "danger"
         ? "active-challenge-card__remaining--danger"
-        : challenge.remaining?.variant ===
-          "urgent"
+        : challenge.remaining?.variant === "urgent"
         ? "active-challenge-card__remaining--urgent"
         : ""
     }
   `;
 
-  const handleClick = () => {
+  const remainingLabel =
+    challenge.remaining?.days !== null &&
+    challenge.remaining?.days > 0
+      ? `${challenge.remaining.days} ${challenge.remaining.temporalState?.label}`
+      : challenge.remaining?.temporalState?.label;
+
+  const handleOpenMission = () => {
 
     if (!challenge?.id) {
       return;
@@ -58,52 +61,153 @@ const ActiveChallengeCard = ({
 
   return (
 
-    <div
+    <article
       className="active-challenge-card"
-      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onClick={handleOpenMission}
+      onKeyDown={(event) => {
+
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+          event.preventDefault();
+          handleOpenMission();
+        }
+
+      }}
     >
 
-     <span
-  className={`active-challenge-card__badge ${
-    badgeClassMap[
-      challenge.status?.id
-    ] || ""
-  }`}
->
-  {challenge.status?.label}
-</span>
+      {/* Top */}
 
- 
- 
+      <div className="active-challenge-card__top">
 
-      <h2 className="active-challenge-card__title">
-        {challenge.title ||
-          "Untitled Commitment"}
-      </h2>
-
-      <p className="active-challenge-card__deadline">
-        Deadline:{" "}
-        {challenge.deadlineLabel}
-      </p>
-
-      <p className={remainingClass}>
-
-  {challenge.remaining?.days !== null &&
-   challenge.remaining?.days > 0
-    ? `${challenge.remaining.days} ${challenge.remaining.temporalState?.label}`
-    : challenge.remaining?.temporalState?.label}
-
-</p>
-
-      <div className="active-challenge-card__footer">
-
-         <p className="active-challenge-card__witness">
-  {challenge.trustState?.label}
-</p>
+        <span
+          className={`
+            active-challenge-card__badge
+            ${
+              badgeClassMap[
+                challenge.status?.id
+              ] || ""
+            }
+          `}
+        >
+          {challenge.status?.label}
+        </span>
 
       </div>
 
-    </div>
+      {/* Title */}
+
+      <div className="active-challenge-card__content">
+
+        <h2 className="active-challenge-card__title">
+
+          {challenge.title ||
+            "Untitled Commitment"}
+
+        </h2>
+
+      </div>
+
+      {/* Divider */}
+
+      <div
+        className="active-challenge-card__divider"
+      />
+
+      {/* Deadline */}
+
+      <section className="active-challenge-card__section">
+
+        <div className="active-challenge-card__section-header">
+
+          <span className="active-challenge-card__icon">
+            📅
+          </span>
+
+          <span className="active-challenge-card__label">
+            Deadline
+          </span>
+
+        </div>
+
+        <p className="active-challenge-card__value">
+
+          {challenge.deadlineLabel}
+
+        </p>
+
+      </section>
+
+      {/* Remaining */}
+
+      <section className="active-challenge-card__section">
+
+        <div className="active-challenge-card__section-header">
+
+          <span className="active-challenge-card__icon">
+            ⏳
+          </span>
+
+          <span className="active-challenge-card__label">
+            Remaining
+          </span>
+
+        </div>
+
+        <p className={remainingClass}>
+
+          {remainingLabel}
+
+        </p>
+
+      </section>
+
+      {/* Witness */}
+
+      <section className="active-challenge-card__section">
+
+        <div className="active-challenge-card__section-header">
+
+          <span className="active-challenge-card__icon">
+            🤝
+          </span>
+
+          <span className="active-challenge-card__label">
+            Witness
+          </span>
+
+        </div>
+
+        <p className="active-challenge-card__witness">
+
+          {challenge.trustState?.label}
+
+        </p>
+
+      </section>
+
+      {/* Footer */}
+
+      <div className="active-challenge-card__footer">
+
+        <span className="active-challenge-card__cta">
+
+          View Mission
+
+        </span>
+
+        <span className="active-challenge-card__arrow">
+
+          →
+
+        </span>
+
+      </div>
+
+    </article>
 
   );
 

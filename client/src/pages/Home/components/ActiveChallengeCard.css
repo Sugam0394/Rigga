@@ -1,224 +1,692 @@
  .active-challenge-card {
+  position: relative;
 
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
 
-  gap:22px;
+  gap: 24px;
 
-  padding:28px;
+  padding: 24px;
 
-  background:var(--color-surface);
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
 
-  border:1px solid var(--color-border);
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #fafafa 100%
+  );
 
-  border-radius:20px;
+  box-shadow:
+    0 8px 30px rgba(15, 23, 42, 0.08);
 
-  cursor:pointer;
+  cursor: pointer;
 
   transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    border-color .2s ease;
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.active-challenge-card:hover {
+
+  transform: translateY(-4px);
+
+  border-color: #d1d5db;
+
+  box-shadow:
+    0 18px 42px rgba(15,23,42,.12);
 
 }
 
- .active-challenge-card:hover{
+.active-challenge-card:active{
 
-transform:translateY(-4px);
-
-border-color:var(--color-primary);
-
-box-shadow:0 14px 32px rgba(0,0,0,.10);
+  transform:translateY(-1px);
 
 }
 
-.active-challenge-card__badge {
+.active-challenge-card:focus-visible{
 
-  align-self: flex-start;
+  outline:3px solid #2563eb;
 
-  padding: 6px 12px;
-
-  border-radius: 999px;
-
-  font-size: .75rem;
-
-  font-weight: 700;
-
-  letter-spacing: .04em;
-
-  text-transform: uppercase;
-
-  color: #fff;
-}
-
-.active-challenge-card__badge--active {
-  background: #16a34a;
-}
-
-.active-challenge-card__badge--review {
-  background: #f59e0b;
-}
-
-.active-challenge-card__badge--rejected {
-  background: #dc2626;
-}
-
-.active-challenge-card__badge--appealed {
-  background: #2563eb;
-}
-
-.active-challenge-card__badge--completed {
-  background: #059669;
-}
-
-.active-challenge-card__badge--failed {
-  background: #6b7280;
-}
-
- .active-challenge-card__title{
-
-margin:0;
-
-font-size:1.45rem;
-
-font-weight:700;
-
-line-height:1.35;
-
-color:var(--color-text-primary);
-
-word-break:break-word;
+  outline-offset:4px;
 
 }
 
-.active-challenge-card__deadline {
+/* ===========================
+   Top
+=========================== */
 
-  margin: 0;
+.active-challenge-card__top{
 
-  font-size: .92rem;
+  display:flex;
 
-  color: var(--color-text-secondary);
-}
+  justify-content:flex-start;
 
- .active-challenge-card__remaining{
-
-margin:0;
-
-font-size:1.05rem;
-
-font-weight:700;
-
-line-height:1.4;
-
-color:var(--color-text-primary);
+  align-items:center;
 
 }
 
-.active-challenge-card__remaining--urgent {
-
-  color: #ea580c;
-}
-
-.active-challenge-card__remaining--danger {
-
-  color: #dc2626;
-}
-
-.active-challenge-card__footer {
-
-  padding-top: 16px;
-
-  border-top: 1px solid var(--color-border);
-}
-
- .active-challenge-card__witness{
-
-margin:0;
-
-font-size:.9rem;
-
-font-weight:600;
-
-letter-spacing:.02em;
-
-color:var(--color-text-secondary);
-
-}
-
-@media (max-width:768px){
-
-  .active-challenge-card{
-
-    padding:20px;
-
-    gap:16px;
-  }
-
-  .active-challenge-card__title{
-
-    font-size:1.1rem;
-  }
-
-}
-
-@media (max-width:390px){
-
-  .active-challenge-card{
-
-    padding:18px;
-  }
-
-  .active-challenge-card__badge{
-
-    font-size:.7rem;
-  }
-
-  .active-challenge-card__title{
-
-    font-size:1rem;
-  }
-
-}
-
-
-@media (max-width:390px){
-
-.active-challenge-card{
-
-gap:14px;
-
-}
-.active-challenge-card__footer{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding-top:18px;
-
-border-top:1px solid var(--color-border);
-
-}
- 
+/* ===========================
+   Badge
+=========================== */
 
 .active-challenge-card__badge{
 
-align-self:flex-start;
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:8px 16px;
+
+  border-radius:999px;
+
+  font-size:.78rem;
+
+  font-weight:700;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
 
 }
 
-.active-challenge-card__deadline,
+/* Active */
+
+.active-challenge-card__badge--active{
+
+  color:#166534;
+
+  background:#dcfce7;
+
+}
+
+/* Review */
+
+.active-challenge-card__badge--review{
+
+  color:#92400e;
+
+  background:#fef3c7;
+
+}
+
+/* Appealed */
+
+.active-challenge-card__badge--appealed{
+
+  color:#1d4ed8;
+
+  background:#dbeafe;
+
+}
+
+/* Rejected */
+
+.active-challenge-card__badge--rejected{
+
+  color:#991b1b;
+
+  background:#fee2e2;
+
+}
+
+/* Failed */
+
+.active-challenge-card__badge--failed{
+
+  color:#ffffff;
+
+  background:#dc2626;
+
+}
+
+/* Completed */
+
+.active-challenge-card__badge--completed{
+
+  color:#ffffff;
+
+  background:#16a34a;
+
+}
+
+/* ===========================
+   Title
+=========================== */
+
+.active-challenge-card__content{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
+}
+
+.active-challenge-card__title{
+
+  margin:0;
+
+  color:#111827;
+
+  font-size:1.55rem;
+
+  font-weight:700;
+
+  line-height:1.3;
+
+  word-break:break-word;
+
+}
+
+/* ===========================
+   Divider
+=========================== */
+
+.active-challenge-card__divider{
+
+  width:100%;
+
+  height:1px;
+
+  background:#ececec;
+
+}
+
+/* ===========================
+   Section
+=========================== */
+
+.active-challenge-card__section{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+
+}
+
+.active-challenge-card__section-header{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+}
+
+.active-challenge-card__icon{
+
+  font-size:1.15rem;
+
+}
+
+.active-challenge-card__label{
+
+  color:#6b7280;
+
+  font-size:.82rem;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  letter-spacing:.08em;
+
+}
+
+.active-challenge-card__value{
+
+  margin:0;
+
+  color:#111827;
+
+  font-size:1.05rem;
+
+  font-weight:600;
+
+}
+
+/* ===========================
+   Remaining
+=========================== */
+
+.active-challenge-card__remaining{
+
+  margin:0;
+
+  font-size:1.1rem;
+
+  font-weight:700;
+
+  color:#2563eb;
+
+}
+
+.active-challenge-card__remaining--urgent{
+
+  color:#ea580c;
+
+}
+
+.active-challenge-card__remaining--danger{
+
+  color:#dc2626;
+
+}
+
+/* ===========================
+   Witness
+=========================== */
+
+.active-challenge-card__witness{
+
+  margin:0;
+
+  color:#059669;
+
+  font-size:1rem;
+
+  font-weight:600;
+
+}
+
+/* ===========================
+   Footer
+=========================== */
+
+.active-challenge-card__footer{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding-top:18px;
+
+  border-top:1px solid #ececec;
+
+}
+
+.active-challenge-card__cta{
+
+  color:#111827;
+
+  font-size:.95rem;
+
+  font-weight:700;
+
+}
+
+.active-challenge-card__arrow{
+
+  font-size:1.3rem;
+
+  font-weight:700;
+
+  color:#2563eb;
+
+  transition:transform .25s ease;
+
+}
+
+.active-challenge-card:hover
+.active-challenge-card__arrow{
+
+  transform:translateX(6px);
+
+}
+
+/* ===================================
+   Premium Top Accent
+=================================== */
+
+.active-challenge-card::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0 0 auto 0;
+
+  height:6px;
+
+  border-radius:24px 24px 0 0;
+
+  background:linear-gradient(
+    90deg,
+    #2563eb,
+    #7c3aed,
+    #22c55e
+  );
+
+}
+
+/* ===================================
+   Decorative Background
+=================================== */
+
+.active-challenge-card::after{
+
+  content:"";
+
+  position:absolute;
+
+  top:-60px;
+
+  right:-60px;
+
+  width:180px;
+
+  height:180px;
+
+  border-radius:50%;
+
+  background:rgba(
+    37,
+    99,
+    235,
+    .05
+  );
+
+  pointer-events:none;
+
+}
+
+/* ===================================
+   Smooth Animation
+=================================== */
+
+.active-challenge-card,
+.active-challenge-card *{
+
+  transition:
+
+    color .25s ease,
+
+    background-color .25s ease,
+
+    border-color .25s ease,
+
+    transform .25s ease,
+
+    box-shadow .25s ease;
+
+}
+
+/* ===================================
+   Hover Experience
+=================================== */
+
+.active-challenge-card:hover{
+
+  background:
+
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f8fbff
+    );
+
+}
+
+.active-challenge-card:hover
+.active-challenge-card__title{
+
+  color:#1d4ed8;
+
+}
+
+.active-challenge-card:hover
+.active-challenge-card__badge{
+
+  transform:scale(1.05);
+
+}
+
+.active-challenge-card:hover
+.active-challenge-card__icon{
+
+  transform:scale(1.08);
+
+}
+
+/* ===================================
+   Remaining Pulse
+=================================== */
+
+@keyframes dangerPulse{
+
+  0%{
+
+    transform:scale(1);
+
+  }
+
+  50%{
+
+    transform:scale(1.04);
+
+  }
+
+  100%{
+
+    transform:scale(1);
+
+  }
+
+}
+
+.active-challenge-card__remaining--danger{
+
+  animation:
+
+    dangerPulse
+
+    1.8s
+
+    infinite;
+
+}
+
+/* ===================================
+   CTA
+=================================== */
+
+.active-challenge-card__cta{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+}
+
+.active-challenge-card:hover
+.active-challenge-card__cta{
+
+  color:#2563eb;
+
+}
+
+/* ===================================
+   Mobile
+=================================== */
+
+@media (max-width:768px){
+
+.active-challenge-card{
+
+padding:20px;
+
+gap:20px;
+
+border-radius:20px;
+
+}
+
+.active-challenge-card__title{
+
+font-size:1.3rem;
+
+}
+
+.active-challenge-card__value{
+
+font-size:1rem;
+
+}
+
+.active-challenge-card__remaining{
+
+font-size:1rem;
+
+}
+
+.active-challenge-card__badge{
+
+padding:7px 14px;
+
+font-size:.72rem;
+
+}
+
+}
+
+/* ===================================
+   Small Phones
+=================================== */
+
+@media (max-width:480px){
+
+.active-challenge-card{
+
+padding:18px;
+
+gap:18px;
+
+}
+
+.active-challenge-card__footer{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:10px;
+
+}
+
+.active-challenge-card__arrow{
+
+display:none;
+
+}
+
+.active-challenge-card__title{
+
+font-size:1.15rem;
+
+}
+
+}
+
+/* ===================================
+   Reduced Motion
+=================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+.active-challenge-card,
+
+.active-challenge-card *{
+
+animation:none!important;
+
+transition:none!important;
+
+}
+
+}
+
+/* ===================================
+   Future Dark Mode Ready
+=================================== */
+
+@media (prefers-color-scheme:dark){
+
+.active-challenge-card{
+
+background:#161616;
+
+border-color:#303030;
+
+box-shadow:none;
+
+}
+
+.active-challenge-card__divider,
+
+.active-challenge-card__footer{
+
+border-color:#2f2f2f;
+
+}
+
+.active-challenge-card__title,
+
+.active-challenge-card__value,
+
+.active-challenge-card__cta{
+
+color:#f3f4f6;
+
+}
+
+.active-challenge-card__label{
+
+color:#9ca3af;
+
+}
+
+.active-challenge-card__remaining{
+
+color:#60a5fa;
+
+}
+
+}
+
+/* ===================================
+   Final Polish
+=================================== */
+
+.active-challenge-card{
+
+overflow:hidden;
+
+isolation:isolate;
+
+}
+
+ 
+
+.active-challenge-card__value,
 
 .active-challenge-card__remaining,
 
 .active-challenge-card__witness{
 
-font-size:.9rem;
-
-line-height:1.6;
+line-height:1.4;
 
 }
 
-}
+ 

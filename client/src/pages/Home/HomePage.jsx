@@ -21,6 +21,9 @@ import useDashboardRuntime
 import dashboardViewModel
   from "../Dashboard/viewModels/dashboardViewModel";
 
+  // Utils
+import getReminderSummary from "../Home/utils/getReminderSummary";
+
 function HomePage() {
 
   const {
@@ -54,6 +57,7 @@ function HomePage() {
 
   const commitments =
     viewModel.activeCommitments ?? [];
+ 
 
   return (
   <div className="home-page">
@@ -82,22 +86,40 @@ function HomePage() {
 
         </header>
 
-        {commitments.map((challenge) => (
+        {commitments.map((challenge) => {
 
-          <ActiveChallengeCard
-            key={challenge.id}
-            challenge={challenge}
-          />
+  const reminderSummary =
+    getReminderSummary(
+      challenge.reminders
+    );
 
-        ))}
+  return (
+
+    <div key={challenge.id}>
+
+      <ActiveChallengeCard
+        challenge={challenge}
+      />
+
+      <HomeReminderSection
+        reminderSummary={reminderSummary}
+      />
+
+    </div>
+
+  );
+
+})}
 
       </section>
 
     )}
 
-    <HomeReminderSection
-      reminders={viewModel.reminders}
-    />
+   
+
+ 
+
+ 
 
   </div>
 );
