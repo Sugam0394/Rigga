@@ -51,49 +51,6 @@ import AppealStatusCard from "../appeals/components/AppealStatusCard";
  
  
  
- 
-
-// AiInsight 
-import useAIInsights from "../../features/ai-insights/hooks/useAIInsights";
-
-import AIInsightsCard from "../../features/ai-insights/components/AIInsightsCard";
-
-import AIInsightsEmptyState from "../../features/ai-insights/state/AIEmptyState";
-import AIInsightsErrorState from "../../features/ai-insights/state/AIErrorState";
-import AIInsightsLoadingState from "../../features/ai-insights/state/AILoadingState";
-
-// AI Narrative
- import useAINarrative
-  from "../../features/ai-narrative/hooks/useAINarrative";
-
-import AINarrativeCard
-  from "../../features/ai-narrative/components/AINarrativeCard";
-
-import AINarrativeLoadingState
-  from "../../features/ai-narrative/state/LoadingState";
-
-import AINarrativeErrorState
-  from "../../features/ai-narrative/state/ErrorState";
-
-import AINarrativeEmptyState
-  from "../../features/ai-narrative/state/EmptyState";
-
-// AI COUCH
-
-import useAICoach
-  from "../../features/ai-couch/hooks/useAiCounch";
-
-import AICoachCard
-  from "../../features/ai-couch/components/AICouchCard";
-
-import AICoachLoadingState
-  from "../../features/ai-couch/state/loadingState";
-
-import AICoachErrorState
-  from "../../features/ai-couch/state/ErrorState";
-
-import AICoachEmptyState
-  from "../../features/ai-couch/state/EmptyState";
 
 
 
@@ -153,34 +110,12 @@ const handleSubmitProgress =  () => {
 
  
 
-  const {
-  insights,
-  loading:
-    insightsLoading,
-  error:
-    insightsError,
-} =
-useAIInsights(id);
-
-const {
-  narrative,
-  loading:
-    narrativeLoading,
-  error:
-    narrativeError,
-} =
-useAINarrative(id);
+ 
+ 
 
  
 
-const {
-  coach,
-  loading:
-    coachLoading,
-  error:
-    coachError,
-} =
-useAICoach(id);
+ 
 
  if (loading) {
   return (
@@ -392,75 +327,9 @@ const nextAction =  getNextAction(
       <ConsequenceStatusCard
         consequence={dashboard.consequence}
       />
+  
 
-      {/* AI Insights */}
-      {insightsLoading && (
-        <AIInsightsLoadingState />
-      )}
-
-      {insightsError && (
-        <AIInsightsErrorState
-          error={insightsError}
-        />
-      )}
-
-      {!insightsLoading &&
-        !insightsError &&
-        !insights && (
-          <AIInsightsEmptyState />
-      )}
-
-      {insights && (
-        <AIInsightsCard
-          insights={insights}
-        />
-      )}
-
-      {/* AI Narrative */}
-      {narrativeLoading && (
-        <AINarrativeLoadingState />
-      )}
-
-      {narrativeError && (
-        <AINarrativeErrorState
-          error={narrativeError}
-        />
-      )}
-
-      {!narrativeLoading &&
-        !narrativeError &&
-        !narrative && (
-          <AINarrativeEmptyState />
-      )}
-
-      {narrative && (
-        <AINarrativeCard
-          narrative={narrative}
-        />
-      )}
-
-      {/* AI Coach */}
-      {coachLoading && (
-        <AICoachLoadingState />
-      )}
-
-      {coachError && (
-        <AICoachErrorState
-          error={coachError}
-        />
-      )}
-
-      {!coachLoading &&
-        !coachError &&
-        !coach && (
-          <AICoachEmptyState />
-      )}
-
-      {coach && (
-        <AICoachCard
-          coach={coach}
-        />
-      )}
+       
 
     </div>
   </div>

@@ -1,5 +1,5 @@
  import "./WitnessAccountabilityCard.css";
-
+import WitnessJourneyTimeline from "./WitnessJourneyTimeline";
 const DECISION_LABELS = {
   PENDING: "Awaiting Review",
   APPROVED: "Approved",
@@ -55,6 +55,13 @@ const WitnessAccountabilityCard = ({
           <span className="witness-card__label">
             Review Status
           </span>
+          <WitnessJourneyTimeline
+  assigned={Boolean(witness)}
+  invited={Boolean(witness?.notifiedAt)}
+  reviewStarted={decision !== "PENDING"}
+  decided={decision !== "PENDING"}
+  decisionLabel={label}
+/>
 
           <span
             className={`witness-card__badge witness-card__badge--${variant}`}

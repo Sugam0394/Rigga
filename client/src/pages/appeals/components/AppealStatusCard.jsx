@@ -1,4 +1,6 @@
  import "./AppealStatusCard.css";
+ import AppealReviewBoard from "./AppealReviewBoard";
+
 
 const AppealStatusCard = () => {
   return (
@@ -6,6 +8,12 @@ const AppealStatusCard = () => {
   <h3 className="appeal-status__title">
      Appeal Status
   </h3>
+
+  <AppealReviewBoard
+  status="UNDER REVIEW"
+  estimatedReview="24 Hours"
+  submitted
+/>
 
   <p className="appeal-status__message">
   Your appeal has been submitted and is currently under review.

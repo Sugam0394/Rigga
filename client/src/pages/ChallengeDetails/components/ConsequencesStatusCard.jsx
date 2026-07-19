@@ -1,4 +1,6 @@
  import "./ConsequenceStatusCard.css";
+import ConsequenceProtectionBar from "./ConsequenceProtectionBar";
+
 
 const ConsequenceStatusCard = ({
   consequence,
@@ -22,6 +24,10 @@ const ConsequenceStatusCard = ({
       <h2 className="consequence-card__title">
         Consequence Status
       </h2>
+
+      <ConsequenceProtectionBar
+  isReleased={isReleased}
+/>
 
       <span
         className={`consequence-card__badge consequence-card__badge--${

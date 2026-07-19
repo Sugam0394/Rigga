@@ -1,0 +1,84 @@
+.appeal-review {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.appeal-review__board {
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  padding: 24px;
+
+  background: #f8fafc;
+}
+
+.appeal-review__label {
+  margin: 0;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #64748b;
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.appeal-review__status {
+  margin: 12px 0 20px;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  color: #7c3aed;
+}
+
+.appeal-review__divider {
+  height: 1px;
+
+  margin: 18px 0;
+
+  background: #e5e7eb;
+}
+
+.appeal-review__time {
+  margin: 10px 0 0;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.appeal-review__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.appeal-review__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.appeal-review__row:last-child {
+  border-bottom: none;
+}
+
+@media (max-width:768px){
+
+  .appeal-review__board{
+      padding:20px;
+  }
+
+  .appeal-review__status{
+      font-size:22px;
+  }
+
+}

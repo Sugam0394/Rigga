@@ -1,45 +1,25 @@
  import "./ChallengeHeaderCard.css";
+import { getDeadlineStatus } from "../utils/deadLineStatus";
 
 const ChallengeHeaderCard = ({
   title,
   deadlineAt,
   status,
 }) => {
-  const formattedDeadline =
-    deadlineAt
-      ? new Date(deadlineAt).toLocaleString(
-          "en-US",
-          {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-          }
-        )
-      : "N/A";
+  const formattedDeadline = deadlineAt
+    ? new Date(deadlineAt).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : "N/A";
 
-  let remainingText = null;
-
-  if (deadlineAt && status === "ACTIVE") {
-    const now = new Date();
-    const deadline = new Date(deadlineAt);
-
-    const diffTime =
-      deadline.getTime() -
-      now.getTime();
-
-    const daysRemaining =
-      Math.ceil(
-        diffTime /
-          (1000 * 60 * 60 * 24)
-      );
-
-    remainingText =
-      daysRemaining > 0
-        ? `${daysRemaining} Days Remaining`
-        : "Deadline Reached";
-  }
+  const deadlineStatus =
+    deadlineAt && status === "ACTIVE"
+      ? getDeadlineStatus(deadlineAt)
+      : null;
 
   return (
     <section className="challenge-header">
@@ -53,20 +33,26 @@ const ChallengeHeaderCard = ({
 
       <div className="challenge-header__meta">
         <p className="challenge-header__deadline">
-          Deadline: {formattedDeadline}
+          📅 {formattedDeadline}
         </p>
 
-       
+        {deadlineStatus && (
+          <p
+            className={`challenge-header__remaining challenge-header__remaining--${deadlineStatus.variant}`}
+          >
+            {deadlineStatus.variant === "safe" && "🟢 "}
+            {deadlineStatus.variant === "warning" && "🟡 "}
+            {deadlineStatus.variant === "critical" && "🔴 "}
+            {deadlineStatus.variant === "neutral" && "⚫ "}
 
-        {remainingText && (
-          <p className="challenge-header__remaining">
-            {remainingText}
+            {deadlineStatus.text}
           </p>
         )}
       </div>
+
       <p className="challenge-header__context">
-  This commitment is being tracked and verified through Rigga.
-</p>
+        This commitment is being tracked and verified through Rigga.
+      </p>
     </section>
   );
 };

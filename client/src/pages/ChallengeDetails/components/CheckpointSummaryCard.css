@@ -4,23 +4,52 @@
   border: 1px solid #e5e7eb;
   border-radius: 16px;
 
-  padding: 24px;
+  padding: 32px;
 
   box-shadow:
-    0 2px 8px rgba(15, 23, 42, 0.04);
+    0 4px 12px rgba(15, 23, 42, 0.05);
 
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 28px;
+}
+
+.checkpoint-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkpoint-card__eyebrow {
+  margin: 0;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+
+  color: #dc2626;
 }
 
 .checkpoint-card__title {
   margin: 0;
 
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
 
   color: #111827;
+}
+
+.checkpoint-card__description {
+  margin: 0;
+
+  max-width: 62ch;
+
+  font-size: 15px;
+  line-height: 1.7;
+
+  color: #6b7280;
 }
 
 .checkpoint-card__stats {
@@ -29,27 +58,32 @@
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 16px;
+  gap: 18px;
 }
 
 .checkpoint-card__stat {
-  padding: 18px;
-
-  border-radius: 12px;
-
   background: #f9fafb;
+
   border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  padding: 22px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  align-items: center;
+  justify-content: center;
 
   text-align: center;
 }
 
 .checkpoint-card__label {
-  margin: 0 0 10px;
+  margin: 0;
 
   font-size: 14px;
   font-weight: 600;
-
-  line-height: 1.5;
 
   color: #6b7280;
 }
@@ -57,31 +91,46 @@
 .checkpoint-card__value {
   margin: 0;
 
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 700;
+
+  line-height: 1;
 
   color: #111827;
 }
 
-@media (max-width: 768px) {
+@media (max-width:768px){
 
-  .checkpoint-card {
-    padding: 20px;
+  .checkpoint-card{
+
+      padding:24px;
+
+      gap:24px;
+
   }
 
-  .checkpoint-card__title {
-    font-size: 20px;
+  .checkpoint-card__stats{
+
+      grid-template-columns:1fr;
+
   }
 
-  .checkpoint-card__stats {
-    grid-template-columns: 1fr;
+  .checkpoint-card__stat{
+
+      padding:20px;
+
   }
 
-  .checkpoint-card__stat {
-    padding: 16px;
+  .checkpoint-card__title{
+
+      font-size:22px;
+
   }
 
-  .checkpoint-card__value {
-    font-size: 28px;
+  .checkpoint-card__value{
+
+      font-size:30px;
+
   }
+
 }

@@ -1,4 +1,6 @@
  import "./ReminderSection.css";
+ import ReminderJourneyTimeline from "../../ChallengeDetails/components/ReminderJourneyTimeline";
+
 
 const ReminderSection = ({
   reminder,
@@ -69,6 +71,12 @@ const ReminderSection = ({
           Reminders
         </h2>
       </header>
+
+      <ReminderJourneyTimeline
+  pending={reminder.status?.pendingCount ?? 0}
+  triggered={reminder.status?.triggeredCount ?? 0}
+  expired={reminder.status?.expiredCount ?? 0}
+/>
 
       <div className="reminder-section__content">
 

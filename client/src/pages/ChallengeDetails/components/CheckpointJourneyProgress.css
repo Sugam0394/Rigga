@@ -1,0 +1,128 @@
+.checkpoint-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.checkpoint-progress__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.checkpoint-progress__eyebrow {
+  margin: 0 0 4px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+
+  color: #dc2626;
+}
+
+.checkpoint-progress__title {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.checkpoint-progress__percentage {
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #dc2626;
+}
+
+.checkpoint-progress__track {
+  position: relative;
+
+  height: 14px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #e5e7eb;
+}
+
+.checkpoint-progress__fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    #dc2626,
+    #ef4444
+  );
+
+  transition: width .45s ease;
+}
+
+.checkpoint-progress__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.checkpoint-progress__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #4b5563;
+}
+
+.checkpoint-progress__dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+}
+
+.checkpoint-progress__dot--completed {
+  background: #22c55e;
+}
+
+.checkpoint-progress__dot--pending {
+  background: #f59e0b;
+}
+
+.checkpoint-progress__dot--missed {
+  background: #ef4444;
+}
+
+@media (max-width:768px){
+
+  .checkpoint-progress__header{
+
+      flex-direction:column;
+
+      align-items:flex-start;
+
+  }
+
+  .checkpoint-progress__percentage{
+
+      font-size:24px;
+
+  }
+
+  .checkpoint-progress__legend{
+
+      flex-direction:column;
+
+      gap:12px;
+
+  }
+
+}
