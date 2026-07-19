@@ -1,5 +1,8 @@
 import Challenge from "../models/challengeModel.js";
 import { CHALLENGE_STATUS, } from "../constants/challengeStatus.js";
+import { ACTIVE_SLOT_STATUSES } from "../constants/challengeCapacityConstants.js";
+
+
 const createChallenge = async (challengeData) => {
   return await Challenge.create(challengeData);
 };
@@ -105,6 +108,15 @@ const getByReviewToken = async (token) => {
   });
 };
 
+const getActiveChallengeCountByUserId = async (userId) => {
+  return Challenge.countDocuments({
+    userId,
+    status: {
+      $in: ACTIVE_SLOT_STATUSES,
+    },
+  });
+};
+
 const getActiveChallenges = async () => {
     return Challenge.find({
       status:
@@ -121,6 +133,8 @@ const getActiveChallenges = async () => {
       },
     });
   };
+
+
 
  const attachWitness = async ({
   challengeId,
@@ -159,6 +173,8 @@ const getActiveChallenges = async () => {
   );
 };
 
+
+
 export default {
   createChallenge,
   updateWitnessNotifiedAt,
@@ -172,5 +188,7 @@ export default {
   getExpiredActiveChallenges,
   attachWitness,
 activateChallenge,
+
+getActiveChallengeCountByUserId
  
 };

@@ -4,6 +4,8 @@ import {
   USER_ROLES,
 } from "../constants/userConstants.js";
 
+import { USER_SUBSCRIPTION_PLANS } from "../constants/subscriptionConstants.js";
+
 const userSchema = new mongoose.Schema(
     {
       name: {
@@ -76,6 +78,14 @@ authProvider: {
   enum: ["phone", "google"],
   required: true,
   default: "phone",
+},
+
+ subscription: {
+  plan: {
+    type: String,
+    enum: Object.values(USER_SUBSCRIPTION_PLANS),
+    default: USER_SUBSCRIPTION_PLANS.FREE,
+  },
 },
 
  settings: {

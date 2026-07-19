@@ -12,7 +12,8 @@ import invitationService from "./invitationService.js";
 import { NOTIFICATION_TYPES,} from "../constants/notificationConstants.js";
 import observationStrategyService from "./observationStrategyService.js";
 import notificationEventService from "./notificationEventService.js";
-
+import userRepository from "../repositories/userRepository.js";
+import { USER_SUBSCRIPTION_PLANS } from "../constants/subscriptionConstants.js";
 
 
 
@@ -37,7 +38,40 @@ import notificationEventService from "./notificationEventService.js";
     !successCriteria
   ) {
     throw new Error("All fields are required");
+
+
   }
+const user = await userRepository.getUserById(userId);
+
+if (!user) {
+  throw new Error("User not found");
+}
+
+const subscriptionPlan =
+  user.subscription?.plan ??
+  USER_SUBSCRIPTION_PLANS.FREE;
+
+  const activeChallengeCount =
+  await challengeRepository.getActiveChallengeCountByUserId(
+    userId
+  );
+
+
+  if (
+  subscriptionPlan ===
+    USER_SUBSCRIPTION_PLANS.FREE &&
+  activeChallengeCount >= 2
+) {
+  const error = new Error(
+    "Free plan allows up to 2 active commitments."
+  );
+
+  error.code =
+    "ACTIVE_CHALLENGE_LIMIT";
+
+  throw error;
+}
+
 
     const deadlineDate =
   new Date(deadlineAt);

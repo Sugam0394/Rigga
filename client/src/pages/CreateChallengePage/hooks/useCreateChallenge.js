@@ -32,6 +32,9 @@ export const useCreateChallenge = () => {
   const [submitError, setSubmitError] =
     useState("");
 
+    const [showSubscriptionModal, setShowSubscriptionModal] =
+  useState(false);
+
     const handleChange = (
   field,
   value
@@ -111,10 +114,21 @@ const handleSubmit = async () => {
       }
     );
   } catch (error) {
-    setSubmitError(
-      error?.response?.data?.message ||
-        "Unable to create challenge. Please try again."
-    );
+    const errorCode =
+  error?.response?.data?.code;
+
+if (
+  errorCode ===
+  "ACTIVE_CHALLENGE_LIMIT"
+) {
+  setShowSubscriptionModal(true);
+  return;
+}
+
+setSubmitError(
+  error?.response?.data?.message ||
+    "Unable to create challenge. Please try again."
+);
   } finally {
     setIsSubmitting(false);
   }
@@ -237,6 +251,10 @@ handleBack,
 
 isStepValid,
 
-handleSubmit
+handleSubmit,
+
+showSubscriptionModal,
+
+setShowSubscriptionModal,
   };
 };
