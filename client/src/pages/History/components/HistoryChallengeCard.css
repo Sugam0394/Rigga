@@ -1,4 +1,4 @@
-.history-card {
+ .history-card {
   display: flex;
   flex-direction: column;
 
@@ -9,19 +9,33 @@
   border: 1px solid var(--color-border);
   border-radius: 16px;
 
-  background: var(--color-surface);
+  background: var(--color-white);
 
   cursor: pointer;
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .history-card:hover {
   transform: translateY(-2px);
 
+  border-color: var(--color-border-strong);
+
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile feedback */
+.history-card:active {
+  transform: scale(0.98);
+}
+
+/* Keyboard accessibility */
+.history-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .history-card__header {
@@ -38,7 +52,7 @@
   font-size: 1rem;
   font-weight: 600;
 
-  color: var(--color-text-primary);
+  color: var(--color-text);
 
   word-break: break-word;
 }
@@ -53,9 +67,11 @@
   font-size: 0.75rem;
   font-weight: 600;
 
-  background: var(--color-background-secondary);
+  background: var(--color-surface);
 
   color: var(--color-text-secondary);
+
+  border: 1px solid var(--color-border);
 }
 
 .history-card__body {
@@ -74,5 +90,5 @@
 }
 
 .history-card__body strong {
-  color: var(--color-text-primary);
+  color: var(--color-text);
 }

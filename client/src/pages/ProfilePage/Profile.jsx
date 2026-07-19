@@ -82,6 +82,11 @@ const handleSave = async () => {
   }
 };
 
+const handleOpenHistory = () => {
+  navigate("/history");
+};
+
+
   const handleLogout =
     async () => {
       try {
@@ -230,6 +235,7 @@ if (!profile) {
   isEditing={isEditing}
   onEdit={handleEdit}
   onSettings={handleOpenSettings}
+  onHistory={handleOpenHistory}
 />
 
     {isEditing ? (

@@ -1,9 +1,10 @@
 import "./ProfileActions.css";
 
-const ProfileActions = ({
+ const ProfileActions = ({
   isEditing,
   onEdit,
   onSettings,
+  onHistory,
 }) => {
   return (
     <div className="profile-actions">
@@ -24,6 +25,13 @@ const ProfileActions = ({
           >
             Settings
           </button>
+          <button
+  type="button"
+  className="profile-actions__button profile-actions__button--secondary"
+  onClick={onHistory}
+>
+  Challenge History
+</button>
         </>
       )}
     </div>

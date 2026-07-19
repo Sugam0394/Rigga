@@ -10,10 +10,9 @@ import authMiddleware
 const router =
   express.Router();
 
-router.get(
-  "/challenges",
-  authMiddleware,
-  historyController.getChallengeHistory
-);
+ router.get("/challenges", (req, res, next) => {
+  console.log("History endpoint hit");
+  next();
+}, authMiddleware, historyController.getChallengeHistory);
 
 export default router;

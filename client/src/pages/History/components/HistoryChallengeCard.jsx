@@ -25,13 +25,23 @@ const HistoryChallengeCard = ({
 
   return (
     <article
-      className="history-card"
-      onClick={() =>
-        navigate(
-          `/challenges/${history.id}`
-        )
-      }
-    >
+  className="history-card"
+  role="button"
+  tabIndex={0}
+  onClick={() =>
+    navigate(`/challenges/${history.id}`)
+  }
+  onKeyDown={(event) => {
+    if (
+      event.key === "Enter" ||
+      event.key === " "
+    ) {
+      event.preventDefault();
+
+      navigate(`/challenges/${history.id}`);
+    }
+  }}
+>
 
       <div className="history-card__header">
 
@@ -39,12 +49,10 @@ const HistoryChallengeCard = ({
           {history.title}
         </h3>
 
-         <span className="history-card__status">
-  {
-    challengeStatusLabels[
-      history.status
-    ] ?? history.status
-  }
+         <span
+  className={`history-card__status history-card__status--${history.status?.toLowerCase()}`}
+>
+  {challengeStatusLabels[history.status] ?? history.status}
 </span>
 
       </div>
