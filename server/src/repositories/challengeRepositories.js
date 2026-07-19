@@ -86,20 +86,34 @@ const getChallengesByUserId = async (userId) => {
   currentStatus,
   nextStatus
 ) => {
+
+  const updateData = {
+    status: nextStatus,
+  };
+
+  if (
+    nextStatus ===
+      CHALLENGE_STATUS.COMPLETED ||
+    nextStatus ===
+      CHALLENGE_STATUS.FAILED
+  ) {
+    updateData.completedAt =
+      new Date();
+  }
+
   return Challenge.findOneAndUpdate(
     {
       _id: challengeId,
       status: currentStatus,
     },
     {
-      $set: {
-        status: nextStatus,
-      },
+      $set: updateData,
     },
     {
       new: true,
     }
   );
+
 };
  
 const getByReviewToken = async (token) => {
@@ -134,7 +148,19 @@ const getActiveChallenges = async () => {
     });
   };
 
-
+const getFinishedChallengesByUserId = async (userId) => {
+  return Challenge.find({
+    userId,
+    status: {
+      $in: [
+        CHALLENGE_STATUS.COMPLETED,
+        CHALLENGE_STATUS.FAILED,
+      ],
+    },
+  }).sort({
+    completedAt: -1,
+  });
+};
 
  const attachWitness = async ({
   challengeId,
@@ -173,6 +199,20 @@ const getActiveChallenges = async () => {
   );
 };
 
+const getFinishedChallengesByUserId = async (userId) => {
+  return Challenge.find({
+    userId,
+    status: {
+      $in: [
+        CHALLENGE_STATUS.COMPLETED,
+        CHALLENGE_STATUS.FAILED,
+      ],
+    },
+  }).sort({
+    completedAt: -1,
+  });
+};
+
 
 
 export default {
@@ -188,7 +228,7 @@ export default {
   getExpiredActiveChallenges,
   attachWitness,
 activateChallenge,
-
-getActiveChallengeCountByUserId
+getActiveChallengeCountByUserId,
+ getFinishedChallengesByUserId
  
 };

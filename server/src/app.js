@@ -58,7 +58,7 @@ import aiCouch from './routes/aiCouchRoutes.js';
 import invitationRoutes from './routes/invitationRoutes.js';
 import profileRoutes from "./routes/profileRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
-
+import historyRoutes from "./routes/historyRoutes.js";
 
 
 
@@ -101,7 +101,8 @@ import settingsRoutes from "./routes/settingsRoutes.js";
    app.use("/api", profileRoutes);
 
    app.use("/api", settingsRoutes);
-
+  
+   app.use( "/history", historyRoutes);
 
 
 
