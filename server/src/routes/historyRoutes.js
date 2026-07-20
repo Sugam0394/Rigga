@@ -13,6 +13,6 @@ const router =
  router.get("/challenges", (req, res, next) => {
   console.log("History endpoint hit");
   next();
-}, authMiddleware, historyController.getChallengeHistory);
+}, historyController.getChallengeHistory);
 
 export default router;
